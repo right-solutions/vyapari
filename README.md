@@ -37,6 +37,11 @@ This will copy migrations from kuppayam and usman engines
 which will have migrations to create images, documents, users, features and permissions respectively.
 
 
+## Configurations
+
+config.railties_order = [:main_app, Vyapari::Engine, Usman::Engine, :all]
+
+
 ## Contributing
 Contribution directions go here.
 
