@@ -15,7 +15,6 @@ class Category < Vyapari::ApplicationRecord
   before_validation :update_permalink
 
 	# Validations
-  extend PoodleValidators
   validates :name, presence: true
   validates :one_liner, presence: false
   validates :status, :presence=> true, :inclusion => {:in => STATUS_HASH_REVERSE.keys, :presence_of => :status, :message => "%{value} is not a valid status" }
