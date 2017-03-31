@@ -1,0 +1,26 @@
+<% edit_link = edit_admin_country_path(id: country.id) %>
+<% delete_link = admin_country_path(id: country.id) %>
+
+<tr id="tr_country_<%= country.id %>">
+
+  <th scope="row" style="text-align: center;">
+    <% if i < 0 %>
+      <i class="fa fa-check text-success"></i>
+    <% else %>
+      <%= i + 1 + (@per_page.to_i * (@current_page.to_i - 1)) %>
+    <% end %>
+  </th>
+
+  <td class="country-name"><%= link_to country.name, admin_country_path(country), remote: true %></td>
+
+  <td class="country-name"><%= link_to country.code, admin_country_path(country), remote: true %></td>
+
+  <td class="action-links" style="width:10%">
+
+    <%= link_to raw("<i class=\"linecons-pencil\"></i> Edit Country"), edit_link, :remote=>true, class: "edit" %>
+
+    <%= link_to raw("<i class=\"linecons-trash\"></i> Delete"), delete_link, method: :delete, country: "menuitem", tabindex: "-1", data: { confirm: 'Are you sure?' }, :remote=>true, class: "delete" %>
+
+  </td>
+
+</tr>

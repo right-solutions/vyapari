@@ -1,0 +1,28 @@
+<%= form_for([:admin, @exchange_rate], :html => {:id=>"form_exchange_rate", :class=>"mb-0 form-horizontal", :exchange_rate => "form", :method => (@exchange_rate.new_record? ? :post : :put), :remote=>true}) do |f| %>
+
+      <div id="exchange_rate_form_error">
+        <%= @exchange_rate.errors[:base].to_sentence %>
+      </div>
+
+      <div class="form-inputs mb-30 mt-30">
+        <%= theme_form_field(@exchange_rate, :currency_name) %>
+        <%= theme_form_field(@exchange_rate, :value) %>
+        <%= theme_form_field(@exchange_rate, :effective_date, html_options: {type: :date}) %>
+
+        <% options = {assoc_collection: Country.select("id, name").order("name ASC").all, required: true, editable: true, assoc_display_method: :name} %>
+        <%= theme_form_assoc_group(@exchange_rate, :country_id, **options) %>
+      </div>
+    
+      <div>
+
+        <%= submit_tag("Save", :class=>"btn btn-primary pull-right ml-10") %>
+        
+        <%= link_to raw("<i class='fa fa-close mr-5'></i><span>Cancel</span>"), "#", onclick: "closeGenericModal();", class: "pull-right ml-10 btn btn-white" %>
+        
+      </div>
+      <%= clear_tag(10) %>
+
+  </div>
+
+<% end %>
+

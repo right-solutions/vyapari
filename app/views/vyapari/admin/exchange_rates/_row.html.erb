@@ -1,0 +1,30 @@
+<% edit_link = edit_admin_exchange_rate_path(id: exchange_rate.id) %>
+<% delete_link = admin_exchange_rate_path(id: exchange_rate.id) %>
+
+<tr id="tr_exchange_rate_<%= exchange_rate.id %>">
+
+  <th scope="row" style="text-align: center;">
+    <% if i < 0 %>
+      <i class="fa fa-check text-success"></i>
+    <% else %>
+      <%= i + 1 + (@per_page.to_i * (@current_page.to_i - 1)) %>
+    <% end %>
+  </th>
+
+  <td class="exchange_rate-name"><%= link_to exchange_rate.currency_name, admin_exchange_rate_path(exchange_rate), remote: true %></td>
+
+  <td><%= exchange_rate.country.name if exchange_rate.country %></td>
+
+  <td><%= number_with_precision(exchange_rate.value, :precision => 2)  %></td>
+
+  <td><%= exchange_rate.effective_date.strftime("%m/%d/%Y") %></td>
+
+  <td class="action-links" style="width:10%">
+
+    <%= link_to raw("<i class=\"linecons-pencil\"></i> Edit ExchangeRate"), edit_link, :remote=>true, class: "edit" %>
+
+    <%= link_to raw("<i class=\"linecons-trash\"></i> Delete"), delete_link, method: :delete, exchange_rate: "menuitem", tabindex: "-1", data: { confirm: 'Are you sure?' }, :remote=>true, class: "delete" %>
+
+  </td>
+
+</tr>
