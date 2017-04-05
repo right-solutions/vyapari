@@ -52,7 +52,7 @@
 
 		<%# edit_link = edit_terminal_staff_invoice_line_item_path(@invoice, line_item, terminal_id: @terminal.id) %>
 
-		<% delete_link = terminal_staff_invoice_line_items_path(@invoice, line_item, terminal_id: @terminal.id) %>
+		<% delete_link = terminal_staff_invoice_line_item_path(@invoice, line_item, terminal_id: @terminal.id) %>
 
 		<div class="col-md-1 li-sl li-display">
 			<% if i < 0 %>
@@ -84,9 +84,9 @@
 	<%= render :partial=>"vyapari/terminal_staff/line_items/form", locals: {line_item: LineItem.new(quantity: 1) } %>
 </div>
 
-<div class="row ili mt-10 mb-10" id="div_line_item_display">
-  <div class="col-md-2 col-md-offset-8 li-item-name li-form li-left">Gross Total:</div>
-  <div class="col-md-2 li-action li-form li-right">
+<div class="row mt-10 mb-10" style="font-weight: bold;">
+  <div class="col-md-2 col-md-offset-7">Gross Total:</div>
+  <div class="col-md-2" style="text-align: right">
   	<%= number_to_currency @invoice.total_amount, unit: "" %>
   </div>
 </div>

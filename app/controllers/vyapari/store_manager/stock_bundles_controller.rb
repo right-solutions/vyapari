@@ -186,7 +186,7 @@ module Vyapari
           heading: "#{@store.name} - Stock Bundle",
           description: "Listing all the stock at #{@store.name}",
           links: [
-            {name: "Home", link: store_manager_stores_path, icon: 'fa-building-o'},
+            {name: "Home", link: user_dashboard_path, icon: 'fa-dashboard'},
             {name: @store.name, link: store_manager_dashboard_path(@store), icon: 'fa-dashboard'},
             {name: "Stock Bundle", link: nil, icon: 'fa-truck', active: true}
           ]

@@ -1,47 +1,36 @@
-<div class="chart-item-bg-2">
-	<div class="chart-item-num">
-		<i class="fa-list"></i>
-		<%= @terminal.invoices.active.count %> <span style="font-size:20px">Invoices</span>
-	</div>
-	<div class="chart-item-desc">
-		<%= link_to raw("<i class=\"fa-truck mr-10\"></i> Create Invoice"), new_terminal_staff_invoice_path(@store), remote: true, class: "btn btn-success btn-lg btn-block", style: "height:50px" %>
-		<%= link_to raw("<i class=\"fa-upload mr-10\"></i> Logout"), "#", class: "btn btn-danger btn-lg btn-block btn-only-hover", style: "height:50px" %>
-	</div>
-</div>
+<%= render :partial=>"vyapari/terminal_staff/dashboard/counts" -%>
 
 <div class="row">
-	
-<!-- 	<div class="col-sm-3">
+	<div class="col-md-6">
+		<div class="panel panel-color panel-blue">
 
-		<div class="xe-widget xe-counter-block" data-count=".num" data-from="0" data-to="99.9" data-suffix="%" data-duration="2">
-			<div class="xe-upper">
-				<div class="xe-icon">
-					<i class="fa-usd"></i>
-				</div>
-				<div class="xe-label">
-					<strong class="num">AED 8,000.00</strong>
-					<span>Cash in Hand</span>
-				</div>
+			<div class="panel-heading">
+				<h3 class="panel-title">Saved Invoices</h3>
 			</div>
-			<div class="xe-lower"></div>
+
+			<div class="panel-body">
+				<!-- Active Invoices -->
+				<% active_invoices = @terminal.invoices.active.order("created_at DESC").page(1).per(10) %>
+				<%= render :partial=>"vyapari/terminal_staff/dashboard/invoices", locals: { invoices: active_invoices } -%>
+			</div>
 		</div>
 	</div>
 
-	<div class="col-sm-3">
-		<div class="xe-widget xe-counter-block xe-counter-block-white" data-count=".num" data-from="0" data-to="99.9" data-suffix="%" data-duration="2">
-			<div class="xe-upper">
-				<div class="xe-icon">
-					<i class="fa-usd"></i>
-				</div>
-				<div class="xe-label">
-					<strong class="num">AED 8,000.00</strong>
-					<span>Credit Sales</span>
-				</div>
+	<div class="col-md-6">
+		<div class="panel panel-color panel-gray">
+
+			<div class="panel-heading">
+				<h3 class="panel-title">Draft Invoices</h3>
 			</div>
-			<div class="xe-lower"></div>
+
+			<div class="panel-body">
+				<!-- Draft Invoices -->
+				<% draft_invoices = @terminal.invoices.draft.order("created_at DESC").page(1).per(10) %>
+				<%= render :partial=>"vyapari/terminal_staff/dashboard/invoices", locals: { invoices: draft_invoices } -%>
+			</div>
+			
 		</div>
-	</div> -->
-	
+	</div>
 </div>
 
 <%= clear_tag(60) %>

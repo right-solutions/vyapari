@@ -9,7 +9,7 @@ class CreateInvoices < ActiveRecord::Migration[5.0]
       t.string :customer_name
       t.string :customer_address
 
-      t.decimal :discount
+      t.integer :discount
       t.decimal :total_amount
 
       t.text :notes
@@ -26,8 +26,6 @@ class CreateInvoices < ActiveRecord::Migration[5.0]
 
       # If Credit Card
       t.string :credit_card_number
-      t.string :credit_card_type
-      t.string :credit_card_type
 
       t.string :status, :null => false, :default=>"draft", :limit=>16
 

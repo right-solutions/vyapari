@@ -1,0 +1,88 @@
+<% 
+	active_invoices = @terminal.invoices.active.count
+	draft_invoices = @terminal.invoices.draft.count
+	active_amount = @terminal.invoices.active.sum(:total_amount)
+	draft_amount = @terminal.invoices.draft.sum(:total_amount)
+	cash_invoices = @terminal.invoices.active.where(payment_method: :cash).count
+	cash_in_hand = 100
+	total_sales = 100
+%>
+
+<div class="row">
+	<div class="col-sm-3">
+		<%= link_to raw("<i class=\"fa-book mr-10\"></i> Create Invoice"), new_terminal_staff_invoice_path(@store), remote: true, class: "btn btn-success btn-lg btn-block", style: "height:50px" %>
+
+		<%= link_to raw("<i class=\"fa-book mr-10\"></i> Manage Invoice"), terminal_staff_invoices_path, class: "btn btn-primary btn-only-hover btn-lg btn-block", style: "height:50px" %>
+	</div>
+
+	<div class="col-sm-3">
+					
+		<div class="xe-widget xe-counter-block xe-counter-block-white" data-suffix="k" data-count=".num" data-from="0" data-to="310" data-duration="4" data-easing="false">
+			<div class="xe-upper">
+				
+				<div class="xe-icon">
+					<i class="fa-money"></i>
+				</div>
+				<div class="xe-label">
+					<strong class="num"><%= number_to_currency cash_in_hand, unit: "AED " %></strong>
+					<span>Cash In Hand</span>
+				</div>
+				
+			</div>
+			<div class="xe-lower">
+				<div class="border"></div>
+				
+				<span>Total Cash Invoices</span>
+				<strong><%= cash_invoices %></strong>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-sm-3">
+					
+		<div class="xe-widget xe-counter-block xe-counter-block-white" data-suffix="k" data-count=".num" data-from="0" data-to="310" data-duration="4" data-easing="false">
+			<div class="xe-upper">
+				
+				<div class="xe-icon">
+					<i class="fa-floppy-o"></i>
+				</div>
+				<div class="xe-label">
+					<strong class="num"><%= active_invoices %></strong>
+					<span>Invoices Created</span>
+				</div>
+				
+			</div>
+			<div class="xe-lower">
+				<div class="border"></div>
+				
+				<span>Total Amount Billed</span>
+				<strong><%= number_to_currency active_amount, unit: "AED " %></strong>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-sm-3">
+					
+		<div class="xe-widget xe-counter-block xe-counter-block-gray" data-suffix="k" data-count=".num" data-from="0" data-to="310" data-duration="4" data-easing="false">
+			<div class="xe-upper">
+				
+				<div class="xe-icon">
+					<i class="fa-pencil-square-o"></i>
+				</div>
+				<div class="xe-label">
+					<strong class="num"><%= draft_invoices %></strong>
+					<span>Draft Invoices</span>
+				</div>
+				
+			</div>
+			<div class="xe-lower">
+				<div class="border"></div>
+				
+				<span>Total Amount Un-Billed</span>
+				<strong><%= number_to_currency draft_amount, unit: "AED " %></strong>
+			</div>
+		</div>
+	</div>
+
+	
+</div>

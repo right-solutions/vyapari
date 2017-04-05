@@ -60,7 +60,7 @@ class Store < Vyapari::ApplicationRecord
   scope :close, -> { where(status: CLOSED) }
 
   scope :active_and_inactive, -> { where(status: [ACTIVE, INACTIVE]) }
-
+  
   def self.save_row_data(row)
 
     row.headers.each{ |cell| row[cell] = row[cell].to_s.strip }
@@ -124,6 +124,10 @@ class Store < Vyapari::ApplicationRecord
 
   def pos_store?
     self.store_type == POS_STORE
+  end
+
+  def in_stock?(product)
+    false
   end
 
   # * Return true if the brand is active, else false.

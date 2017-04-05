@@ -193,7 +193,7 @@ class LineItem < Vyapari::ApplicationRecord
   end
   
   def can_be_deleted?
-    false
+    true
     #if self.jobs.any?
     #  self.errors.add(:base, DELETE_MESSAGE) 
     #  return false
