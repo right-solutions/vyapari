@@ -127,7 +127,7 @@ class Store < Vyapari::ApplicationRecord
   end
 
   def in_stock?(product)
-    false
+    true
   end
 
   # * Return true if the brand is active, else false.

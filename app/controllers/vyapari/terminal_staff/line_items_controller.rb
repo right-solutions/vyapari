@@ -12,7 +12,7 @@ module Vyapari
         product_in_stock = false
 
         # Initialize the line item with quantity 0.0
-        @r_object = @line_item = @invoice.line_items.build(quantity: 0.0)
+        @line_item = @invoice.line_items.build(quantity: 0.0)
 
         # Check if there exists a line item with the invoice.
         @line_item = @invoice.line_items.where("product_id = ?", product.id).first if product
@@ -32,6 +32,10 @@ module Vyapari
         # Do this after .valid? method as .valid will clear errors
         product_in_stock = @store.in_stock?(product) if product
         @line_item.errors.add(:product_id, "This Product is Out of Stock") unless product_in_stock
+
+        @r_object = @line_item
+
+        binding.pry
 
         if @line_item.errors.blank?
           @line_item.save

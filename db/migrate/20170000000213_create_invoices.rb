@@ -2,7 +2,7 @@ class CreateInvoices < ActiveRecord::Migration[5.0]
   def change
     create_table :invoices do |t|
       
-      t.string :invoice_number, limit: 256
+      t.string :invoice_number
       t.datetime :invoice_date
 
       t.string :customer_name

@@ -23,7 +23,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'axlsx', '~> 2.0.1'
 
   s.add_dependency 'kuppayam', "~> 0.1.5dev"
-  s.add_dependency 'usman', "~> 0.1.5dev"
+  s.add_dependency 'usman', "~> 0.1.5dev1"
   s.add_dependency "bcrypt"
 
   s.add_development_dependency 'pry', "~> 0.10.1", ">= 0.10.0"

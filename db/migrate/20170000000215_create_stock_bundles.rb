@@ -4,7 +4,7 @@ class CreateStockBundles < ActiveRecord::Migration
       t.datetime   :uploaded_date
       t.references :store, index: true
       t.references :supplier, index: true
-      t.references :uploader, references: :users
+      t.references :uploader, references: :users, index: true
       t.string     :name
       t.string     :file
       t.string     :error_summary

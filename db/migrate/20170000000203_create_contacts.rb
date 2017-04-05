@@ -2,7 +2,7 @@ class CreateContacts < ActiveRecord::Migration
   def change
     create_table(:contacts) do |t|
 
-      t.string :name, limit: 256
+      t.string :name
       t.string :designation, :null => true, :limit=>56
       t.string :email, :null => false
       t.string :phone, :null => true, :limit=>24

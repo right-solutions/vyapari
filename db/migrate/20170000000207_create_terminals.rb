@@ -2,7 +2,7 @@ class CreateTerminals < ActiveRecord::Migration[5.0]
   def change
     create_table :terminals do |t|
       
-      t.string :name, limit: 256
+      t.string :name
       t.string :code, limit: 24
 
       t.string :status, :null => false, :default=>"active", :limit=>16
