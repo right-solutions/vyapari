@@ -15,13 +15,16 @@
 
 <% else %>
   
-  // Highlighting the newly saved line item
+  // Highlighting the line item in the table in red color
   $("#div_line_item_<%= @line_item.id %>").css("background-color", "red");
 
   // Show Main Error Message on the form
   <% error_message = content_tag(:div, raw(@notification[:message]), class: "alert alert-danger mt-20") %>
   $("#invoice_form_error").html("<%= escape_javascript(error_message) %>");
   $("#invoice_form_error").show();
+
+  // Set the mouse focus on the EAN input field
+  $( "#div_line_item_form .li-item-name input").focus().select();
   
   // Showing Growl Like Message
   notifyError("<%= escape_javascript(@notification[:title]) %>", "<%= escape_javascript(raw(@notification[:message])) %>");

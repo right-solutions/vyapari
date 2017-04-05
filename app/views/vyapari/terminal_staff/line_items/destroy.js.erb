@@ -1,0 +1,25 @@
+<% if @destroyed %>
+  
+  // Removing the item from the list
+  $('#div_<%= @resource_options[:item_name] %>_<%= @r_object.id %>').remove();
+  $("#div_invoice_form").html("<%= escape_javascript(render(:partial=>"/vyapari/terminal_staff/invoices/form")) %>");
+
+  // Hide errors
+  $("#invoice_form_error").hide();
+
+  // Showing Growl Like Message
+  notifySuccess("<%= escape_javascript(@notification[:title]) %>", "<%= escape_javascript(@notification[:message]) %>");
+  
+<% else %>
+
+  // Show Main Error Message on the form
+  <% error_message = content_tag(:div, raw(@notification[:message]), class: "alert alert-danger mt-20") %>
+  $("#invoice_form_error").html("<%= escape_javascript(error_message) %>");
+  $("#invoice_form_error").show();
+  
+  // Showing Growl Like Message
+  notifyError("<%= escape_javascript(@notification[:title]) %>", "<%= escape_javascript(@notification[:message]) %>");
+
+<% end %>
+
+

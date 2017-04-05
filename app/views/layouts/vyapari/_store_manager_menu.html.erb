@@ -38,27 +38,13 @@
     <ul class="navbar-nav">
       
       <!-- Dashboard -->
-      <li class="<%= nav_class("store_manager/home") %>">
-        <%= link_to raw("<i class=\"fa-home\"></i> <span class='title'>Dashboard</span>"), vyapari.terminal_staff_dashboard_path(@store) %>
+      <li class="<%= nav_class("store_manager/dashboard") %>">
+        <%= link_to raw("<i class=\"fa-home\"></i> <span class='title'>Dashboard</span>"), vyapari.store_manager_dashboard_path %>
       </li>
 
-      <!-- Stocks Menu -->
-      <% if @store %>
-      <li class="<%= nav_class("store_manager/stocks") %>">
-        <a href="#">
-          <i class="linecons-cog"></i>
-          <span class="title">Stocks</span>
-        </a>
-        <ul>
-          <li>
-            <%= link_to raw("<i class=\"linecons-desktop\"></i> <span class='title'>Stock Entries</span>"), vyapari.store_manager_stock_entries_path(@store) %>
-          </li>
-          <li>
-            <%= link_to raw("<i class=\"linecons-desktop\"></i> <span class='title'>Import Stock</span>"), vyapari.store_manager_stock_bundles_path(@store) %>
-          </li>
-        </ul>
+      <li class="<%= nav_active?('store_manager/stock') ? 'active' : ''  %>">
+        <%= link_to raw("<i class=\"linecons-desktop\"></i> <span class='title'>Manage Stock</span>"), vyapari.store_manager_stock_entries_path(@store) %>
       </li>
-      <% end %>
 
       <!-- Admin -->
       <% if @current_user.has_role?("Site Admin") %>
@@ -68,8 +54,8 @@
       <% end %>
 
       <!-- Log out -->
-      <li class="<%= nav_class("store_manager/dashboard") %>">
-        <%= link_to raw("<i class=\"fa-power-off\"></i> <span class='title'>Log out</span>"), vyapari.user_dashboard_path %>
+      <li class="<%= nav_class("user/dashboard") %>">
+        <%= link_to raw("<i class=\"fa-desktop\"></i> <span class='title'>Change Store/Terminal</span>"), vyapari.user_dashboard_path %>
       </li>
 
       

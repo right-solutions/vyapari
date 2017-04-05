@@ -23,7 +23,7 @@ module Vyapari
 	    end
 
 	    def set_navs
-	      set_nav("store_manager/home")
+	      set_nav("user/dashboard")
 	    end
 
   end

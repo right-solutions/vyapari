@@ -2,6 +2,8 @@ module Vyapari
 	module TerminalStaff
 	  class InvoicesController < Vyapari::TerminalStaff::ResourceController
 
+      #layout :resolve_layout
+
 	  	def new
         @invoice = @r_object = Invoice.new
         @invoice.terminal = @terminal
@@ -11,12 +13,16 @@ module Vyapari
         @invoice.generate_temporary_invoice_number
         @invoice.invoice_date = Time.now
         @invoice.save
-        render_show
+        #render_show
       end
 
       def edit
         @invoice = @r_object = Invoice.find_by_id(params[:id])
         render_show
+      end
+
+      def show
+        @invoice = @r_object = Invoice.find_by_id(params[:id])
       end
 
       def update
@@ -34,13 +40,22 @@ module Vyapari
           error_message = @invoice.invoice_number || I18n.t('status.error')
           set_notification(false, error_message, @invoice.errors.full_messages.join(", "))  
         end
-        render_show
+        render :new
       end
 
 	    private
 
       def permitted_params
-        params.require(:invoice).permit(:discount, :adjustment, :money_taken, :notes, :payment_method)
+        params.require(:invoice).permit(:discount, :adjustment, :money_taken, :notes, :payment_method, :customer_name, :customer_address, :credit_card_number)
+      end
+
+      def resolve_layout
+        case action_name
+        when "show"
+          'kuppayam/print_a4'
+        else
+          'vyapari/terminal_staff'
+        end
       end
 
 	    def resource_controller_configuration
@@ -59,7 +74,7 @@ module Vyapari
 	        heading: "Invoices - #{@terminal.name}",
 	        description: "Listing the invoices - #{@terminal.name}",
 	        links: [
-            {name: "Home", link: store_manager_stores_path, icon: 'fa-building-o'},
+            {name: "Home", link: user_dashboard_path, icon: 'fa-dashboard'},
             {name: @store.name, link: store_manager_dashboard_path(@store), icon: 'fa-dashboard'},
             {name: "Stock Entries", link: nil, icon: 'fa-truck', active: true},
             {name: @terminal.name, link: terminal_staff_dashboard_path(@terminal), icon: 'fa-desktop'},

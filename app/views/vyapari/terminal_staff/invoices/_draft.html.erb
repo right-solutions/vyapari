@@ -1,0 +1,62 @@
+<% status_hash = {draft: "default", active: "success", cancelled: "danger"} %>
+
+<div id="div_invoice_show">
+	
+	<div class="row">
+
+	  <div class="col-md-9 col-sm-12 col-xs-12" style="border-right:1px solid #f1f1f1;">
+
+	  	<div class="visible-sm visible-xs mt-50"></div>
+
+	  	<%= theme_panel_heading(@invoice.invoice_number) %>
+	  	<%= clear_tag(5) %>
+	  	<span class="mt-15 label label-lg label-<%= status_hash[@invoice.status.to_sym] %>" style="font-size:14px;"><%= @invoice.status.titleize %></span>
+	  	<%= clear_tag(10) %>
+	  	
+	  	<%= theme_panel_sub_heading(@invoice.terminal.try(:name), "#") %>
+
+	  	<%= theme_panel_sub_heading(@invoice.store.try(:name), "#") %>
+
+	  	<%= theme_panel_description(@invoice.invoice_date.strftime("%m/%d/%Y - %H:%M:%S")) %>
+
+	  	<%= theme_panel_description(@invoice.user.name) %>
+	  	
+	    <%= clear_tag(10) %>
+
+	    <div class="visible-sm visible-xs mb-50"></div>
+
+	  </div>
+
+	  <div class="col-md-3 col-sm-12 col-xs-12">
+
+	  	<% print_link = edit_terminal_staff_invoice_path(@terminal, @invoice) %>
+			
+			<% delete_link = terminal_staff_invoice_path(@terminal, @invoice) %>
+
+			<%= link_to raw("<i class=\"fa-print\"></i> Print Invoice"), print_link, :remote=>true, class: "btn btn-block btn-white" if @invoice.active? %>
+
+	    <%= link_to raw("<i class=\"linecons-trash\"></i> Delete"), delete_link, method: :delete, invoice: "menuitem", tabindex: "-1", data: { confirm: 'Are you sure?' }, :remote=>true, class: "btn btn-block btn-danger btn-only-hover" if @invoice.can_be_deleted? %>
+
+	    <div class="visible-sm visible-xs mb-50"></div>
+
+	  </div>
+
+	</div>
+
+	<%= clear_tag(50) %>
+
+	<div id="invoice_form_error">
+    <%= @invoice.errors[:base].to_sentence %>
+    <%= @line_item.errors[:base].to_sentence if @line_item %>
+  </div>
+
+	<div id="div_line_item_index" class="col-md-12" style="border: 1px solid #f1f1f1;">
+  	<%= render :partial=>"vyapari/terminal_staff/line_items/index" %>
+  </div>
+
+  <div id="div_invoice_form" class="col-md-12 mb-10">
+  	<%= render :partial=>"vyapari/terminal_staff/invoices/form" %>
+  </div>
+
+	<%= clear_tag %>
+</div>

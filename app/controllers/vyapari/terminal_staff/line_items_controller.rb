@@ -9,40 +9,78 @@ module Vyapari
         ean_sku = permitted_params[:product_id]
         product = Product.where("ean_sku = ?", permitted_params[:product_id]).first
 
-        if product
-          @line_item = @invoice.line_items.where("product_id = ?", product.id).first
-          unless @line_item
-            @line_item = @invoice.line_items.build
-            @line_item.product = product
-            @line_item.quantity = permitted_params[:quantity] || 1
-          end
-        else
-          @line_item = LineItem.new
-          @line_item.quantity = 0
-          @line_item.errors.add(:product_id, "Product is not In Stock")
-        end
+        product_in_stock = false
 
+        # Initialize the line item with quantity 0.0
+        @r_object = @line_item = @invoice.line_items.build(quantity: 0.0)
+
+        # Check if there exists a line item with the invoice.
+        @line_item = @invoice.line_items.where("product_id = ?", product.id).first if product
+        
+        # Initialize the line item again if @line_item is nil
+        @line_item = @invoice.line_items.build(product: product, quantity: 0.0) unless @line_item
+
+        # Update the line item quantity and rate
         @line_item.quantity = @line_item.quantity + permitted_params[:quantity].to_f if permitted_params[:quantity]
         @line_item.rate = product.retail_price if product
-        begin
-          @line_item.rate = permitted_params[:rate].to_f unless permitted_params[:rate]
-        rescue
-        end
 
-        @r_object = @line_item
+        # Check if line item is valid
+        @line_item.valid?
 
-        # unless product exists in store
-        # @line_item.errors.add(:product_id, "This Product is not In Stock")
+        # check if product exists in store if product is there
+        # add error if out of stock
+        # Do this after .valid? method as .valid will clear errors
+        product_in_stock = @store.in_stock?(product) if product
+        @line_item.errors.add(:product_id, "This Product is Out of Stock") unless product_in_stock
 
-        if @line_item.valid?
+        if @line_item.errors.blank?
           @line_item.save
           # recalculate the total amount
           @invoice.save
           set_notification(true, @line_item.product.ean_sku, "Line Item '#{@line_item.product.name}' ADDED")
         else
-          error_message = @line_item.try(:product).try(:ean_sku) || I18n.t('status.error')
-          set_notification(false, error_message, @line_item.errors.full_messages.join(", "))  
+          if product
+            if product_in_stock
+              error_message = @line_item.try(:product).try(:ean_sku) || I18n.t('status.error')
+              set_notification(false, error_message, @line_item.errors.full_messages.join(", "))  
+            else
+              error_message = @line_item.try(:product).try(:ean_sku) || I18n.t('status.error')
+              set_notification(false, error_message, @line_item.errors[:product_id].first)              
+            end
+          else
+            error_message = @line_item.try(:product).try(:ean_sku) || I18n.t('status.error')
+            set_notification(false, error_message, "Product doesn't exist")              
+          end
         end
+
+      end
+
+      def destroy
+        @line_item = @r_object = @resource_options[:class].find_by_id(params[:id])
+        if @r_object
+          if @r_object.can_be_deleted?
+            @r_object.destroy
+            get_collections
+            set_flash_message(I18n.t('success.deleted'), :success)
+            set_notification(false, I18n.t('status.success'), I18n.t('success.deleted', item: default_item_name.titleize))
+            @destroyed = true
+          else
+            message = I18n.t('errors.failed_to_delete', item: default_item_name.titleize)
+            set_flash_message(message, :failure)
+            set_notification(false, I18n.t('status.error'), message)
+            @destroyed = false
+          end
+        else
+          set_notification(false, I18n.t('status.error'), I18n.t('status.not_found', item: default_item_name.titleize))
+        end
+
+        # respond_to do |format|
+        #   format.html {}
+        #   format.js  { 
+        #     js_view_path = @resource_options && @resource_options[:js_view_path] ? "#{@resource_options[:js_view_path]}/destroy" : :destroy 
+        #     render js_view_path
+        #   }
+        # end
 
       end
 
@@ -53,7 +91,7 @@ module Vyapari
       end
 
       def permitted_params
-        params.require(:line_item).permit(:product_id, :quantity, :rate)
+        params.require(:line_item).permit(:product_id, :quantity)
       end
 
 	    def resource_controller_configuration
