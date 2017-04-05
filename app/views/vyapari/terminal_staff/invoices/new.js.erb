@@ -11,3 +11,6 @@
   notifyError("<%= escape_javascript(@notification[:title]) %>", "<%= escape_javascript(raw(@notification[:message])) %>");
 
 <% end %>
+
+// Set the mouse focus on the EAN input field
+$( "#div_line_item_form .li-item-name input").focus().select();

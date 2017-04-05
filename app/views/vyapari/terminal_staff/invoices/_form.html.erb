@@ -30,6 +30,20 @@
           </div>
 
           <div class="row mt-10 mb-10">
+            <div class="col-md-4">Customer Phone:</div>
+            <div class="col-md-8">
+              <%= f.text_field(:customer_phone, style: "width:100%;") %>
+            </div>
+          </div>
+
+          <div class="row mt-10 mb-10">
+            <div class="col-md-4">Customer Email:</div>
+            <div class="col-md-8">
+              <%= f.text_field(:customer_email, style: "width:100%;") %>
+            </div>
+          </div>
+
+          <div class="row mt-10 mb-10">
             <div class="col-md-4">Payment Method:</div>
             <div class="col-md-8">
               <!-- Radio Button for Cash -->
@@ -53,7 +67,7 @@
           <div class="row mt-10 mb-10">
             <div class="col-md-4">Credit Card Number:</div>
             <div class="col-md-8">
-              <%= f.text_field(:customer_name, style: ";width:100%;") %>
+              <%= f.text_field(:credit_card_number, style: ";width:100%;") %>
             </div>
           </div>
 
@@ -74,7 +88,7 @@
         <div class="col-md-6">
           
           <div class="row mt-10 mb-10">
-            <div class="col-md-4 col-md-offset-2">Discount:</div>
+            <div class="col-md-4 col-md-offset-2">Discount (%):</div>
             <div class="col-md-4">
               <%= f.text_field(:discount, style: "text-align: right;width:100%;") %>
             </div>

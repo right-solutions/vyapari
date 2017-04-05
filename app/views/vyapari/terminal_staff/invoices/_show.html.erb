@@ -1,171 +1,204 @@
-<div class="panel panel-default">
-				<div class="panel-heading hidden-print">Invoice</div>
-				<div class="panel-body">
+<style type="text/css">
+	@media print {
+		.body { font-size: 16px; }
+		.invoice-header { font-size: 18px; }
+		
+	}
+</style>
+
+<div class="panel panel-default" style="width:100%;">
+	<div class="panel-heading hidden-print">
+		<strong>#<%= @invoice.invoice_number %></strong>
+	</div>
+	<div class="panel-body">
+
+		<section class="invoice-env">
+
+			<!-- Invoice header -->
+			<div class="invoice-header" style="font-size:16px;">
+
+				<!-- Invoice Options Buttons -->
+				<div class="invoice-options hidden-print">
 					
-					<section class="invoice-env">
-					
-						<!-- Invoice header -->
-						<div class="invoice-header">
-							
-							<!-- Invoice Options Buttons -->
-							<div class="invoice-options hidden-print">
-								<a href="#" class="btn btn-block btn-gray btn-icon btn-icon-standalone btn-icon-standalone-right text-left">
-									<i class="fa-envelope-o"></i>
-									<span>Send</span>
-								</a>
-								
-								<a href="#" class="btn btn-block btn-secondary btn-icon btn-icon-standalone btn-icon-standalone-right btn-single text-left">
-									<i class="fa-print"></i>
-									<span>Print</span>
-								</a>
-							</div>
-							
-							<!-- Invoice Data Header -->
-							<div class="invoice-logo">
-							
-								<a href="#" class="logo">
-									<img src="assets/images/logo-white-bg.png" class="img-responsive" />
-								</a>
-								
-								<ul class="list-unstyled">
-									<li class="upper">Invoice No. <strong>#5652256</strong></li>
-									<li>06 December 14</li>
-									<li>Prishtin&euml;, Kosovo</li>
-								</ul>
-								
-							</div>
-							
-						</div>
-						
-						
-						<!-- Client and Payment Details -->
-						<div class="invoice-details">
-							
-							<div class="invoice-client-info">
-								<strong>Client</strong>
-								
-								<ul class="list-unstyled">
-									<li>John Doe </li>
-									<li>Mr Nilson Otto </li>
-									<li>FoodMaster Ltd</li>
-								</ul>
-								
-								<ul class="list-unstyled">		
-									<li>1982 OOP </li>
-									<li>Madrid, Spain </li>
-									<li>+1 (151) 225-4183</li>
-								</ul>
-							</div>
-							
-							<div class="invoice-payment-info">
-								<strong>Payment Details</strong>
-								
-								<ul class="list-unstyled">
-									<li>V.A.T Reg #: <strong>542554(DEMO)78</strong></li>
-									<li>Account Name: <strong>FoodMaster Ltd</strong> </li>
-									<li>SWIFT code: <strong>45454DEMO545DEMO</strong></li>
-								</ul>
-							</div>
-							
-						</div>
-						
-						
-						<!-- Invoice Entries -->
-						<table class="table table-bordered">
-							<thead>
-								<tr class="no-borders">
-									<th class="text-center hidden-xs">#</th>
-									<th width="60%" class="text-center">Product</th>
-									<th class="text-center hidden-xs">Quantity</th>
-									<th class="text-center">Price</th>
-								</tr>
-							</thead>
-							
-							<tbody>
-								<tr>
-									<td class="text-center hidden-xs">1</td>
-									<td>On am we offices expense thought</td>
-									<td class="text-center hidden-xs">1</td>
-									<td class="text-right text-primary text-bold">$1,290</td>
-								</tr>
-								
-								<tr>
-									<td class="text-center hidden-xs">2</td>
-									<td>Up do view time they shot</td>
-									<td class="text-center hidden-xs">1</td>
-									<td class="text-right text-primary text-bold">$400</td>
-								</tr>
-								
-								<tr>
-									<td class="text-center hidden-xs">3</td>
-									<td>Way ham unwilling not breakfast</td>
-									<td class="text-center hidden-xs">1</td>
-									<td class="text-right text-primary text-bold">$550</td>
-								</tr>
-								
-								<tr>
-									<td class="text-center hidden-xs">4</td>
-									<td>Songs to an blush woman be sorry</td>
-									<td class="text-center hidden-xs">1</td>
-									<td class="text-right text-primary text-bold">$4020</td>
-								</tr>
-								
-								<tr>
-									<td class="text-center hidden-xs">5</td>
-									<td>Luckily offered article led lasting</td>
-									<td class="text-center hidden-xs">1</td>
-									<td class="text-right text-primary text-bold">$87</td>
-								</tr>
-								
-								<tr>
-									<td class="text-center hidden-xs">6</td>
-									<td>Of as by belonging therefore suspicion</td>
-									<td class="text-center hidden-xs">1</td>
-									<td class="text-right text-primary text-bold">$140</td>
-								</tr>
-							</tbody>
-						</table>
-						
-						<!-- Invoice Subtotals and Totals -->
-						<div class="invoice-totals">
-							
-							<div class="invoice-subtotals-totals">
-								<span>
-									Sub - Total amount: 
-									<strong>$6,487</strong>
-								</span>
-								
-								<span>
-									VAT: 
-									<strong>12.9%</strong>
-								</span>
-								
-								<span>
-									Discount: 
-									<strong>-----</strong>
-								</span>
-								
-								<hr />
-								
-								<span>
-									Grand Total: 
-									<strong>$7,304</strong>
-								</span>
-							</div>
-							
-							<div class="invoice-bill-info">
-								<address>
-									795 Park Ave, Suite 120<br />
-									San Francisco, CA 94107<br /> 
-									P: (234) 145-1810 <br />
-									Full Name <br />
-									<a href="#">first.last@email.com</a>
-								</address>
-							</div>
-							
-						</div>
-						
-					</section>
-					
+					<% if request.xhr?  %>
+
+
+						<%= link_to edit_terminal_staff_invoice_path(@terminal, @invoice), remote: true, class: "btn btn-block btn-secondary btn-icon btn-icon-standalone btn-icon-standalone-right text-left" do %>
+							<i class="fa-envelope-o"></i>
+							<span>Edit</span>
+						<% end %>
+
+						<%= link_to terminal_staff_invoice_path(@terminal, @invoice), class: "btn btn-block btn-gray btn-icon btn-icon-standalone btn-icon-standalone-right btn-single text-left", target: "_blank" do %>
+							<i class="fa-print"></i>
+							<span>Preview</span>
+						<% end %>
+
+					<% else %>
+
+						<%= link_to "#", class: "btn btn-block btn-secondary btn-icon btn-icon-standalone btn-icon-standalone-right btn-single text-left", onclick: "window.print();" do %>
+							<i class="fa-print"></i>
+							<span>Print</span>
+						<% end %>
+
+					<% end %>
 				</div>
+
+				<!-- Invoice Data Header -->
+				<div class="invoice-logo">
+
+					<a href="#" class="logo">
+					<img src="/assets/kuppayam/logo.png" class="img-responsive" width="200" />
+					</a>
+
+					<ul class="list-unstyled mt-30">
+						<li class="upper fs-20">Invoice No: <strong>#<%= @invoice.invoice_number%></strong></li>
+						<li class="mt-10">Invoice No: <%= @invoice.invoice_date.strftime("%m/%d/%Y") %></li>
+						<!-- <li>Dubai</li> -->
+					</ul>
+
+				</div>
+
+			</div>
+
+
+			<!-- Client and Payment Details -->
+			<div class="invoice-details">
+
+				<div class="invoice-client-info">
+					
+					<% if @invoice.customer_name %>
+					
+					<strong>Customer Info</strong>
+					<ul class="list-unstyled">
+						<li><%= @invoice.customer_name %></li>
+						<li><%= @invoice.customer_phone %></li>
+					</ul>
+					<% end %>
+
+					<ul class="list-unstyled">		
+						<li><%= @invoice.customer_email %></li>
+						<li><%= @invoice.customer_address %></li>
+					</ul>
+				</div>
+
+				<div class="invoice-payment-info" style="text-align: left">
+					<strong>Payment Details</strong>
+
+					<ul class="list-unstyled">
+						<li>Payment Method: <strong><%= @invoice.display_payment_method %></strong></li>
+						<% if @invoice.credit_card? %>
+							<li>Credit Card Number: <strong><%= @invoice.credit_card_number %></strong> </li>
+						<% end %>
+					</ul>
+				</div>
+
+			</div>
+
+
+			<!-- Invoice Entries -->
+			<table class="table table-bordered mt-60">
+				<thead>
+					<tr style="background-color: #4b4b4b; color:red;">
+						<th width="10%" class="text-center">No</th>
+						<th width="40%" class="text-center">Item</th>
+						<th width="15%" class="text-center">Unit Price</th>
+						<th width="15%" class="text-center">Quantity</th>
+						<th width="20%" class="text-center">Price</th>
+					</tr>
+				</thead>
+
+				<tbody>
+					<% @invoice.line_items.each_with_index do |line_item, i| %>
+						<tr>
+							<td class="text-center">
+								<%= i + 1 + (@per_page.to_i * (@current_page.to_i - 1)) %>
+							</td>
+							<td><%= line_item.product.display_name %></td>
+							<td class="text-center">
+								<%= number_to_currency line_item.product.retail_price, unit: "AED " %>
+							<td class="text-center"><%= line_item.quantity %></td>
+							<td class="text-right text-primary text-bold"><%= number_to_currency line_item.total_amount, unit: "AED " %></td>
+						</tr>
+					<% end %>
+					
+				</tbody>
+			</table>
+
+			<!-- Invoice Subtotals and Totals -->
+			<div class="invoice-totals mt-40">
+
+				<div class="invoice-subtotals-totals">
+					<span class="mt-10 fs-20">
+						Total Amount: 
+						<strong><%= number_to_currency @invoice.gross_total_amount, unit: "AED " %></strong>
+					</span>
+
+					<% if @invoice.tax > 0.00 %>
+						<span class="mt-10 fs-20">
+							Tax: 
+							<strong><%= number_to_currency @invoice.tax, unit: "" %></strong>
+						</span>
+					<% end %>
+
+					<% if @invoice.discount %>
+					<span class="mt-10 fs-20">
+						Discount (<%= number_to_currency @invoice.discount, unit: "%" %>): 
+						<strong><%= number_to_currency @invoice.discount_amount, unit: "AED " %></strong>
+					</span>
+					<% end %>
+
+					<hr />
+
+					<span class="mt-10 fs-20">
+						Net Total: 
+						<strong><%= number_to_currency @invoice.net_total_amount, unit: "AED " %></strong>
+					</span>
+				</div>
+
+				<div class="invoice-bill-info">
+					<address>
+						<strong>SELAYIA INVESTMENT</strong><br />
+						P O BOX: 63995, Dubai, U.A.E<br /> 
+						<!-- Office #505, Sama Tower<br />
+						Sheikh Zayed Road<br />  -->
+						P: +971 4 355 9333 <br />
+						F: +971 4 355 0365 <br />
+						 <br />
+					</address>
+				</div>
+
+			</div>
+
+			<hr />
+
+			<!-- Invoice header -->
+			<div class="invoice-footer fs-12 lh-20 mt-40">
+
+				<!-- Invoice Data Header -->
+				<div class="terminal_info" style="float:left;width:40%">
+
+					<ul class="list-unstyled">
+						<li class="upper">Terminal: <%= @terminal.display_name %></li>
+						<li class="upper">Store: <%= @store.display_name %></li>
+						<li>Timestamp: <%= @invoice.invoice_date.strftime("%m/%d/%Y - %H:%M:%S") %></li>
+						<li>Sales Staff: <%= @invoice.user.display_name %></li>
+					</ul>
+
+				</div>
+
+				<div class="terms_and_conditions" style="float:right;width:60%">
+
+					<strong>Terms & Conditions</strong> <br>
+
+					There is no refund for items sold. <br>
+					The items sold may be exchanged until end of the event upon producing the original invoice.
+
+				</div>
+
+				<div class="clearfix"></div>
+			</div>
+
+		</section>
+
+	</div>
 </div>

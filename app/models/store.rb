@@ -95,7 +95,8 @@ class Store < Vyapari::ApplicationRecord
   # ------------------
 
   def display_name
-    self.country ? "#{self.code_was}-#{self.name_was}, #{self.country.name}" : "#{self.code_was}-#{self.name_was}"
+    #self.country ? "#{self.code_was}-#{self.name_was}, #{self.country.name}" : "#{self.code_was}-#{self.name_was}"
+    "#{self.code_was}-#{self.name_was}"
   end
 
   def display_store_type

@@ -29,11 +29,11 @@
 
 	  <div class="col-md-3 col-sm-12 col-xs-12">
 
-	  	<% print_link = edit_terminal_staff_invoice_path(@terminal, @invoice) %>
+	  	<% print_link = terminal_staff_invoice_path(@terminal, @invoice) %>
 			
 			<% delete_link = terminal_staff_invoice_path(@terminal, @invoice) %>
 
-			<%= link_to raw("<i class=\"fa-print\"></i> Print Invoice"), print_link, :remote=>true, class: "btn btn-block btn-white" if @invoice.active? %>
+			<%= link_to raw("<i class=\"fa-print\"></i> Print Invoice"), print_link, target: "_blank", class: "btn btn-block btn-white" if @invoice.active? %>
 
 	    <%= link_to raw("<i class=\"linecons-trash\"></i> Delete"), delete_link, method: :delete, invoice: "menuitem", tabindex: "-1", data: { confirm: 'Are you sure?' }, :remote=>true, class: "btn btn-block btn-danger btn-only-hover" if @invoice.can_be_deleted? %>
 

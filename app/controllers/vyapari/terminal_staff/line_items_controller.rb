@@ -6,8 +6,9 @@ module Vyapari
 
 	  	def create
 
-        ean_sku = permitted_params[:product_id]
-        product = Product.where("ean_sku = ?", permitted_params[:product_id]).first
+        ean_sku = permitted_params[:product_id].to_s
+
+        product = Product.where("ean_sku = ? ", ean_sku).first
 
         product_in_stock = false
 
@@ -35,12 +36,13 @@ module Vyapari
 
         @r_object = @line_item
 
-        binding.pry
-
         if @line_item.errors.blank?
+          
           @line_item.save
-          # recalculate the total amount
-          @invoice.save
+          
+          # recalculate the gross total amount
+          @invoice.reload.save
+
           set_notification(true, @line_item.product.ean_sku, "Line Item '#{@line_item.product.name}' ADDED")
         else
           if product
@@ -64,9 +66,14 @@ module Vyapari
         if @r_object
           if @r_object.can_be_deleted?
             @r_object.destroy
+            
+            # recalculate the gross total amount
+            @invoice.reload.save
+
             get_collections
             set_flash_message(I18n.t('success.deleted'), :success)
             set_notification(false, I18n.t('status.success'), I18n.t('success.deleted', item: default_item_name.titleize))
+            
             @destroyed = true
           else
             message = I18n.t('errors.failed_to_delete', item: default_item_name.titleize)

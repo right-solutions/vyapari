@@ -61,7 +61,7 @@ class Product < Vyapari::ApplicationRecord
     product.name = row[:name]
     product.one_liner = row[:one_liner]
     product.description = row[:description]
-    product.ean_sku = row[:ean_sku]
+    product.ean_sku = row[:ean_sku].to_s
     product.reference_number = row[:reference_number]
 
     product.brand = Brand.find_by_name(row[:brand])

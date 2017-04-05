@@ -19,7 +19,6 @@ module Vyapari
           set_flash_message(text, :error, false) if defined?(flash) && flash
           redirect_to default_redirect_url_after_sign_in
         end
-        #binding.pry
       end
       
     end	

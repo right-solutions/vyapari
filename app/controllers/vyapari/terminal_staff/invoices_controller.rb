@@ -2,7 +2,7 @@ module Vyapari
 	module TerminalStaff
 	  class InvoicesController < Vyapari::TerminalStaff::ResourceController
 
-      #layout :resolve_layout
+      layout :resolve_layout
 
 	  	def new
         @invoice = @r_object = Invoice.new
@@ -18,11 +18,12 @@ module Vyapari
 
       def edit
         @invoice = @r_object = Invoice.find_by_id(params[:id])
-        render_show
+        render :new
       end
 
       def show
         @invoice = @r_object = Invoice.find_by_id(params[:id])
+        render :show
       end
 
       def update
@@ -46,7 +47,7 @@ module Vyapari
 	    private
 
       def permitted_params
-        params.require(:invoice).permit(:discount, :adjustment, :money_taken, :notes, :payment_method, :customer_name, :customer_address, :credit_card_number)
+        params.require(:invoice).permit(:discount, :adjustment, :money_taken, :notes, :payment_method, :customer_name, :customer_address, :customer_phone, :customer_email, :credit_card_number)
       end
 
       def resolve_layout

@@ -1,10 +1,10 @@
 <% 
 	active_invoices = @terminal.invoices.active.count
 	draft_invoices = @terminal.invoices.draft.count
-	active_amount = @terminal.invoices.active.sum(:total_amount)
-	draft_amount = @terminal.invoices.draft.sum(:total_amount)
+	active_amount = @terminal.invoices.active.sum(:net_total_amount)
+	draft_amount = @terminal.invoices.draft.sum(:net_total_amount)
 	cash_invoices = @terminal.invoices.active.where(payment_method: :cash).count
-	cash_in_hand = 100
+	cash_in_hand = @terminal.invoices.active.cash_invoices.sum(:net_total_amount)
 	total_sales = 100
 %>
 

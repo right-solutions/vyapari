@@ -14,7 +14,7 @@ class Invoice < Vyapari::ApplicationRecord
   STATUS_HASH_REVERSE = {DRAFT => "Draft", ACTIVE => "Active", CANCELLED => "Cancelled"}
 
   # Call backs
-  before_save :calculate_total_amount
+  before_save :calculate_gross_total_amount
 
   # Validations
   validates :invoice_number, :presence=> true
@@ -49,6 +49,11 @@ class Invoice < Vyapari::ApplicationRecord
   scope :active, -> { where(status: ACTIVE) }
   scope :cancelled, -> { where(status: CANCELLED) }
 
+  scope :cash_invoices, -> { where(payment_method: CASH) }
+  scope :credit_invoices, -> { where(payment_method: CREDIT) }
+  scope :credit_card_invoices, -> { where(payment_method: CREDIT_CARD) }
+  scope :cheque_invoices, -> { where(payment_method: CHEQUE) }
+
   scope :this_month, lambda { where("created_at >= ? AND created_at <= ?", Time.zone.now.beginning_of_month, Time.zone.now.end_of_month) }
   
   # ------------------
@@ -58,9 +63,11 @@ class Invoice < Vyapari::ApplicationRecord
   def initialize
     super
     self.discount = 0.00
+    self.tax = 0.00
     self.adjustment = 0.00
     self.money_taken = 0.00
-    self.total_amount = 0.00
+    self.gross_total_amount = 0.00
+    self.net_total_amount = 0.00
   end
 
   def display_name
@@ -208,16 +215,19 @@ class Invoice < Vyapari::ApplicationRecord
     self.save
   end
 
-  def net_total_amount
-    self.total_amount - self.discount
+  def discount_amount
+    self.gross_total_amount * (self.discount / 100.00)
   end
 
   def balance_to_give
     self.money_taken - self.net_total_amount
   end
 
-  def calculate_total_amount
-    self.total_amount = self.line_items.sum("rate * quantity") || 0.0
+  def calculate_gross_total_amount
+    self.gross_total_amount = self.line_items.sum("rate * quantity") || 0.0
+    total_after_discount_and_tax = self.gross_total_amount - ( self.discount / 100.00  * self.gross_total_amount) + ( self.tax / 100.00  * self.gross_total_amount)
+    self.net_total_amount = total_after_discount_and_tax.round(2)
+    self.adjustment = self.net_total_amount - total_after_discount_and_tax
   end
   
 end

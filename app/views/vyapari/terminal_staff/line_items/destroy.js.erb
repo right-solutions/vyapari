@@ -1,7 +1,7 @@
 <% if @destroyed %>
   
   // Removing the item from the list
-  $('#div_<%= @resource_options[:item_name] %>_<%= @r_object.id %>').remove();
+  $("#div_line_item_index").html("<%= escape_javascript(render(:partial=>"/vyapari/terminal_staff/line_items/index")) %>");
   $("#div_invoice_form").html("<%= escape_javascript(render(:partial=>"/vyapari/terminal_staff/invoices/form")) %>");
 
   // Hide errors

@@ -18,7 +18,7 @@
 
   <td class="invoice-name" style="text-align: center;"><%= @invoice.user.display_payment_method %></td>
 
-  <td class="invoice-name" style="text-align: center;"><%= number_to_currency invoice.total_amount, unit: "" %></td>
+  <td class="invoice-name" style="text-align: center;"><%= number_to_currency invoice.net_total_amount, unit: "" %></td>
 
   <td class="invoice-name"><%= invoice.display_status %></td>
 

@@ -4,7 +4,7 @@
 			<tr> 
 				<th>Invoice Number</th>
 				<th>Customer</th>
-				<th>Date</th>
+				<!-- <th>Date</th> -->
 				<th style="text-align: right;">Total Amount</th>
 			</tr> 
 		</thead>
@@ -14,14 +14,19 @@
 	  		
 	  		<tr id="tr_invoice_<%= invoice.id %>">
 		      
-		      <td class="invoice-name"><%= link_to invoice.invoice_number, terminal_staff_invoice_path(@terminal, invoice), remote: true %></td>
+		      <% customer_name = invoice.customer_name || "GUEST-#{invoice.id}-#{@store.code}-" %>
 
-		      <% customer_name = invoice.customer_name || "CUST-#{invoice.id}" %>
-		      <td class="invoice-name"><%= link_to customer_name, terminal_staff_invoice_path(@terminal, invoice), remote: true %></td>
+	  			<% if invoice.draft? %>
+		  			<td class="invoice-name"><%= link_to invoice.invoice_number, edit_terminal_staff_invoice_path(@terminal, invoice), remote: true %></td>
+		  			<td class="invoice-name"><%= link_to customer_name, edit_terminal_staff_invoice_path(@terminal, invoice), remote: true %></td>
+		  		<% else %>
+		  			<td class="invoice-name"><%= link_to invoice.invoice_number, terminal_staff_invoice_path(@terminal, invoice), remote: true %></td>
+		  			<td class="invoice-name"><%= link_to customer_name, terminal_staff_invoice_path(@terminal, invoice), remote: true %></td>
+		  		<% end %>
 
-		      <td class="invoice-name" style="text-align: center;"><%= invoice.invoice_date.strftime("%m/%d/%Y") if invoice.invoice_date %></td>
+		      <!-- <td class="invoice-name" style="text-align: center;"><%#= invoice.invoice_date.strftime("%m/%d/%Y") if invoice.invoice_date %></td> -->
 
-		      <td class="invoice-name" style="text-align: center;"><%= number_to_currency invoice.total_amount, unit: "" %></td>
+		      <td class="invoice-name" style="text-align: center;"><%= number_to_currency invoice.net_total_amount, unit: "" %></td>
 
 		    </tr>
 		  <% end %>

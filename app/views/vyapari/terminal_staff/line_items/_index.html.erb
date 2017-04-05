@@ -48,6 +48,8 @@
 
 <% @invoice.line_items.each_with_index do |line_item, i| %>
 	
+	<% next unless line_item.persisted? %>
+	
 	<div class="row ili" id="div_line_item_<%= line_item.id %>">
 
 		<%# edit_link = edit_terminal_staff_invoice_line_item_path(@invoice, line_item, terminal_id: @terminal.id) %>
@@ -87,7 +89,7 @@
 <div class="row mt-10 mb-10" style="font-weight: bold;">
   <div class="col-md-2 col-md-offset-7">Gross Total:</div>
   <div class="col-md-2" style="text-align: right">
-  	<%= number_to_currency @invoice.total_amount, unit: "" %>
+  	<%= number_to_currency @invoice.gross_total_amount, unit: "AED " %>
   </div>
 </div>
 
