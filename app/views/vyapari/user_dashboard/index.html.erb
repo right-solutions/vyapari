@@ -1,4 +1,4 @@
-<% @stores = Store.active_and_inactive.all %>
+<% @stores = Store.active.all %>
 
 <h1 class="mb-40" style="text-align:center;color:#4b4b4b;">Welcome <strong><%= @current_user.name %></strong></h1>
 
@@ -22,7 +22,7 @@
 			</div>
 
 			
-			<% store.terminals.active_and_inactive.each do |terminal| %>
+			<% store.terminals.active.each do |terminal| %>
 
 				<div class="col-sm-8">
 					<span style="font-size:14px;"><%= terminal.name %></span>
