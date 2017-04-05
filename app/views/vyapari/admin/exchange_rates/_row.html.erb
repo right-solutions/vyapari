@@ -11,9 +11,9 @@
     <% end %>
   </th>
 
-  <td class="exchange_rate-name"><%= link_to exchange_rate.currency_name, admin_exchange_rate_path(exchange_rate), remote: true %></td>
+  <td class="exchange_rate-name"><%= link_to exchange_rate.base_currency, admin_exchange_rate_path(exchange_rate), remote: true %></td>
 
-  <td><%= exchange_rate.country.name if exchange_rate.country %></td>
+  <td class="exchange_rate-name"><%= link_to exchange_rate.counter_currency, admin_exchange_rate_path(exchange_rate), remote: true %></td>
 
   <td><%= number_with_precision(exchange_rate.value, :precision => 2)  %></td>
 
@@ -21,7 +21,7 @@
 
   <td class="action-links" style="width:10%">
 
-    <%= link_to raw("<i class=\"linecons-pencil\"></i> Edit ExchangeRate"), edit_link, :remote=>true, class: "edit" %>
+    <%= link_to raw("<i class=\"linecons-pencil\"></i> Edit"), edit_link, :remote=>true, class: "edit" %>
 
     <%= link_to raw("<i class=\"linecons-trash\"></i> Delete"), delete_link, method: :delete, exchange_rate: "menuitem", tabindex: "-1", data: { confirm: 'Are you sure?' }, :remote=>true, class: "delete" %>
 

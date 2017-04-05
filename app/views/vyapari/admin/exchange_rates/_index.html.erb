@@ -2,9 +2,9 @@
 	<table class="table table-hover members-table middle-align">
 	  <thead> 
 			<tr> 
-				<th style="text-align: center;width:20px">#</th> 
-				<th>Currency Name</th>
-				<th>Country</th>
+				<th style="text-align: center;width:60px">#</th> 
+				<th>Base Currency</th>
+				<th>Counter Currency</th>
 				<th style="width:10%">Value</th>
 				<th style="width:20%">Effective Date</th>
 				<th style="text-align: center;">Actions</th>
@@ -27,17 +27,17 @@
 						<% end %>
 					</th>
 
-		      <td class="exchange_rate-name"><%= link_to exchange_rate.currency_name, admin_exchange_rate_path(exchange_rate), remote: true %></td>
+		      <td class="exchange_rate-name"><%= link_to exchange_rate.base_currency, admin_exchange_rate_path(exchange_rate), remote: true %></td>
 
-		      <td><%= exchange_rate.country.name if exchange_rate.country %></td>
+		      <td class="exchange_rate-name"><%= link_to exchange_rate.counter_currency, admin_exchange_rate_path(exchange_rate), remote: true %></td>
 
-					<td><%= number_with_precision(exchange_rate.value, :precision => 2)  %></td>
+		      <td><%= number_with_precision(exchange_rate.value, :precision => 2)  %></td>
 
 					<td><%= exchange_rate.effective_date.strftime("%m/%d/%Y") %></td>
 
 					<td class="action-links" style="width:10%">
 
-		      	<%= link_to raw("<i class=\"linecons-pencil\"></i> Edit ExchangeRate"), edit_link, :remote=>true, class: "edit" %>
+		      	<%= link_to raw("<i class=\"linecons-pencil\"></i> Edit"), edit_link, :remote=>true, class: "edit" %>
 
 		        <%= link_to raw("<i class=\"linecons-trash\"></i> Delete"), delete_link, method: :delete, exchange_rate: "menuitem", tabindex: "-1", data: { confirm: 'Are you sure?' }, :remote=>true, class: "delete" %>
 

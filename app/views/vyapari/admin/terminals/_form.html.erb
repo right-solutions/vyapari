@@ -1,0 +1,24 @@
+<%= form_for([:admin, @terminal.store, @terminal], :html => {:id=>"form_terminal", :class=>"mb-0 form-horizontal", :terminal => "form", :method => (@terminal.new_record? ? :post : :put), :remote=>true}) do |f| %>
+
+      <div id="terminal_form_error">
+        <%= @terminal.errors[:base].to_sentence %>
+      </div>
+
+      <div class="form-inputs mb-30 mt-30">
+        <%= theme_form_field(@terminal, :name) %>
+        <%= theme_form_field(@terminal, :code) %>
+      </div>
+    
+      <div>
+
+        <%= submit_tag("Save", :class=>"btn btn-primary pull-right ml-10") %>
+        
+        <%= link_to raw("<i class='fa fa-close mr-5'></i><span>Cancel</span>"), "#", onclick: "closeGenericModal();", class: "pull-right ml-10 btn btn-white" %>
+        
+      </div>
+      <%= clear_tag(10) %>
+
+  </div>
+
+<% end %>
+

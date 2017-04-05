@@ -5,12 +5,11 @@
       </div>
 
       <div class="form-inputs mb-30 mt-30">
-        <%= theme_form_field(@exchange_rate, :currency_name) %>
+        <%= theme_form_field(@exchange_rate, :base_currency) %>
+        <%= theme_form_field(@exchange_rate, :counter_currency) %>
         <%= theme_form_field(@exchange_rate, :value) %>
         <%= theme_form_field(@exchange_rate, :effective_date, html_options: {type: :date}) %>
-
-        <% options = {assoc_collection: Country.select("id, name").order("name ASC").all, required: true, editable: true, assoc_display_method: :name} %>
-        <%= theme_form_assoc_group(@exchange_rate, :country_id, **options) %>
+        
       </div>
     
       <div>

@@ -39,7 +39,7 @@ module Vyapari
 
       def resource_controller_configuration
         {
-          page_title: "Manage Countries",
+          page_title: "Exchange Rates",
           collection_name: :exchange_rates,
           item_name: :exchange_rate,
           class: ExchangeRate,
@@ -58,7 +58,7 @@ module Vyapari
       end
 
       def permitted_params
-        params.require(:exchange_rate).permit(:currency_name, :value, :effective_date, :country_id)
+        params.require(:exchange_rate).permit(:base_currency, :counter_currency, :value, :effective_date)
       end
 
       def set_navs

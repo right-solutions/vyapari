@@ -1,7 +1,5 @@
 class Region < Vyapari::ApplicationRecord
 
-  DELETE_MESSAGE = "Cannot delete this Region. You should first delete all the dependant data like Company Cities, Jobs, Budgets etc tagged with this Region"
-
   # Validations
   validates :name, presence: true, length: {minimum: 2, maximum: 250}, allow_blank: false
   validates :code, presence: true, uniqueness: true, length: {minimum: 2, maximum: 32}, allow_blank: false
@@ -9,7 +7,7 @@ class Region < Vyapari::ApplicationRecord
   
   # Associations
   belongs_to :country
-  # has_many :stores
+  has_many :stores
   
   # ------------------
   # Class Methods
@@ -21,6 +19,31 @@ class Region < Vyapari::ApplicationRecord
   #   >>> obj.search(query)
   #   => ActiveRecord::Relation object
   scope :search, lambda {|query| joins(:country).where("LOWER(cities.name) LIKE LOWER('%#{query}%') OR LOWER(countries.name) LIKE LOWER('%#{query}%')")}
+
+  def self.save_row_data(row)
+
+    row.headers.each{ |cell| row[cell] = row[cell].to_s.strip }
+
+    return if row[:name].blank?
+
+    region = Region.find_by_code(row[:code]) || Region.new
+    region.name = row[:name]
+    region.code = row[:code]
+    region.country = Country.find_by_code(row[:country]) || Country.find_by_name(row[:country])
+
+    # Initializing error hash for displaying all errors altogether
+    error_object = Kuppayam::Importer::ErrorHash.new
+
+    if region.valid?
+      region.save!
+    else
+      summary = "Error while saving region: #{region.name}"
+      details = "Error! #{region.errors.full_messages.to_sentence}"
+      error_object.errors << { summary: summary, details: details }
+    end
+
+    return error_object
+  end
 
   # ------------------
   # Instance Methods

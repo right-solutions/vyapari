@@ -1,0 +1,44 @@
+<% edit_link = edit_store_manager_stock_bundle_path(@store, stock_bundle) %>
+
+<% delete_link = store_manager_stock_bundle_path(@store, stock_bundle) %>
+
+<% show_link = store_manager_stock_bundle_path(@store, stock_bundle) %>
+
+<% stock_entries_link = store_manager_stock_entries_path(@store, sb: @stock_bundle_id) %>
+
+<tr id="tr_stock_bundle_<%= stock_bundle.id %>">
+
+  <th scope="row" style="text-align: center;">
+    <% if i < 0 %>
+      <i class="fa fa-check text-success"></i>
+    <% else %>
+      <%= i + 1 + (@per_page.to_i * (@current_page.to_i - 1)) %>
+    <% end %>
+  </th>
+
+  <td class="stock_bundle-name"><%= link_to stock_bundle.display_file_name, stock_entries_link, target: "_blank" %></td>
+
+  <td class="stock_bundle-name"><%= stock_bundle.uploaded_date.strftime("%m/%d/%Y") %></td>
+
+  <td class="stock_bundle-name"><%= stock_bundle.uploader.try(:display_name) %></td>
+
+  <% if @store.warehouse? %>
+  <td class="stock_bundle-name"><%= link_to stock_bundle.supplier.try(:name), stock_entries_link if stock_bundle.supplier %></td>
+  <% end %>
+
+  <td class="hidden-sm hidden-xs hidden">
+    <% status_hash = {approved: "success", pending: "default", errored: "danger"} %>
+    <span class="ml-5 mt-5 label label-<%= status_hash[stock_bundle.status.to_sym] %>"><%= stock_bundle.display_status %></span>
+  </td>
+
+  <td class="action-links" style="width:10%">
+
+    <%= link_to raw("<i class=\"linecons-pencil\"></i> Check Status"), show_link, :remote => true, class: "" %>
+
+    <%= link_to raw("<i class=\"linecons-pencil\"></i> Edit"), edit_link, :remote => true, class: "edit" %>
+
+    <%= link_to raw("<i class=\"linecons-trash\"></i> Delete"), delete_link, method: :delete, stock_bundle: "menuitem", tabindex: "-1", data: { confirm: 'Are you sure?' }, :remote=>true, class: "delete" %>
+
+  </td>
+
+</tr>

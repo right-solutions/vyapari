@@ -1,0 +1,50 @@
+<% suppliers = Supplier.select("id, name").order("name ASC").all %>
+
+<%= form_for([:store_manager, @stock_entry], :html => {:id=>"form_stock_entry", :class=>"mb-0 form-horizontal", :stock_entry => "form", :method => (@stock_entry.new_record? ? :post : :put), :remote=>true}) do |f| %>
+
+      <% if suppliers.empty? %>
+        <div class="alert alert-danger alert-dismissible" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <p>
+            <b>Warning:</b>You have not added any suppliers. Ask your administrator to add suppliers for the company so that you could upload stock you have received from those suppliers.
+          </p>
+        </div>
+      <% end %>
+
+      <div id="stock_entry_form_error">
+        <%= @stock_entry.errors[:base].to_sentence %>
+      </div>
+
+      <div class="form-inputs mb-30 mt-30">
+        
+        <% if @stock_bundle && @stock_bundle.persisted? %>
+          
+          <%= theme_form_group("Supplier", required: true, error_class: "error") do %>
+            <%= content_tag :div, @stock_bundle.supplier.try(:name) %>
+          <% end %>
+          <%= hidden_field_tag "stock_bundle[supplier_id]", @stock_bundle.supplier_id %>
+          
+        <% else %>
+          
+          <% options = {assoc_collection: suppliers, required: true, editable: true, assoc_display_method: :name} %>
+          <%= theme_form_assoc_group(@stock_bundle, :supplier_id, **options) %>
+          
+        <% end %>
+
+        <%= theme_form_field(@stock_bundle, :file, html_options: {type: 'file'}, label: "Upload the Stock file in CSV format", param_name: "stock_bundle[file]") %>
+        
+      </div>
+    
+      <div>
+
+        <%= submit_tag("Save", :class=>"btn btn-primary pull-right ml-10") %>
+        
+        <%= link_to raw("<i class='fa fa-close mr-5'></i><span>Cancel</span>"), "#", onclick: "closeLargeModal();", class: "pull-right ml-10 btn btn-white" %>
+        
+      </div>
+      <%= clear_tag(10) %>
+
+  </div>
+
+<% end %>
+

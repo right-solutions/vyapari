@@ -9,5 +9,17 @@ module Vyapari
 	    set_title("Vyapari - User Management System")
 	  end
 
+	  def default_redirect_url_after_sign_in
+      asd
+	  	vyapari.user_dashboard_url
+      # if @current_user.has_role?("Admin")
+      #   vyapari.admin_dashboard_url
+      # elsif @current_user.has_role?("Admin")
+      #   vyapari.store_dashboard_url
+      # else
+      #   vyapari.admin_dashboard_url
+      # end
+    end
+
   end
 end

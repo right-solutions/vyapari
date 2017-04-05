@@ -1,0 +1,80 @@
+<div class="table-responsive"> 
+	<table class="table table-hover members-table middle-align">
+	  <thead> 
+			<tr> 
+				<th style="text-align: center;width:60px">#</th> 
+				<th>Product Name</th>
+				<th style="width:15%;text-align: center;">EAN/SKU</th>
+				<th style="text-align: right;">PP</th>
+				<th style="text-align: right;">LP</th>
+				<th style="text-align: right;">SP</th>
+				<th style="text-align: right;">RP</th>
+				<th style="text-align: center;">Quantity</th>
+				<th>Status</th>
+				<th style="text-align: center;">Actions</th>
+			</tr> 
+		</thead>
+		
+	  <tbody>
+	  	<% @stock_entries.each_with_index do |stock_entry, i| %>
+	  		
+	  		<% edit_link = edit_store_manager_stock_entry_path(@store, stock_entry) %>
+
+				<% delete_link = store_manager_stock_entries_path(@store, stock_entry) %>
+				
+		    <tr id="tr_stock_entry_<%= stock_entry.id %>">
+		      
+		      <th scope="row" style="text-align: center;">
+						<% if i < 0 %>
+							<i class="fa fa-check text-success"></i>
+						<% else %>
+							<%= i + 1 + (@per_page.to_i * (@current_page.to_i - 1)) %>
+						<% end %>
+					</th>
+
+		      <td class="stock_entry-name"><%= link_to stock_entry.product.name, store_manager_stock_entries_path(@store, stock_entry), remote: true %></td>
+
+		      <td class="stock_entry-name" style="text-align: center;"><%= link_to stock_entry.product.ean_sku, store_manager_stock_entries_path(@store, stock_entry), remote: true %></td>
+
+		      <td class="stock_entry-name" style="text-align: right;">
+		      	<%= number_to_currency stock_entry.product.purchased_price, unit: "" %>
+		      </td>
+
+		      <td class="stock_entry-name" style="text-align: right;">
+		      	<%= number_to_currency stock_entry.product.landed_price, unit: "" %>
+		      </td>
+
+		      <td class="stock_entry-name" style="text-align: right;">
+		      	<%= number_to_currency stock_entry.product.selling_price, unit: "" %>
+		      </td>
+
+		      <td class="stock_entry-name" style="text-align: right;">
+		      	<%= number_to_currency stock_entry.product.retail_price, unit: "" %>
+		      </td>
+
+		      <td class="stock_entry-name" style="text-align: center;">
+		      	<%= stock_entry.quantity %>
+		      </td>
+
+		      <td class="stock_entry-name"><%= stock_entry.display_status %></td>
+
+		      <td class="action-links" style="width:10%">
+
+		      	<%= link_to raw("<i class=\"linecons-pencil\"></i> Edit"), edit_link, :remote=>true, class: "edit" %>
+
+		        <%= link_to raw("<i class=\"linecons-trash\"></i> Delete"), delete_link, method: :delete, stock_entry: "menuitem", tabindex: "-1", data: { confirm: 'Are you sure?' }, :remote=>true, class: "delete" %>
+
+		      </td>
+
+		    </tr>
+		  <% end %>
+	  </tbody>
+	</table>
+</div>
+
+<div class="row">
+  <div class="col-sm-12">
+    <%= paginate_kuppayam(@stock_entries) %>
+  </div>
+</div>
+

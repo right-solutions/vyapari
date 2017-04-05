@@ -1,0 +1,47 @@
+<div class="chart-item-bg-2">
+	<div class="chart-item-num">
+		<i class="fa-list"></i>
+		<%= @terminal.invoices.active.count %> <span style="font-size:20px">Invoices</span>
+	</div>
+	<div class="chart-item-desc">
+		<%= link_to raw("<i class=\"fa-truck mr-10\"></i> Create Invoice"), new_terminal_staff_invoice_path(@store), remote: true, class: "btn btn-success btn-lg btn-block", style: "height:50px" %>
+		<%= link_to raw("<i class=\"fa-upload mr-10\"></i> Logout"), "#", class: "btn btn-danger btn-lg btn-block btn-only-hover", style: "height:50px" %>
+	</div>
+</div>
+
+<div class="row">
+	
+<!-- 	<div class="col-sm-3">
+
+		<div class="xe-widget xe-counter-block" data-count=".num" data-from="0" data-to="99.9" data-suffix="%" data-duration="2">
+			<div class="xe-upper">
+				<div class="xe-icon">
+					<i class="fa-usd"></i>
+				</div>
+				<div class="xe-label">
+					<strong class="num">AED 8,000.00</strong>
+					<span>Cash in Hand</span>
+				</div>
+			</div>
+			<div class="xe-lower"></div>
+		</div>
+	</div>
+
+	<div class="col-sm-3">
+		<div class="xe-widget xe-counter-block xe-counter-block-white" data-count=".num" data-from="0" data-to="99.9" data-suffix="%" data-duration="2">
+			<div class="xe-upper">
+				<div class="xe-icon">
+					<i class="fa-usd"></i>
+				</div>
+				<div class="xe-label">
+					<strong class="num">AED 8,000.00</strong>
+					<span>Credit Sales</span>
+				</div>
+			</div>
+			<div class="xe-lower"></div>
+		</div>
+	</div> -->
+	
+</div>
+
+<%= clear_tag(60) %>

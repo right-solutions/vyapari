@@ -1,0 +1,33 @@
+<% edit_link = edit_terminal_staff_invoice_path(@terminal, invoice) %>
+
+<% delete_link = terminal_staff_invoices_path(@terminal, invoice) %>
+
+<tr id="tr_stock_entry_<%= stock_entry.id %>">
+
+  <th scope="row" style="text-align: center;">
+    <% if i < 0 %>
+      <i class="fa fa-check text-success"></i>
+    <% else %>
+      <%= i + 1 + (@per_page.to_i * (@current_page.to_i - 1)) %>
+    <% end %>
+  </th>
+
+  <td class="invoice-name"><%= link_to invoice.invoice_number, terminal_staff_invoice_path(@terminal, invoice), remote: true %></td>
+
+  <td class="invoice-name" style="text-align: center;"><%= @invoice.invoice_date.strftime("%m/%d/%Y - %H:%M:%S") if @invoice.invoice_date %></td>
+
+  <td class="invoice-name" style="text-align: center;"><%= @invoice.user.display_payment_method %></td>
+
+  <td class="invoice-name" style="text-align: center;"><%= number_to_currency invoice.total_amount, unit: "" %></td>
+
+  <td class="invoice-name"><%= invoice.display_status %></td>
+
+  <td class="action-links" style="width:10%">
+
+    <%= link_to raw("<i class=\"linecons-pencil\"></i> Edit"), edit_link, :remote=>true, class: "edit" %>
+
+    <%= link_to raw("<i class=\"linecons-trash\"></i> Delete"), delete_link, method: :delete, invoice: "menuitem", tabindex: "-1", data: { confirm: 'Are you sure?' }, :remote=>true, class: "delete" %>
+
+  </td>
+
+</tr>

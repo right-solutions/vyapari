@@ -4,6 +4,7 @@ class Product < Vyapari::ApplicationRecord
   PUBLISHED = "published"
   UNPUBLISHED = "unpublished"
   REMOVED = "removed"
+  
   STATUS_HASH = {"Published" => PUBLISHED, "Unpublished" => UNPUBLISHED, "Removed" => REMOVED}
   STATUS_HASH_REVERSE = {PUBLISHED => "Published", UNPUBLISHED => "Unpublished", REMOVED => "Removed"}
 
@@ -11,18 +12,18 @@ class Product < Vyapari::ApplicationRecord
   FEATURED_HASH_REVERSE = {true => "Featured", false => "Non Featured"}
 
   # Callbacks
-  before_validation :update_permalink
   before_validation :update_top_category
 
 	# Validations
   validates :name, presence: true
+  validates :ean_sku, presence: true
+  
   #validates :description, presence: true
-  validates :permalink, presence: true, uniqueness: true
   validates :status, :presence=> true, :inclusion => {:in => STATUS_HASH_REVERSE.keys, :presence_of => :status, :message => "%{value} is not a valid status" }
 
   # Associations
   has_one :product_image, :as => :imageable, :dependent => :destroy, :class_name => "Image::ProductImage"
-  has_one :brochure, :as => :documentable, :dependent => :destroy, :class_name => "Document::Brochure"
+  #has_one :brochure, :as => :documentable, :dependent => :destroy, :class_name => "Document::Brochure"
   
   belongs_to :brand
   belongs_to :category
@@ -35,7 +36,6 @@ class Product < Vyapari::ApplicationRecord
   #   => ActiveRecord::Relation object
   scope :search, lambda {|query| joins("INNER JOIN categories on categories.id = products.category_id").
                                  where("LOWER(products.name) LIKE LOWER('%#{query}%') OR\
-                                        LOWER(products.permalink) LIKE LOWER('%#{query}%') OR\
                                         LOWER(products.one_liner) LIKE LOWER('%#{query}%') OR\
                                         LOWER(products.description) LIKE LOWER('%#{query}%') OR\
                                         LOWER(categories.name) LIKE LOWER('%#{query}%') OR\
@@ -50,10 +50,57 @@ class Product < Vyapari::ApplicationRecord
   scope :unpublished, -> { where(status: UNPUBLISHED) }
   scope :removed, -> { where(status: REMOVED) }
 
+  def self.save_row_data(row)
+
+    row.headers.each{ |cell| row[cell] = row[cell].to_s.strip }
+
+    return if row[:name].blank?
+
+    product = Product.find_by_name(row[:name]) || Product.new
+
+    product.name = row[:name]
+    product.one_liner = row[:one_liner]
+    product.description = row[:description]
+    product.ean_sku = row[:ean_sku]
+    product.reference_number = row[:reference_number]
+
+    product.brand = Brand.find_by_name(row[:brand])
+    product.category = Category.find_by_name(row[:category])
+    product.top_category = product.category.top_category if product.category
+
+    product.featured = row[:featured]
+    product.status = row[:status]
+    product.priority = row[:priority]
+    
+    # Initializing error hash for displaying all errors altogether
+    error_object = Kuppayam::Importer::ErrorHash.new
+
+    if product.valid?
+      product.save!
+    else
+      summary = "Error while saving product: #{product.name}"
+      details = "Error! #{product.errors.full_messages.to_sentence}"
+      error_object.errors << { summary: summary, details: details }
+    end
+    return error_object
+  end
+
   # ------------------
   # Instance variables
   # ------------------
 
+  def display_name
+    "#{self.ean_sku} : #{self.name}"
+  end
+
+  def slug
+    self.name.parameterize
+  end
+
+  def to_param
+    "#{id}-#{slug}"
+  end
+  
   # * Return true if the brand is published, else false.
   # == Examples
   #   >>> brand.published?
@@ -105,7 +152,22 @@ class Product < Vyapari::ApplicationRecord
     self.update_attributes(status: REMOVED, featured: false)
   end
 
-  # TODO
+  def can_be_published?
+    unpublished? or removed?
+  end
+
+  def can_be_unpublished?
+    published? or removed?
+  end
+
+  def can_be_removed?
+    published? or unpublished? or removed?
+  end
+
+  def can_be_edited?
+    true
+  end
+
   def can_be_deleted?
     #if self.jobs.any?
     #  self.errors.add(:base, DELETE_MESSAGE) 
@@ -114,10 +176,6 @@ class Product < Vyapari::ApplicationRecord
     #  return true
     #end
     return true
-  end
-
-  def default_image_url(size="medium")
-    "/assets/defaults/product-#{size}.png"
   end
 
   protected
@@ -130,10 +188,6 @@ class Product < Vyapari::ApplicationRecord
         self.top_category = self.category
       end
     end
-  end
-
-  def update_permalink
-    self.permalink = "#{id}-#{name.parameterize}" if self.permalink.blank?
   end
 
 end

@@ -1,0 +1,55 @@
+<% edit_link = edit_admin_store_path(id: store.id) %>
+<% delete_link = admin_store_path(id: store.id) %>
+
+<tr id="tr_store_<%= store.id %>">
+
+  <th scope="row" style="text-align: center;">
+    <% if i < 0 %>
+      <i class="fa fa-check text-success"></i>
+    <% else %>
+      <%= i + 1 + (@per_page.to_i * (@current_page.to_i - 1)) %>
+    <% end %>
+  </th>
+
+  <td class="store-name"><%= link_to store.name, admin_store_path(store), remote: true %></td>
+
+  <td class="store-name"><%= link_to store.code, admin_store_path(store), remote: true %></td>
+
+  <td class="store-name"><%= link_to store.display_store_type, admin_store_path(store), remote: true %></td>
+
+  <td class="store-name"><%= link_to store.region.try(:name), admin_store_path(store), remote: true %></td>
+
+  <td class="store-name"><%= link_to store.country.try(:name), admin_store_path(store), remote: true %></td>
+
+  <td>
+    <% if store.inactive? %>
+      <span class="ml-5 mt-5 label label-default">Inactive</span>
+    <% elsif store.active? %>
+      <span class="ml-5 mt-5 label label-success">Active</span>
+    <% elsif store.closed? %>
+      <span class="ml-5 mt-5 label label-danger">Closed</span>
+    <% end %>
+  </td>
+
+  <td class="action-links" style="width:10%">
+
+    <!-- Activate -->
+    <%= link_to raw("<i class=\"fa fa-circle-o mr-5\"></i> Activate"), update_status_admin_store_path(store, :status =>'active'), :method =>'PUT', :remote=>true, role: "menuitem", tabindex: "-1", :class=>"edit" if store.can_be_activated? %>
+
+    <!-- In Activate -->
+    <%= link_to raw("<i class=\"fa fa-circle-o mr-5\"></i> In Activate"), update_status_admin_store_path(store, :status =>'inactive'), :method =>'PUT', :remote=>true, role: "menuitem", tabindex: "-1", :class=>"" if store.can_be_inactivated? %>
+
+    <!-- Close -->
+    <%= link_to raw("<i class=\"fa fa-circle-o mr-5\"></i> Close"), update_status_admin_store_path(store, :status =>'closed'), :method =>'PUT', :remote=>true, role: "menuitem", tabindex: "-1", data: { confirm: 'Are you sure? Do you really want to close the store?' }, :class=>"delete" if store.can_be_closed? %>
+
+  </td>
+  
+  <td class="action-links" style="width:10%">
+
+    <%= link_to raw("<i class=\"linecons-pencil\"></i> Edit Store"), edit_link, :remote=>true, class: "edit" %>
+
+    <%= link_to raw("<i class=\"linecons-trash\"></i> Delete"), delete_link, method: :delete, store: "menuitem", tabindex: "-1", data: { confirm: 'Are you sure?' }, :remote=>true, class: "delete" %>
+
+  </td>
+
+</tr>

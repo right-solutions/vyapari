@@ -12,11 +12,12 @@ class Brand < Vyapari::ApplicationRecord
   FEATURED_HASH_REVERSE = {true => "Featured", false => "Non Featured"}
 
   # Validations
-  validates :name, :presence=> true
+  validates :name, :presence=> true, uniqueness: true
   validates :status, :presence=> true, :inclusion => {:in => STATUS_HASH_REVERSE.keys, :presence_of => :status, :message => "%{value} is not a valid status" }
 
   # Associations
   has_one :brand_image, :as => :imageable, :dependent => :destroy, :class_name => "Image::BrandImage"
+  has_many :products
 
   # ------------------
   # Class Methods
@@ -41,6 +42,48 @@ class Brand < Vyapari::ApplicationRecord
 
   scope :this_month, lambda { where("created_at >= ? AND created_at <= ?", Time.zone.now.beginning_of_month, Time.zone.now.end_of_month) }
   
+  def self.save_row_data(row)
+
+    row.headers.each{ |cell| row[cell] = row[cell].to_s.strip }
+
+    return if row[:name].blank?
+
+    brand = Brand.find_by_name(row[:name]) || Brand.new
+    
+    brand.name = row[:name]
+    brand.featured = row[:featured]
+    brand.status = row[:status]
+    brand.priority = row[:priority]
+    
+    # Initializing error hash for displaying all errors altogether
+    error_object = Kuppayam::Importer::ErrorHash.new
+
+    if brand.valid?
+      brand.save!
+    else
+      summary = "Error while saving brand: #{brand.name}"
+      details = "Error! #{brand.errors.full_messages.to_sentence}"
+      error_object.errors << { summary: summary, details: details }
+    end
+    return error_object
+  end
+
+  # ------------------
+  # Instance Methods
+  # ------------------
+
+  def display_name
+    self.name
+  end
+
+  def slug
+    self.name.parameterize
+  end
+
+  def to_param
+    "#{id}-#{slug}"
+  end
+
   # * Return true if the brand is published, else false.
   # == Examples
   #   >>> brand.published?
@@ -92,23 +135,33 @@ class Brand < Vyapari::ApplicationRecord
     self.update_attributes(status: REMOVED, featured: false)
   end
 
+  def can_be_published?
+    unpublished? or removed?
+  end
+
+  def can_be_unpublished?
+    published? or removed?
+  end
+
+  def can_be_removed?
+    published? or unpublished?
+  end
+
   # TODO
+
+  def can_be_edited?
+    true
+  end
+  
   def can_be_deleted?
+    removed? && self.products.blank?
     #if self.jobs.any?
     #  self.errors.add(:base, DELETE_MESSAGE) 
     #  return false
     #else
     #  return true
     #end
-    return true
-  end
-
-  def display_name
-    self.name
-  end
-
-  def default_image_url(size="medium")
-    "/assets/defaults/brand-#{size}.png"
+    #return true
   end
   
 end

@@ -1,0 +1,51 @@
+<% @stores = Store.active_and_inactive.all + Store.active_and_inactive.all %>
+
+<h1 class="mb-40" style="text-align:center;color:#4b4b4b;">Welcome <strong><%= @current_user.name %></strong></h1>
+
+<div class="col-md-12">
+<% @stores.each do |store| %>
+	<div class="col-md-4 panel panel-default panel-border">
+		
+		<div class="panel-body" style="height:300px;overflow-y: auto">
+
+			<div class="xe-widget xe-counter xe-counter-info">
+				<div class="xe-icon">
+					<i class="fa fa-building-o"></i>
+				</div>
+				<div class="xe-label">
+					<%= link_to store_manager_dashboard_path(store) do %>
+						<strong class="num"><%= store.name %></strong>
+					<% end %>
+					<span style="font-size:20px;"><%= store.code %></span>
+					
+				</div>
+			</div>
+
+			
+			<% store.terminals.active_and_inactive.each do |terminal| %>
+
+				<div class="col-sm-8">
+					<span style="font-size:14px;"><%= terminal.name %></span>
+				</div>
+
+				<div class="col-sm-4">
+					<%= link_to "Log In", terminal_staff_dashboard_path(terminal), class: "btn btn-secondary btn-xs" %>
+				</div>
+
+			<% end %>
+
+		</div>
+
+		<% if @current_user.has_role?("POS Sales Manager") || @current_user.has_role?("Warehouse Manager") %>
+			<div class="panel-footer">
+				<%= link_to "Manage", store_manager_dashboard_path(store), class: "btn btn-white btn-lg btn-block mt-30" %>
+			</div>
+		<% end %>
+
+	</div>
+<% end %>
+</div>
+
+<%= clear_tag(30) %>
+
+

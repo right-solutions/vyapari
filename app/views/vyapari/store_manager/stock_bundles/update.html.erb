@@ -1,0 +1,57 @@
+<%= content_for :javascript_footer do %>
+  <script type="text/javascript">
+
+  	<% if @stock_bundle.errors.blank? %>
+
+  		<% if @stock_bundle.error_summary.blank? %>
+
+	  		//var stockEntriesUrl = "<%= store_manager_stock_entries_url(@stock_bundle.store, sb: @stock_bundle.id) %>";
+	  		//window.parent.location.replace(stockEntriesUrl);
+
+	  		heading = "Stock Bundle Uploaded Successfully!";
+				bodyContent = "<%= escape_javascript(render(:partial=>"/vyapari/store_manager/stock_bundles/show")) %>";
+			  window.parent.showLargeModal(heading, bodyContent, false);
+
+			  // Showing Growl Like Message
+			  //notifySuccess("<%= escape_javascript(@notification[:title]) %>", "<%= escape_javascript(@notification[:message]) %>");
+
+  		<% else %>
+
+  			heading = "Stock Bundle Uploaded with Errors";
+				bodyContent = "<%= escape_javascript(render(:partial=>"/vyapari/store_manager/stock_bundles/show")) %>";
+
+			  window.parent.showLargeModal(heading, bodyContent, false);
+
+			  // Showing Growl Like Message
+			  //notifyError("<%= escape_javascript(@notification[:title]) %>", "<%= escape_javascript(@notification[:message]) %>");
+
+  		<% end %>
+
+  		// Inserting the row on top of the table and highlighting it
+		  window.parent.$('#div_stock_bundle_index table > tbody').prepend("<%= escape_javascript(render(:partial=>"/vyapari/store_manager/stock_bundles/row", locals: {stock_bundle: @stock_bundle, i: -1})) %>");
+
+		  window.parent.$("#tr_stock_bundle_<%= @stock_bundle.id %>").css("background-color", "#fffddd");
+
+		<% else %>
+
+			heading = "Upload Stock Bundle (CSV Format)";
+			bodyContent = "<%= escape_javascript(render(:partial=>"/vyapari/store_manager/stock_bundles/form")) %>";
+
+			window.parent.showLargeModal(heading, bodyContent);
+			
+			<%
+		    text = "You have few errors. All fields are mandatory."
+		    error_message = content_tag(:div, text, class: "alert alert-danger")
+		  %>
+		  
+		  $("#stock_bundle_form_error", window.parent.document).html("<%= escape_javascript(error_message) %>");
+
+		  $("#form_stock_bundle > div > div.panel-footer.clearfix > div > input", window.parent.document).replaceWith("<%= escape_javascript(theme_form_button(@stock_bundle)) %>");
+
+		<% end %>
+    
+    $.rails.handleRemote($("a[data-remote]"));
+
+  </script>
+<% end %>
+

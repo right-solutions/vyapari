@@ -18,7 +18,7 @@ module Vyapari
       def apply_filters
         @relation = @relation.search(@query) if @query
         
-        @order_by = "created_at desc" unless @order_by
+        @order_by = "name ASC" unless @order_by
         @relation = @relation.order(@order_by)
       end
 
@@ -39,7 +39,7 @@ module Vyapari
 
       def resource_controller_configuration
         {
-          page_title: "Manage Countries",
+          page_title: "Countries",
           current_nav: "admin/countries",
           js_view_path: "/kuppayam/workflows/parrot",
           view_path: "/vyapari/admin/countries"

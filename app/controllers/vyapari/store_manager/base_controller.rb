@@ -1,0 +1,28 @@
+module Vyapari
+  module StoreManager
+    class BaseController < ApplicationController
+      
+      layout 'vyapari/store_manager'
+      
+      before_action :require_user
+      
+      private
+
+      def set_default_title
+        set_title("Vyapari Store | Vyapari Stock Management Module")
+      end
+
+      def get_nested_resource_objects
+        @store = Store.find_by_id(params[:store_id])
+      end
+
+      def configure_filter_param_mapping
+        @filter_param_mapping = default_filter_param_mapping
+        @filter_param_mapping[:stock_bundle] = :sb
+        @filter_param_mapping[:store] = :st
+        @filter_param_mapping[:supplier] = :sp
+      end
+      
+    end	
+  end
+end

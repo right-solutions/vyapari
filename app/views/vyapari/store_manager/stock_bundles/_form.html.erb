@@ -1,0 +1,99 @@
+<% suppliers = Supplier.select("id, name").order("name ASC").all %>
+<% sample_file_link = "/assets/vyapari/sample_stock_bundle.csv" %>
+
+<%= form_for([:store_manager, @stock_bundle], :html => {:id=>"form_stock_bundle", :class=>"mb-0 form-horizontal", :stock_bundle => "form", :method => (@stock_bundle.new_record? ? :post : :put), multipart: true, :target => "iframe_document"}) do |f| %>
+
+      <div class="dx-warning mt-20" role="alert">
+        <p>
+          A <strong>Stock bundle</strong> is a collection of stock items you receive from a particular Supplier. To make it work for different suppliers, you should convert the excel / csv file you have received from the supplier to a common format so that the system undersand it.
+
+          <br><br>
+          <strong>Click here to view the 
+          <%= link_to "Exmaple File", sample_file_link, target: "_blank" %>
+          format the system is expecting </strong>
+          <br><br>
+
+          The status of the Job Bunde will be <span class="ml-5 mt-5 label label-white">Pending</span> by default. You can verify it once again after uploading and can change the status to <span class="ml-5 mt-5 label label-success">Approved</span>. However, the system will not allow you to approve if it has any error. The error will be populated in an error file which the system will generate after parsing the uploaded file. It will be available for you to download once it is ready.
+
+          <br></br>
+
+          <span class="ml-5 mt-5 label label-danger">Pending</span> Stocks are not included in the reports and not shown on invoice line items.</li>
+            <li>You click on edit button in the list view against each stock bundle and reupload the corrected CSV file after rectifying the errors the system has pointed out.
+
+          <br></br>
+
+          <b>POINTS TO NOTE:</b>
+          <ul>
+            <li>Convert your .xlsx or .xls files to CSV format. You can do this easily with <b>Save As</b> Option in Microsoft Excel.</li>
+            
+            <li>Create one <b>FILE</b> for one <b>SUPPLIER</b>.</li>
+
+            <li>CSV files can be created with Excel. However, do not use sheets / tabs as CSV has only one sheet always.</li>
+            
+            <li>Upload one CSV file at a time (one each for a Supplier / Store combination).</li>
+            
+          </ul>
+
+          <%= link_to(raw("<i class='fa fa-download mr-10'></i> Download the Sample CSV File"), sample_file_link, class: "btn btn-primary btn-only-hover", target: "_blank") %>
+
+        </p>
+      </div>
+
+      <% unless @stock_bundle.new_record? %>
+        <div class="alert alert-danger alert-dismissible mt-20 hidden" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <p>
+            <b>Warning:</b>This will overwrite the stock entries.
+          </p>
+        </div>
+      <% end %>
+
+      <% if @store.warehouse? && suppliers.empty? %>
+        <div class="alert alert-danger alert-dismissible mt-20" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <p>
+            <b>Warning:</b>You have not added any suppliers. Ask your administrator to add suppliers for the company so that you could upload stock you have received from those suppliers.
+          </p>
+        </div>
+      <% end %>
+
+      <div id="stock_bundle_form_error">
+        <%= @stock_bundle.errors[:base].to_sentence %>
+      </div>
+
+      <div class="form-inputs mb-30 mt-30">
+        
+        <% if @stock_bundle && @stock_bundle.persisted? %>
+          
+          <%= theme_form_group("Supplier", required: false, error_class: "error") do %>
+            <%= content_tag :div, @stock_bundle.supplier.try(:name) %>
+          <% end %>
+          
+          <%= hidden_field_tag "stock_bundle[supplier_id]", @stock_bundle.supplier_id %>
+          
+        <% else %>
+          
+          <% options = {assoc_collection: suppliers, required: false, editable: true, assoc_display_method: :name} %>
+          <%= theme_form_assoc_group(@stock_bundle, :supplier_id, **options) %>
+          
+        <% end %>
+
+        <%= theme_form_field(@stock_bundle, :name) %>
+
+        <%= theme_form_field(@stock_bundle, :file, html_options: {type: 'file'}, label: "Upload the Stock file in CSV format", param_name: "stock_bundle[file]") %>
+        
+      </div>
+    
+      <div>
+
+        <%= submit_tag("Save", :class=>"btn btn-primary pull-right ml-10") %>
+        
+        <%= link_to raw("<i class='fa fa-close mr-5'></i><span>Cancel</span>"), "#", onclick: "closeLargeModal();", class: "pull-right ml-10 btn btn-white" %>
+        
+      </div>
+      <%= clear_tag(10) %>
+
+  </div>
+
+<% end %>
+

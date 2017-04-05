@@ -1,0 +1,104 @@
+<div id="div_brand_show">
+	<% status_hash = {published: "success", unpublished: "default", removed: "danger"} %>
+
+	<div class="row">
+
+	  <div class="col-md-7 col-sm-12 col-xs-12" style="border-right:1px solid #f1f1f1;">
+	  	
+	  	<%= edit_image(@brand, 
+	                  "brand_image.image.large.url",
+	                  upload_image_link(@brand, :brand_image, nil ),
+	                  remove_image_link(@brand, :brand_image, nil ),
+	                  image_options: {assoc_name: :brand_image }) %>
+	  
+	  	<div class="visible-sm visible-xs mt-50"></div>
+
+	  	<%= clear_tag(10) %>
+
+	  	<%= theme_panel_heading(@brand.name) %>
+
+	    <%= clear_tag(10) %>
+
+	    <span class="ml-5 mt-5 label label-<%= status_hash[@brand.status.to_sym] %>"><%= @brand.status.titleize %></span>
+
+	  	<% if @brand.featured? %>
+	      <span class="mr-10 mt-5 label label-info">Featured</span>
+	    <% end %>
+	    
+	    <%= clear_tag(10) %>
+
+	    <div class="visible-sm visible-xs mb-50"></div>
+
+	    </div>
+
+	  <div class="col-md-5 col-sm-12 col-xs-12">
+
+	  	<% edit_link = edit_admin_brand_path(id: @brand.id) %>
+			<% delete_link = admin_brand_path(id: @brand.id) %>
+
+			<%= link_to raw("<i class=\"linecons-pencil\"></i> Edit User"), edit_link, :remote=>true, class: "btn btn-block btn-success" if @brand.can_be_edited? %>
+
+	    <%= link_to raw("<i class=\"linecons-trash\"></i> Delete"), delete_link, method: :delete, role: "menuitem", tabindex: "-1", data: { confirm: 'Are you sure?' }, :remote=>true, class: "btn btn-block btn-danger btn-only-hover" if @brand.can_be_deleted? && (@current_brand != @brand)  %>
+
+	    <!-- Publish -->
+	    <%= link_to raw("<i class=\"fa fa-circle-o mr-5\"></i> Publish"), update_status_admin_brand_path(:id =>@brand.id, :status =>'published'), :method =>'PUT', :remote=>true, role: "menuitem", tabindex: "-1", :class=>"btn btn-block btn-success btn-only-hover" if @brand.can_be_published? %>
+
+	    <!-- Unpublish -->
+	    <%= link_to raw("<i class=\"fa fa-circle mr-5\"></i> Un-Publish"), update_status_admin_brand_path(:id =>@brand.id, :status =>'unpublished'), :method =>'PUT', :remote=>true, role: "menuitem", tabindex: "-1", :class=>"btn btn-block btn-gray btn-only-hover" if @brand.can_be_unpublished? %>
+	    	
+	    <!-- Remove -->
+	    <%= link_to raw("<i class=\"fa fa-edit mr-5\"></i> Remove"), update_status_admin_brand_path(:id =>@brand.id, :status =>'removed'), :method =>'PUT', :remote=>true, role: "menuitem", tabindex: "-1", :class=>"btn btn-block btn-danger btn-only-hover" if @brand.can_be_removed? %>
+
+	    <!-- Feature -->
+	    <%= link_to raw("<i class=\"fa fa-edit mr-5\"></i> Mark as Feature"), mark_as_featured_admin_brand_path(:id =>@brand.id), :method =>'PUT', :remote=>true, role: "menuitem", tabindex: "-1", :class=>"btn btn-block btn-danger btn-only-hover" unless @brand.featured? %>
+
+	    <!-- Remove from Featuring -->
+	    <%= link_to raw("<i class=\"fa fa-edit mr-5\"></i> Remove from Featuring"), remove_from_featured_admin_brand_path(:id =>@brand.id), :method =>'PUT', :remote=>true, role: "menuitem", tabindex: "-1", :class=>"btn btn-block btn-danger btn-only-hover" if @brand.featured? %>
+
+	    <div class="visible-sm visible-xs mb-50"></div>
+
+	  </div>
+
+	</div>
+
+	<%= clear_tag(50) %>
+
+	<ul class="nav nav-pills">
+	  <li class="active">
+	    <a href="#technical_details" data-toggle="tab" aria-expanded="false">
+	      <span class="visible-xs"><i class="fa-database"></i></span>
+	      <span class="hidden-xs">Technical Details</span>
+	    </a>
+	  </li>
+	</ul>
+
+	<div class="tab-content">
+	  <div class="tab-pane active" id="technical_details">
+	    
+	    <%= clear_tag(20) %>
+
+	    <div class="table-responsive"> 
+				<table class="table table-striped table-condensed table-bordered mb-30"> 
+					<tbody>
+						
+						<tr>
+							<th>ID</th><td colspan="3"><%= @brand.id %></td>
+						</tr>
+						
+						<tr>
+							<th>Created At</th><td><%= @brand.created_at.strftime("%m/%d/%Y - %H:%M:%S") if @brand.created_at %></td>
+							<th>Updated At</th><td><%= @brand.updated_at.strftime("%m/%d/%Y - %H:%M:%S") if @brand.updated_at %></td>
+						</tr>
+
+					</tbody>
+				</table>
+				
+			</div>
+
+	  </div>
+	</div>
+
+	<%= link_to "Close", "#", onclick: "closeGenericModal();", class: "btn btn-primary pull-right" %>
+
+	<%= clear_tag %>
+</div>

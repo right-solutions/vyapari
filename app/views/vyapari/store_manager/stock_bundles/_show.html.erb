@@ -1,0 +1,110 @@
+<% 
+
+edit_link = edit_store_manager_stock_bundle_path(@store, @stock_bundle)			
+
+delete_link = store_manager_stock_bundles_path(@store, @stock_bundle)
+
+view_stock_link = store_manager_stock_entries_path(@store, sb: @stock_bundle.id)
+
+if @stock_bundle.file.file
+	download_original_file_link = download_original_file_store_manager_stock_bundle_url(@store, @stock_bundle)
+end
+
+if @stock_bundle.error_file.file
+	download_error_file_link = download_error_file_store_manager_stock_bundle_url(@store, @stock_bundle)
+end
+
+stock_entries_count = @stock_bundle.stock_entries.count
+
+if @stock_bundle.error_summary.blank?
+	widget_class = "xe-counter-green"
+	widget_icon = "fa-check"
+	panel_heading = "Uploaded Successfully"
+	panel_class = "panel-success"
+else
+	widget_class = "xe-counter-red"
+	widget_icon = "fa-exclamation-triangle"
+	panel_heading = "Parse Error"
+	panel_class = "panel-red"
+end
+
+%>
+
+<%#  main_app.url_for([:edit, scope, :image, id: image_object.id, imageable_id: object.id, imageable_type: object.class.to_s, image_type: image_object.class.name]) %>
+
+<div id="div_stock_bundle_status">
+	
+	<div class="row">
+	  
+	  <div class="col-md-3 col-sm-12 col-xs-12" style="border-right:1px solid #f1f1f1;">
+
+	  	<div class="visible-sm visible-xs mt-50"></div>
+
+	  		<div class="xe-widget xe-vertical-counter xe-vertical-counter-primary" data-count=".num" data-from="0" data-to="442" data-suffix=" TB" data-duration="5">
+					<div class="xe-icon">
+						<i class="linecons-truck"></i>
+					</div>
+					
+					<div class="xe-label">
+						<strong class="num"><%= stock_entries_count %></strong>
+						<span>Product Items</span>
+					</div>
+				</div>
+
+	  		<%= clear_tag(10) %>
+
+				<div class="visible-sm visible-xs mb-50"></div>
+
+		</div>
+
+	  <div class="col-md-6 col-sm-12 col-xs-12" style="border-right:1px solid #f1f1f1;">
+
+	  	<div class="visible-sm visible-xs mt-50"></div>
+
+	  		<div class="xe-widget xe-counter <%= widget_class %>" data-count=".num" data-from="0" data-to="57" data-prefix="-," data-suffix="%" data-duration="5" data-easing="true" data-delay="1">
+					<div class="xe-icon">
+						<i class="<%= widget_icon %>"></i>
+					</div>
+					<div class="xe-label">
+						<strong class="num"><%= @stock_bundle.display_name %></strong>
+						<span><strong style="font-size:16px;"><%= @stock_bundle.store.try(:name) %></strong></span>
+						<span>Uploaded By: <%= @stock_bundle.uploader.try(:name) %></span>
+					</div>
+				</div>
+
+	  		<%= clear_tag(10) %>
+
+	  		<% unless @stock_bundle.error_summary.blank? %>
+	      	<div class="alert alert-danger alert-dismissible mt-20" role="alert">
+	          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	          <p><b>Error:</b> <%= @stock_bundle.error_summary %></p>
+	        </div>
+	      <% end %>
+
+				<div class="visible-sm visible-xs mb-50"></div>
+
+		</div>
+
+		<div class="col-md-3 col-sm-12 col-xs-12">
+
+			<%= link_to(raw("<i class='fa fa-edit mr-10'></i> View Stock Entries"), view_stock_link, class: "pull-left btn btn-secondary btn-block", target: "_blank") %>
+
+			<%= link_to(raw("<i class='fa fa-edit mr-10'></i> Re-Upload"), edit_link, class: "pull-left btn btn-primary btn-block btn-only-hover", remote: true) %>
+
+			<%= link_to raw("<i class=\"linecons-trash\"></i> Delete this Stock Bundle"), delete_link, method: :delete, stock_bundle: "menuitem", tabindex: "-1", data: { confirm: 'Are you sure?' }, :remote=>true, class: "pull-right btn btn-danger btn-block btn-only-hover" if @stock_bundle.can_be_deleted? && @current_user.super_admin? %>
+
+			<%= link_to(raw("<i class='fa fa-search mr-10'></i> Inspect errors"), download_error_file_link, class: "pull-left btn btn-block btn-primary") if @stock_bundle.error_file.try(:file) %>
+
+			<%= link_to(raw("<i class='fa fa-download mr-10'></i> Download Original File"), download_original_file_link, class: "pull-left btn btn-primary btn-block btn-only-hover") if @stock_bundle.file %>
+
+			<div class="visible-sm visible-xs mb-50"></div>
+
+		</div>
+
+	</div>
+
+	<%= link_to "Close", "#", onclick: "closeLargeModal();", class: "btn btn-primary pull-right" %>
+
+	<%= clear_tag %>
+
+</div>

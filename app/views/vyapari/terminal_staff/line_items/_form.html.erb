@@ -1,0 +1,40 @@
+<%
+	
+	url = url_for([:terminal_staff, @invoice, line_item, { terminal_id: @invoice.terminal_id}])
+
+	if line_item.new_record?
+    http_method = :post
+  else
+    http_method = :put
+  end
+
+%>
+
+<%= form_for(line_item, :url => url, :method => http_method, :html => {:id=>"form_line_item", :class=>"mb-0 form-horizontal", :role => "form", :method => (line_item.new_record? ? :post : :put), :remote=>true}) do |f| %>
+	
+  <div class="row ili">
+
+	  <div class="col-md-1 li-form li-sl li-center" style="height:52px;">&nbsp;</div>
+
+	  <div class="col-md-4 li-form li-item-name li-center"><%= f.text_field(:product_id, style: "text-align: left") %></div>
+
+	  <div class="col-md-2 li-form li-quantity li-center"><%= f.text_field(:quantity, style: "text-align: center") %></div>
+		
+		<div class="col-md-2 li-form li-rate li-right"><%= f.text_field(:rate, style: "text-align: right") %></div>
+
+		<div class="col-md-3 li-action li-form"><%= submit_tag("Save", :class=>"btn btn-primary btn-xs btn-block", style: "margin:0px;") %></div>
+
+	</div>
+  
+<% end %>
+
+<script type="text/javascript">
+	$( "#div_line_item_form .li-item-name input").focus();
+
+	$('#div_line_item_form input').keydown(function (e) {
+	 	if (e.which === 13) {
+	    var index = $('#div_line_item_form input').index(this) + 1;
+	    $('#div_line_item_form input').eq(index).focus();
+	 	}
+	});
+</script>

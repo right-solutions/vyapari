@@ -1,0 +1,92 @@
+<%
+  
+  url = url_for([:terminal_staff, @invoice, { terminal_id: @invoice.terminal_id}])
+
+  if @invoice.new_record?
+    http_method = :post
+  else
+    http_method = :put
+  end
+
+%>
+
+<%= form_for(@invoice, :url => url, :method => http_method, :html => {:id=>"form_invoice", :class=>"mb-0 form-horizontal", :invoice => "form", :method => (@invoice.new_record? ? :post : :put), :remote=>true}) do |f| %>
+
+      <div class="form-inputs mb-30 mt-30">
+        
+        <div class="row ili mt-10 mb-10" id="div_line_item_display">
+          <div class="col-md-2 col-md-offset-8 li-item-name li-form li-left" style="height:52px;">Discount:</div>
+          <div class="col-md-2 li-action li-form li-right">
+            <%= f.text_field(:discount, style: "text-align: right") %>
+          </div>
+        </div>
+
+        <div class="row ili mt-10 mb-10" id="div_line_item_display" style="font-weight: bold;font-size:20px;">
+          <div class="col-md-2 col-md-offset-8 li-item-name li-form li-left">Net Total:</div>
+          <div class="col-md-2 li-action li-form li-right">
+            <span>AED </span>
+            <span id="invoice_total">
+              <%= number_to_currency @invoice.net_total_amount, unit: "" %>
+              </span>
+          </div>
+        </div>
+
+        <!-- <div class="row ili mt-10 mb-10" id="div_line_item_display">
+          <div class="col-md-2 col-md-offset-8 li-item-name li-form li-left" style="height:52px;">Adjustment:</div>
+          <div class="col-md-2 li-action li-form li-right">
+            <%#= f.text_field(:adjustment, style: "text-align: right") %>
+          </div>
+        </div> -->
+
+        <div class="row ili mt-10 mb-10" id="div_line_item_display">
+          <div class="col-md-2 col-md-offset-8 li-item-name li-form li-left" style="height:52px;">Money Taken:</div>
+          <div class="col-md-2 li-action li-form li-right">
+            <%= f.text_field(:money_taken, style: "text-align: right") %>
+          </div>
+        </div>
+
+        <div class="row ili mt-10 mb-10" id="div_line_item_display">
+          <div class="col-md-2 col-md-offset-8 li-item-name li-form li-left">Customer Balance:</div>
+          <div class="col-md-2 li-action li-form li-right">
+            <span>AED </span>
+            <span id="invoice_total" style="height:52px;">
+              <%= number_to_currency @invoice.balance_to_give, unit: "" %>
+              </span>
+          </div>
+        </div>
+
+        <%= theme_form_field(@invoice, :notes, required: true, form_style: "top-bottom", html_options: {type: :textarea, style: "height: 100px;"}) %>
+
+        <!-- <div class="form-group "><label class=" control-label mb-20"><b>Notes</b><span class="text-color-red ml-10 mr-5 pull-right">*</span></label><div><textarea name="invoice[notes]" id="inp_notes" type="textarea" style="height: 100px;" class="text input form-control" place_holder=""></textarea></div></div> -->
+
+        <!-- Radio Button for Cash -->
+        <%= f.radio_button :payment_method, 'cash', class: "mr-10", :checked => true %> 
+        <%= label :payment_method_cash, 'CASH', class: "mr-30" %>
+
+        <!-- Radio Button for Credit Card -->
+        <%= f.radio_button :payment_method, 'credit_card', class: "mr-10" %>
+        <%= label :payment_method_credit_card, 'CREDIT CARD', class: "mr-30" %>
+
+        <!-- Radio Button for Credit -->
+        <%= f.radio_button :payment_method, 'credit', class: "mr-10" %>
+        <%= label :payment_method_credit, 'CREDIT', class: "mr-30" %>
+
+        <!-- Radio Button for Cheque -->
+        <%= f.radio_button :payment_method, 'cheque', class: "mr-10" %>
+        <%= label :payment_method_cheque, 'CHEQUE', class: "mr-30" %>
+
+      </div>
+    
+      <div class="form-group ">
+
+        <%= submit_tag("Save", :class=>"btn btn-success btn-lg pull-right ml-10") %>
+        
+        <%= link_to "Close", "#", onclick: "closeLargeModal();", class: "btn btn-primary pull-right" %>
+        
+      </div>
+      <%= clear_tag(10) %>
+
+  </div>
+
+<% end %>
+

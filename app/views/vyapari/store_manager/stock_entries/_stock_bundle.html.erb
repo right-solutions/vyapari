@@ -1,0 +1,61 @@
+<%
+	stock_entries_count = @stock_bundle.stock_entries.count
+
+	if @stock_bundle.error_summary.blank?
+		widget_class = "xe-counter-green"
+		widget_icon = "fa-check"
+		panel_heading = "Uploaded Successfully"
+		panel_class = "panel-success"
+	else
+		widget_class = "xe-counter-red"
+		widget_icon = "fa-exclamation-triangle"
+		panel_heading = "Parse Error"
+		panel_class = "panel-red"
+	end
+%>
+
+<div class="row">
+	  
+  <div class="col-md-3 col-sm-4 col-xs-12" style="border-right:1px solid #f1f1f1;">
+
+  	<div class="visible-sm visible-xs mt-50"></div>
+
+  		<div class="xe-widget xe-vertical-counter xe-vertical-counter-primary" data-count=".num" data-from="0" data-to="442" data-suffix=" TB" data-duration="5">
+				<div class="xe-icon">
+					<i class="linecons-truck"></i>
+				</div>
+				
+				<div class="xe-label">
+					<strong class="num"><%= stock_entries_count %></strong>
+					<span>Product Items</span>
+				</div>
+			</div>
+
+  		<%= clear_tag(10) %>
+
+			<div class="visible-sm visible-xs mb-50"></div>
+
+	</div>
+
+	<div class="col-md-9 col-sm-8 col-xs-12" style="border-right:1px solid #f1f1f1;">
+
+		<div class="visible-sm visible-xs mt-50"></div>
+
+		<div class="xe-widget xe-counter <%= widget_class %>" data-count=".num" data-from="0" data-to="57" data-prefix="-," data-suffix="%" data-duration="5" data-easing="true" data-delay="1">
+			<div class="xe-icon">
+				<i class="<%= widget_icon %>"></i>
+			</div>
+			<div class="xe-label">
+			<strong class="num"><%= @stock_bundle.display_name %></strong>
+				<span><strong style="font-size:16px;"><%= @stock_bundle.store.try(:name) %></strong></span>
+				<span>Uploaded By: <%= @stock_bundle.uploader.try(:name) %></span>
+			</div>
+		</div>
+
+		<%= clear_tag(10) %>
+
+		<div class="visible-sm visible-xs mb-50"></div>
+
+	</div>
+
+</div>

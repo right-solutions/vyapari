@@ -1,0 +1,81 @@
+<div id="div_product_show">
+	
+	<div class="row">
+
+	  <div class="col-md-9 col-sm-12 col-xs-12" style="border-right:1px solid #f1f1f1;">
+
+	  	<div class="visible-sm visible-xs mt-50"></div>
+
+	  	<%= theme_panel_heading(@product.display_name) %>
+	  	<%= theme_panel_sub_heading(@product.code, "#") %>
+	  	<%= theme_panel_sub_heading(@product.city, "#") %>
+	  	<%= theme_panel_description(@product.country.name) if @product.country %>
+
+	    <%= clear_tag(10) %>
+
+	    <div class="mt-20" style="max-width: 100%;overflow: auto;max-height: 500px;">
+        <%= raw(@product.address) %>
+      </div>
+
+	    <%= clear_tag(10) %>
+
+	    <div class="visible-sm visible-xs mb-50"></div>
+
+	    </div>
+
+	  <div class="col-md-3 col-sm-12 col-xs-12">
+
+	  	<% edit_link = edit_admin_product_path(id: @product.id) %>
+			<% delete_link = admin_product_path(id: @product.id) %>
+
+			<%= link_to raw("<i class=\"linecons-pencil\"></i> Edit"), edit_link, :remote=>true, class: "btn btn-block btn-success" if @product.can_be_edited? %>
+
+	    <%= link_to raw("<i class=\"linecons-trash\"></i> Delete"), delete_link, method: :delete, product: "menuitem", tabindex: "-1", data: { confirm: 'Are you sure?' }, :remote=>true, class: "btn btn-block btn-danger btn-only-hover" if @product.can_be_deleted? %>
+
+	    <div class="visible-sm visible-xs mb-50"></div>
+
+	  </div>
+
+	</div>
+
+	<%= clear_tag(50) %>
+
+	<ul class="nav nav-pills">
+	  <li class="active">
+	    <a href="#technical_details" data-toggle="tab" aria-expanded="false">
+	      <span class="visible-xs"><i class="fa-database"></i></span>
+	      <span class="hidden-xs">Technical Details</span>
+	    </a>
+	  </li>
+	</ul>
+
+	<div class="tab-content">
+	  <div class="tab-pane active" id="technical_details">
+	    
+	    <%= clear_tag(20) %>
+
+	    <div class="table-responsive"> 
+				<table class="table table-striped table-condensed table-bordered mb-30"> 
+					<tbody>
+						
+						<tr>
+							<th>ID</th><td colspan="3"><%= @product.id %></td>
+						</tr>
+						
+						<tr>
+							<th>Created At</th><td><%= @product.created_at.strftime("%m/%d/%Y - %H:%M:%S") if @product.created_at %></td>
+							<th>Updated At</th><td><%= @product.updated_at.strftime("%m/%d/%Y - %H:%M:%S") if @product.updated_at %></td>
+						</tr>
+
+					</tbody>
+				</table>
+				
+			</div>
+
+	  </div>
+	</div>
+
+	<%= link_to "Close", "#", onclick: "closeGenericModal();", class: "btn btn-primary pull-right" %>
+
+	<%= clear_tag %>
+</div>

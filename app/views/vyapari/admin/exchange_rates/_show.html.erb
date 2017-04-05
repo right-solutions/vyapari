@@ -17,6 +17,7 @@
 	  <div class="col-md-3 col-sm-12 col-xs-12">
 
 	  	<% edit_link = edit_admin_exchange_rate_path(id: @exchange_rate.id) %>
+	  	
 			<% delete_link = admin_exchange_rate_path(id: @exchange_rate.id) %>
 
 			<%= link_to raw("<i class=\"linecons-pencil\"></i> Edit"), edit_link, :remote=>true, class: "btn btn-block btn-success" if @exchange_rate.can_be_edited? %>

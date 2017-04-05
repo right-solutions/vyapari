@@ -1,0 +1,75 @@
+<div class="table-responsive"> 
+	<table class="table table-hover members-table middle-align">
+	  <thead> 
+			<tr> 
+				<th style="text-align: center;width:60px">#</th> 
+				<th>Name</th>
+				<th>Code</th>
+				<th>Status</th>
+				<th style="text-align: center;" colspan="2">Actions</th>
+			</tr> 
+		</thead>
+		
+	  <tbody>
+	  	<% @terminals.each_with_index do |terminal, i| %>
+	  			
+	  		<% edit_link = edit_admin_store_terminal_path(terminal.store, terminal) %>
+				<% delete_link = admin_store_terminal_path(terminal.store, terminal) %>
+				
+		    <tr id="tr_terminal_<%= terminal.id %>">
+		      
+		      <th scope="row" style="text-align: center;">
+						<% if i < 0 %>
+							<i class="fa fa-check text-success"></i>
+						<% else %>
+							<%= i + 1 + (@per_page.to_i * (@current_page.to_i - 1)) %>
+						<% end %>
+					</th>
+
+		      <td class="terminal-name"><%= link_to terminal.name, admin_store_terminal_path(terminal.store, terminal), remote: true %></td>
+
+		      <td class="terminal-name"><%= link_to terminal.code, admin_store_terminal_path(terminal.store, terminal), remote: true %></td>
+
+		      <td>
+				  	<% if terminal.inactive? %>
+				  		<span class="ml-5 mt-5 label label-default">Inactive</span>
+				  	<% elsif terminal.active? %>
+				  		<span class="ml-5 mt-5 label label-success">Active</span>
+				  	<% elsif terminal.closed? %>
+				  		<span class="ml-5 mt-5 label label-danger">Closed</span>
+				  	<% end %>
+				  </td>
+
+		      <td class="action-links" style="width:10%">
+
+		      	<!-- Activate -->
+				    <%= link_to raw("<i class=\"fa fa-circle-o mr-5\"></i> Activate"), update_status_admin_store_terminal_path(terminal.store, terminal, :status =>'active'), :method =>'PUT', :remote=>true, role: "menuitem", tabindex: "-1", :class=>"edit" if terminal.can_be_activated? %>
+
+				    <!-- In Activate -->
+				    <%= link_to raw("<i class=\"fa fa-circle-o mr-5\"></i> In Activate"), update_status_admin_store_terminal_path(terminal.store, terminal, :status =>'inactive'), :method =>'PUT', :remote=>true, role: "menuitem", tabindex: "-1", :class=>"" if terminal.can_be_inactivated? %>
+
+				    <!-- Close -->
+				    <%= link_to raw("<i class=\"fa fa-circle-o mr-5\"></i> Close"), update_status_admin_store_terminal_path(terminal.store, terminal, :status =>'closed'), :method =>'PUT', :remote=>true, role: "menuitem", tabindex: "-1", data: { confirm: 'Are you sure? Do you really want to close the terminal?' }, :class=>"delete" if terminal.can_be_closed? %>
+
+		      </td>
+
+		      <td class="action-links" style="width:10%">
+
+		      	<%= link_to raw("<i class=\"linecons-pencil\"></i> Edit Terminal"), edit_link, :remote=>true, class: "edit" %>
+
+		        <%= link_to raw("<i class=\"linecons-trash\"></i> Delete"), delete_link, method: :delete, terminal: "menuitem", tabindex: "-1", data: { confirm: 'Are you sure?' }, :remote=>true, class: "delete" %>
+
+		      </td>
+
+		    </tr>
+		  <% end %>
+	  </tbody>
+	</table>
+</div>
+
+<div class="row">
+  <div class="col-sm-12">
+    <%= paginate_kuppayam(@terminals) %>
+  </div>
+</div>
+

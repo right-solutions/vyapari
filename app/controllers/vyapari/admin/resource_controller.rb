@@ -4,6 +4,7 @@ module Vyapari
 
 	  	include ResourceHelper
 
+	  	before_action :require_site_admin
 	    before_action :configure_resource_controller
 
 	    def resource_url(obj)

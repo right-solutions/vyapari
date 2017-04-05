@@ -1,0 +1,45 @@
+<div class="row">
+      
+  <div class="col-md-12">
+
+  <div id="div_stock_bundle_show">
+    <% if @stock_bundle %>
+      <%= render :partial=>"vyapari/store_manager/stock_entries/stock_bundle" %>
+    <% end %>
+  </div>
+    
+    <ul class="nav nav-tabs">
+    </ul>
+    
+    <div class="tab-content">
+      <div class="tab-pane active">
+
+        <div id="div_stock_entry_action_buttons">
+          <div class="row">
+            <div class="col-md-6">
+
+              <%= theme_button('Import / Update Stock', 'plus', store_manager_stock_bundles_path(@store), remote: false, classes: "pull-left", btn_type: "success") %>
+              
+              <%#= theme_button('Add a Single Item', 'check', new_store_manager_stock_entry_path(@store, overwrite: true), classes: "pull-left", btn_type: "success") %>
+
+              <%= theme_button('Refresh', 'refresh', store_manager_stock_entries_path(@store), classes: "pull-left ml-10", btn_type: "white") %>
+              
+            </div>
+            <div class="col-md-6">
+              <%= search_form_kuppayam(StockEntry, store_manager_stock_entries_path(@store), text: @filters[:query]) %>
+            </div>
+          </div>
+        </div>
+        <%= clear_tag(10) %>
+
+        <div id="div_stock_entry_index">
+          <%= render :partial=>"vyapari/store_manager/stock_entries/index" %>
+        </div>
+        <%= clear_tag(10) %>
+
+      </div>
+    </div>
+
+  </div>
+
+</div>

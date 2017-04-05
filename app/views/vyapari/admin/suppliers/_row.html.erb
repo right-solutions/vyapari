@@ -1,0 +1,30 @@
+<% edit_link = edit_admin_supplier_path(id: supplier.id) %>
+<% delete_link = admin_supplier_path(id: supplier.id) %>
+
+<tr id="tr_supplier_<%= supplier.id %>">
+
+  <th scope="row" style="text-align: center;">
+    <% if i < 0 %>
+      <i class="fa fa-check text-success"></i>
+    <% else %>
+      <%= i + 1 + (@per_page.to_i * (@current_page.to_i - 1)) %>
+    <% end %>
+  </th>
+
+  <td class="supplier-name"><%= link_to supplier.name, admin_supplier_path(supplier), remote: true %></td>
+
+  <td class="supplier-name"><%= link_to supplier.code, admin_supplier_path(supplier), remote: true %></td>
+
+  <td class="supplier-name"><%= link_to supplier.city, admin_supplier_path(supplier), remote: true %></td>
+  
+  <td class="supplier-name"><%= link_to supplier.country.try(:name), admin_supplier_path(supplier), remote: true %></td>
+
+  <td class="action-links" style="width:10%">
+
+    <%= link_to raw("<i class=\"linecons-pencil\"></i> Edit Supplier"), edit_link, :remote=>true, class: "edit" %>
+
+    <%= link_to raw("<i class=\"linecons-trash\"></i> Delete"), delete_link, method: :delete, supplier: "menuitem", tabindex: "-1", data: { confirm: 'Are you sure?' }, :remote=>true, class: "delete" %>
+
+  </td>
+
+</tr>

@@ -1,0 +1,19 @@
+<div class="row">
+
+	<% @stores.each do |store| %>
+	<div class="col-sm-3">
+		<div class="xe-widget xe-counter xe-counter-info" style="min-height:160px;max-height: 160px;overflow:hidden;">
+			<div class="xe-icon">
+				<i class="fa fa-building-o"></i>
+			</div>
+			<div class="xe-label">
+				<%= link_to store_manager_dashboard_path(store) do %>
+					<strong class="num"><%= store.code %></strong>
+				<% end %>
+				<span><%= store.name %></span>
+			</div>
+		</div>
+	</div>
+	<% end %>
+
+</div>

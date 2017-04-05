@@ -2,6 +2,8 @@ module Vyapari
 	module Admin
 	  class DashboardController < Vyapari::Admin::BaseController
 
+	  	before_action :require_site_admin
+
 	  	# GET /dashboard
 	    def index
 	    end
@@ -10,7 +12,7 @@ module Vyapari
 
 	    def breadcrumbs_configuration
 	      {
-	        heading: "Stock Dashboard",
+	        heading: "Admin Dashboard",
 	        description: "A Quick view of stocks",
 	        links: [{name: "Dashboard", link: admin_dashboard_path, icon: 'fa-dashboard'}]
 	      }

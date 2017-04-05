@@ -1,0 +1,64 @@
+<div class="table-responsive"> 
+	<table class="table table-hover members-table middle-align">
+	  <thead> 
+			<tr> 
+				<th style="text-align: center;width:60px">#</th> 
+				<th>Invoice Number</th>
+				<th style="width:15%;text-align: center;">Date</th>
+				<th style="text-align: left;">User</th>
+				<th style="text-align: center;">Payment Method</th>
+				<th style="text-align: right;">Total Amount</th>
+				<th>Status</th>
+				<th style="text-align: center;">Actions</th>
+			</tr> 
+		</thead>
+		
+	  <tbody>
+	  	<% @invoices.each_with_index do |invoice, i| %>
+	  		
+	  		<% edit_link = edit_terminal_staff_invoice_path(@terminal, invoice) %>
+
+				<% delete_link = terminal_staff_invoices_path(@terminal, invoice) %>
+				
+		    <tr id="tr_invoice_<%= invoice.id %>">
+		      
+		      <th scope="row" style="text-align: center;">
+						<% if i < 0 %>
+							<i class="fa fa-check text-success"></i>
+						<% else %>
+							<%= i + 1 + (@per_page.to_i * (@current_page.to_i - 1)) %>
+						<% end %>
+					</th>
+
+		      <td class="invoice-name"><%= link_to invoice.invoice_number, terminal_staff_invoice_path(@terminal, invoice), remote: true %></td>
+
+		      <td class="invoice-name" style="text-align: center;"><%= invoice.invoice_date.strftime("%m/%d/%Y") if invoice.invoice_date %></td>
+
+		      <td class="invoice-name" style="text-align: center;"><%= invoice.user.display_name if invoice.user %></td>
+
+		      <td class="invoice-name" style="text-align: center;"><%= invoice.display_payment_method %></td>
+
+		      <td class="invoice-name" style="text-align: center;"><%= number_to_currency invoice.total_amount, unit: "" %></td>
+
+		      <td class="invoice-name" style="text-align: center;"><%= invoice.display_status %></td>
+
+		      <td class="action-links" style="width:10%">
+
+		      	<%= link_to raw("<i class=\"linecons-pencil\"></i> Edit"), edit_link, :remote=>true, class: "edit" %>
+
+		        <%= link_to raw("<i class=\"linecons-trash\"></i> Delete"), delete_link, method: :delete, invoice: "menuitem", tabindex: "-1", data: { confirm: 'Are you sure?' }, :remote=>true, class: "delete" %>
+
+		      </td>
+
+		    </tr>
+		  <% end %>
+	  </tbody>
+	</table>
+</div>
+
+<div class="row">
+  <div class="col-sm-12">
+    <%= paginate_kuppayam(@invoices) %>
+  </div>
+</div>
+

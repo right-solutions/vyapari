@@ -1,0 +1,32 @@
+<%= form_for([:admin, @product], :html => {:id=>"form_product", :class=>"mb-0 form-horizontal", :product => "form", :method => (@product.new_record? ? :post : :put), :remote=>true}) do |f| %>
+
+      <div id="product_form_error">
+        <%= @product.errors[:base].to_sentence %>
+      </div>
+
+      <div class="form-inputs mb-30 mt-30">
+        <%= theme_form_field(@product, :name) %>
+        <%= theme_form_field(@product, :code) %>
+        
+        <%= theme_form_field(@product, :address, required: true, html_options: {type: :textarea}) %>
+
+        <%= theme_form_field(@product, :city) %>
+
+        <% options = {assoc_collection: Country.select("id, name").order("name ASC").all, required: true, editable: true, assoc_display_method: :name} %>
+        <%= theme_form_assoc_group(@product, :country_id, **options) %>
+        
+      </div>
+    
+      <div>
+
+        <%= submit_tag("Save", :class=>"btn btn-primary pull-right ml-10") %>
+        
+        <%= link_to raw("<i class='fa fa-close mr-5'></i><span>Cancel</span>"), "#", onclick: "closeGenericModal();", class: "pull-right ml-10 btn btn-white" %>
+        
+      </div>
+      <%= clear_tag(10) %>
+
+  </div>
+
+<% end %>
+

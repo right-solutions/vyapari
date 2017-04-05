@@ -1,0 +1,37 @@
+<%= form_for([:admin, @store], :html => {:id=>"form_store", :class=>"mb-0 form-horizontal", :store => "form", :method => (@store.new_record? ? :post : :put), :remote=>true}) do |f| %>
+
+      <div id="store_form_error">
+        <%= @store.errors[:base].to_sentence %>
+      </div>
+
+      <div class="form-inputs mb-30 mt-30">
+        <%= theme_form_field(@store, :name) %>
+        <%= theme_form_field(@store, :code) %>
+        
+        <%
+          store_types = Store::STORE_TYPES_REVERSE
+          options_list = Array[*store_types.collect {|v,i| [v,i] }]
+        %>
+        <%= theme_form_select_group(f, @store, :store_type, options_list, label: "Store Type", param_name: "store_type", prompt: true, required: true) %>
+
+        <% options = {assoc_collection: Region.select("id, name").order("name ASC").all, required: false, editable: true, assoc_display_method: :name} %>
+        <%= theme_form_assoc_group(@store, :region_id, **options) %>
+
+        <% options = {assoc_collection: Country.select("id, name").order("name ASC").all, required: false, editable: true, assoc_display_method: :name} %>
+        <%= theme_form_assoc_group(@store, :country_id, **options) %>
+        
+      </div>
+    
+      <div>
+
+        <%= submit_tag("Save", :class=>"btn btn-primary pull-right ml-10") %>
+        
+        <%= link_to raw("<i class='fa fa-close mr-5'></i><span>Cancel</span>"), "#", onclick: "closeLargeModal();", class: "pull-right ml-10 btn btn-white" %>
+        
+      </div>
+      <%= clear_tag(10) %>
+
+  </div>
+
+<% end %>
+

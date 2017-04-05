@@ -39,7 +39,7 @@ module Vyapari
 
       def resource_controller_configuration
         {
-          page_title: "Manage Countries",
+          page_title: "Regions",
           js_view_path: "/kuppayam/workflows/parrot",
           view_path: "/vyapari/admin/regions"
         }

@@ -1,0 +1,94 @@
+<style type="text/css">
+	.ili .li-heading {
+		background-color: #4b4b4b;
+		color: #fff;
+		border: 1px solid #FFF;
+		padding: 10px;
+	}
+
+	.ili .li-display {
+		background-color: #f1f1f1;
+		color: #4b4b4b;
+		border: 1px solid #FFF;
+		padding: 10px;
+	}
+
+	.ili .li-form {
+		background-color: #f1f1f1;
+		color: #4b4b4b;
+		border: 1px solid #FFF;
+		padding: 10px;
+	}
+
+	.ili .li-form input {
+		width:95%;
+		height: 30px;
+	}
+
+	.ili .li-center {text-align: center;}
+	.ili .li-left {text-align: left;}
+	.ili .li-right {text-align: right;}
+
+	/*.ili .li-sl {width: 10%;}
+	.ili .li-item-name {}
+	.ili .li-quantity {width: 10%;}
+	.ili .li-rate {width: 10%;}
+	.ili .li-action {width: 10%;}*/
+
+</style>
+
+<div class="row ili" id="div_line_item_header">
+	<div class="col-md-1 li-heading li-sl li-center">#</div>
+	<div class="col-md-4 li-heading li-item-name li-left">Item</div>
+	<div class="col-md-2 li-heading li-quantity li-center">Quantity</div>
+	<div class="col-md-2 li-rate li-heading li-right">Rate</div>
+	<div class="col-md-2 li-rate li-heading li-right">Total</div>
+	<div class="col-md-1 li-action li-heading li-center">&nbsp;</div>
+</div>
+
+<% @invoice.line_items.each_with_index do |line_item, i| %>
+	
+	<div class="row ili" id="div_line_item_<%= line_item.id %>">
+
+		<%# edit_link = edit_terminal_staff_invoice_line_item_path(@invoice, line_item, terminal_id: @terminal.id) %>
+
+		<% delete_link = terminal_staff_invoice_line_items_path(@invoice, line_item, terminal_id: @terminal.id) %>
+
+		<div class="col-md-1 li-sl li-display">
+			<% if i < 0 %>
+				<i class="fa fa-check text-success"></i>
+			<% else %>
+				<%= i + 1 + (@per_page.to_i * (@current_page.to_i - 1)) %>
+			<% end %>
+		</div>
+
+		<div class="col-md-4 li-item-name li-display li-left"><%= line_item.display_name %></div>
+
+		<div class="col-md-2 li-quantity li-display li-center"><%= line_item.quantity %></div>
+
+		<div class="col-md-2 li-rate li-display li-right"><%= number_to_currency line_item.rate, unit: "" %></div>
+
+		<div class="col-md-2 li-rate li-display li-right"><%= number_to_currency (line_item.total_amount) , unit: "" %></div>
+
+		<div class="col-md-1 li-action li-display">
+			<%#= link_to raw("<i class=\"linecons-pencil\"></i>"), edit_link, :remote=>true, class: "edit" %>
+
+		  <%= link_to raw("<i class=\"linecons-trash\"></i>"), delete_link, method: :delete, line_item: "menuitem", tabindex: "-1", data: { confirm: 'Are you sure?' }, :remote=>true, class: "delete" %>
+		</div>
+
+	</div>
+
+<% end %>
+
+<div id="div_line_item_form">
+	<%= render :partial=>"vyapari/terminal_staff/line_items/form", locals: {line_item: LineItem.new(quantity: 1) } %>
+</div>
+
+<div class="row ili mt-10 mb-10" id="div_line_item_display">
+  <div class="col-md-2 col-md-offset-8 li-item-name li-form li-left">Gross Total:</div>
+  <div class="col-md-2 li-action li-form li-right">
+  	<%= number_to_currency @invoice.total_amount, unit: "" %>
+  </div>
+</div>
+
+

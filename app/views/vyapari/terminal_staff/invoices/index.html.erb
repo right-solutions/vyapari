@@ -1,0 +1,37 @@
+<div class="row">
+      
+  <div class="col-md-12">
+
+    <ul class="nav nav-tabs">
+    </ul>
+    
+    <div class="tab-content">
+      <div class="tab-pane active">
+
+        <div id="div_invoice_action_buttons">
+          <div class="row">
+            <div class="col-md-6">
+
+              <%= theme_button('Create Invoice', 'plus', terminal_staff_invoices_path(@terminal), remote: false, classes: "pull-left", btn_type: "success") %>
+              
+              <%= theme_button('Refresh', 'refresh', terminal_staff_invoices_path(@terminal), classes: "pull-left ml-10", btn_type: "white") %>
+              
+            </div>
+            <div class="col-md-6">
+              <%= search_form_kuppayam(Invoice, terminal_staff_invoices_path(@terminal), text: @filters[:query]) %>
+            </div>
+          </div>
+        </div>
+        <%= clear_tag(10) %>
+
+        <div id="div_invoice_index">
+          <%= render :partial=>"vyapari/terminal_staff/invoices/index" %>
+        </div>
+        <%= clear_tag(10) %>
+
+      </div>
+    </div>
+
+  </div>
+
+</div>

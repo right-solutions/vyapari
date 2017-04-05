@@ -1,0 +1,93 @@
+<%
+	total_count = @store.stock_entries.count
+	in_stock_count = @store.stock_entries.in_stock.count
+	damaged_count = @store.stock_entries.damaged.count
+	sold_count = @store.stock_entries.sold.count
+	reserved_count = @store.stock_entries.reserved.count
+%>
+
+<div class="chart-item-bg-2">
+	<div class="chart-item-num" data-count="this" data-from="0" data-to="98" data-suffix="%" data-duration="2">
+		<i class="fa-list"></i>
+		<%= total_count %> <span style="font-size:20px">Product Items</span>
+	</div>
+	<div class="chart-item-desc">
+		<%= link_to raw("<i class=\"fa-truck mr-10\"></i> View Stock"), store_manager_stock_entries_path(@store), class: "btn btn-success btn-lg btn-block", style: "height:50px" %>
+		<%= link_to raw("<i class=\"fa-upload mr-10\"></i> Import Stock"), store_manager_stock_bundles_path(@store), class: "btn btn-success btn-lg btn-block", style: "height:50px" %>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-sm-3">
+
+		<div class="xe-widget xe-counter xe-counter-success" data-count=".num" data-from="0" data-to="99.9" data-suffix="%" data-duration="2">
+			<div class="xe-icon">
+				<i class="fa-shopping-cart"></i>
+			</div>
+			<div class="xe-label">
+			<strong class="num"><%= sold_count %></strong>
+				<span>SOLD</span>
+			</div>
+		</div>
+
+		<div class="xe-widget xe-counter xe-counter-info" data-count=".num" data-from="1" data-to="117" data-suffix="k" data-duration="3" data-easing="false">
+			<div class="xe-icon">
+				<i class="fa-truck"></i>
+			</div>
+			<div class="xe-label">
+				<strong class="num"><%= in_stock_count %></strong>
+				<span>IN STOCK</span>
+			</div>
+		</div>
+
+		<div class="xe-widget xe-counter xe-counter-danger" data-count=".num" data-from="1000" data-to="2470" data-duration="4" data-easing="true">
+			<div class="xe-icon">
+				<i class="fa-ban"></i>
+			</div>
+			<div class="xe-label">
+				<strong class="num"><%= damaged_count %></strong>
+				<span>DAMAGED</span>
+			</div>
+		</div>
+
+		<div class="xe-widget xe-counter xe-counter-gray" data-count=".num" data-from="1000" data-to="2470" data-duration="4" data-easing="true">
+			<div class="xe-icon">
+				<i class="fa-bookmark"></i>
+			</div>
+			<div class="xe-label">
+				<strong class="num"><%= reserved_count %></strong>
+				<span>RESERVED</span>
+			</div>
+		</div>
+
+	</div>
+
+	<div class="col-sm-9">
+
+		<div class="panel panel-default" style="width:100%;min-height:405px;">
+			<div class="panel-heading">Terminals</div>
+			<table class="table">
+				<thead>
+					<tr>
+						<th style="width:60%">Name</th>
+						<th>Code</th>
+						<th style="text-align:center">Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					<% @store.terminals.each do |terminal| %>
+						<tr>
+							<td><%= terminal.name %></td>
+							<td><%= terminal.code %></td>
+							<td style="text-align:center">
+								<%= link_to "Log In", terminal_staff_dashboard_path(terminal), class: "btn btn-primary btn-success pr-30 pl-30" %>
+							</td>
+						</tr>
+					<% end %>
+				</tbody>
+			</table>
+		</div>
+
+	</div>
+	
+</div>
