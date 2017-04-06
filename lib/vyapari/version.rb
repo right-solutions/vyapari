@@ -1,3 +1,3 @@
 module Vyapari
-  VERSION = '0.1.5dev4'
+  VERSION = '0.1.5dev5'
 end
