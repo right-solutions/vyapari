@@ -43,6 +43,9 @@ module Vyapari
           # recalculate the gross total amount
           @invoice.reload.save
 
+          # Updating the stock register
+          @invoice.update_stock_register!
+
           set_notification(true, @line_item.product.ean_sku, "Line Item '#{@line_item.product.name}' ADDED")
         else
           if product
@@ -69,6 +72,8 @@ module Vyapari
             
             # recalculate the gross total amount
             @invoice.reload.save
+
+            @invoice.update_stock_register!
 
             get_collections
             set_flash_message(I18n.t('success.deleted'), :success)

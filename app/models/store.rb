@@ -131,6 +131,60 @@ class Store < Vyapari::ApplicationRecord
     true
   end
 
+  def sold_items_count_for_today
+    self.stock_entries.today.sold.sum(:quantity)
+  end
+
+  def sold_items_count_for_this_month
+    self.stock_entries.this_month.sold.sum(:quantity)
+  end
+
+  def damaged_items_count_for_today
+    self.stock_entries.today.damaged.sum(:quantity)
+  end
+
+  def damaged_items_count_for_this_month
+    self.stock_entries.this_month.damaged.sum(:quantity)
+  end
+
+  def returned_items_count_for_today
+    self.stock_entries.today.returned.sum(:quantity)
+  end
+
+  def returned_items_count_for_this_month
+    self.stock_entries.this_month.returned.sum(:quantity)
+  end
+
+  def reserved_items_count_for_today
+    self.stock_entries.today.reserved.sum(:quantity)
+  end
+
+  def reserved_items_count_for_this_month
+    self.stock_entries.this_month.reserved.sum(:quantity)
+  end
+
+  def in_stock_items_count_as_of_now
+    self.stock_entries.active.sum(:quantity) - self.stock_entries.sold.sum(:quantity)
+  end
+
+  def total_no_of_products_in_stock
+    self.stock_entries.active.count 
+    # - self.stock_entries.sold.count
+    # self.stock_entries.active.count - self.stock_entries.sold.count
+    #begin
+      # result = Product.select("COUNT(products.id) as id, MAX(se.store_id) as store_id").
+      #               joins("LEFT JOIN stock_entries se ON se.product_id = products.id").
+      #               where("se.store_id = ?", self.id).
+      #               group("products.id")
+      # return result.size.to_i
+    #rescue
+      #0
+    #end
+  end
+  
+  
+  
+
   # * Return true if the brand is active, else false.
   # == Examples
   #   >>> brand.active?

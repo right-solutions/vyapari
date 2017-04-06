@@ -80,7 +80,7 @@ module Vyapari
       private
 
       def get_collections
-        @relation = @store.stock_entries.where("")
+        @relation = @store.stock_entries.includes(:product, :supplier).where("")
 
         parse_filters
         apply_filters
@@ -130,7 +130,7 @@ module Vyapari
           collection_name: :stock_entries,
           item_name: :stock_entry,
           class: StockEntry,
-          page_title: "#{@store.name} - Stock Entries",
+          page_title: "#{@store.name} - Stock",
           js_view_path: "/kuppayam/workflows/parrot",
           view_path: "/vyapari/store_manager/stock_entries"
         }
@@ -138,7 +138,7 @@ module Vyapari
 
       def breadcrumbs_configuration
         {
-          heading: "#{@store.name} - Stock Entries",
+          heading: "#{@store.name} - Stock",
           description: "Listing all the stock at #{@store.name}",
           links: [
             {name: "Home", link: user_dashboard_path, icon: 'fa-dashboard'},

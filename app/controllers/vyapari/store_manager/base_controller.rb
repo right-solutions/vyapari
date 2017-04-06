@@ -21,6 +21,8 @@ module Vyapari
         @filter_param_mapping[:stock_bundle] = :sb
         @filter_param_mapping[:store] = :st
         @filter_param_mapping[:supplier] = :sp
+        @filter_param_mapping[:brand] = :br
+        @filter_param_mapping[:category] = :ct
       end
       
     end	

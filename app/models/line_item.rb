@@ -5,9 +5,10 @@ class LineItem < Vyapari::ApplicationRecord
   SOLD = "sold"
   DAMAGED = "damaged"
   RETURNED = "returned"
+  CANCELLED = "cancelled"
   
-  STATUS_HASH = {"Draft" => DRAFT, "Sold" => SOLD, "Damaged" => DAMAGED, "Returned" => RETURNED}
-  STATUS_HASH_REVERSE = {DRAFT => "Draft", SOLD => "Sold", DAMAGED => "Damaged", RETURNED => "Returned"}
+  STATUS_HASH = {"Draft" => DRAFT, "Sold" => SOLD, "Damaged" => DAMAGED, "Returned" => RETURNED, "Cancelled" => CANCELLED}
+  STATUS_HASH_REVERSE = {DRAFT => "Draft", SOLD => "Sold", DAMAGED => "Damaged", RETURNED => "Returned", CANCELLED => "Cancelled"}
 
   # Call backs
   before_save :calculate_total_amount

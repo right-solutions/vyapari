@@ -55,6 +55,7 @@ class Invoice < Vyapari::ApplicationRecord
   scope :cheque_invoices, -> { where(payment_method: CHEQUE) }
 
   scope :this_month, lambda { where("created_at >= ? AND created_at <= ?", Time.zone.now.beginning_of_month, Time.zone.now.end_of_month) }
+  scope :today, lambda { where('DATE(created_at) = ?', Date.today)}
   
   # ------------------
   # Instance Methods
@@ -130,6 +131,7 @@ class Invoice < Vyapari::ApplicationRecord
   #   => "active"
   def activate!
     self.update_attributes(status: ACTIVE)
+    #self.line_items.update_attributes(status: LineItem::SOLD)
   end
 
   # * Return true if the invoice is cancelled, else false.
@@ -146,7 +148,8 @@ class Invoice < Vyapari::ApplicationRecord
   #   >>> invoice.remove!
   #   => "cancelled"
   def cancel!
-    self.update_attributes(status: CANCELLED, featured: false)
+    self.update_attributes(status: CANCELLED)
+    #self.line_items.update_attributes(status: LineItem::CANCELLED)
   end
 
   # * Return true if the invoice is cash, else false.
@@ -208,6 +211,20 @@ class Invoice < Vyapari::ApplicationRecord
     #  return true
     #end
     #return true
+  end
+
+  def update_stock_register!
+    return unless self.active?
+    self.stock_entries.destroy_all
+    self.line_items.each do |li|
+      stock_entry = StockEntry.new
+      stock_entry.store = self.store
+      stock_entry.product = li.product
+      stock_entry.invoice_id = self.id
+      stock_entry.quantity = li.quantity
+      stock_entry.status = LineItem::SOLD
+      stock_entry.save
+    end    
   end
 
   def generate_real_invoice_number!

@@ -50,6 +50,9 @@ class StockEntry < Vyapari::ApplicationRecord
   scope :reserved, -> { where(status: RESERVED) }
   scope :in_stock, -> { where(status: [ACTIVE, RECEIVED, RETURNED]) }
 
+  scope :this_month, lambda { where("created_at >= ? AND created_at <= ?", Time.zone.now.beginning_of_month, Time.zone.now.end_of_month) }
+  scope :today, lambda { where('DATE(created_at) = ?', Date.today)}
+
   def self.save_row_data(row)
 
     row.headers.each{ |cell| row[cell] = row[cell].to_s.strip }

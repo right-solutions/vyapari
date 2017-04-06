@@ -10,8 +10,7 @@ module Vyapari
 	  end
 
 	  def default_redirect_url_after_sign_in
-      asd
-	  	vyapari.user_dashboard_url
+      vyapari.user_dashboard_url
       # if @current_user.has_role?("Admin")
       #   vyapari.admin_dashboard_url
       # elsif @current_user.has_role?("Admin")

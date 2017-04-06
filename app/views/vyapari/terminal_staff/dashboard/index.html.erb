@@ -10,7 +10,7 @@
 
 			<div class="panel-body">
 				<!-- Active Invoices -->
-				<% active_invoices = @terminal.invoices.active.order("created_at DESC").page(1).per(10) %>
+				<% active_invoices = @terminal.invoices.active.today.order("created_at DESC").page(1).per(10) %>
 				<%= render :partial=>"vyapari/terminal_staff/dashboard/invoices", locals: { invoices: active_invoices } -%>
 			</div>
 		</div>
@@ -25,7 +25,7 @@
 
 			<div class="panel-body">
 				<!-- Draft Invoices -->
-				<% draft_invoices = @terminal.invoices.draft.order("created_at DESC").page(1).per(10) %>
+				<% draft_invoices = @terminal.invoices.draft.today.order("created_at DESC").page(1).per(10) %>
 				<%= render :partial=>"vyapari/terminal_staff/dashboard/invoices", locals: { invoices: draft_invoices } -%>
 			</div>
 			

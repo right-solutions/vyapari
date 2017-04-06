@@ -34,7 +34,7 @@
 
 		      <td class="stock_entry-name"><%= link_to stock_entry.product.name, store_manager_stock_entries_path(@store, stock_entry), remote: true %></td>
 
-		      <td class="stock_entry-name" style="text-align: center;"><%= link_to stock_entry.product.ean_sku, store_manager_stock_entries_path(@store, stock_entry), remote: true %></td>
+		      <td class="stock_entry-name" style="text-align: center;"><%= stock_entry.product.ean_sku %></td>
 
 		      <td class="stock_entry-name" style="text-align: right;">
 		      	<%= number_to_currency stock_entry.product.purchased_price, unit: "" %>

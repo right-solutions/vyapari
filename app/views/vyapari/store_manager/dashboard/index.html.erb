@@ -1,15 +1,14 @@
 <%
-	total_count = @store.stock_entries.count
-	in_stock_count = @store.stock_entries.in_stock.count
-	damaged_count = @store.stock_entries.damaged.count
-	sold_count = @store.stock_entries.sold.count
-	reserved_count = @store.stock_entries.reserved.count
+	#total_no_of_products_in_stock = @store.stock_entries.active.count
+	#in_stock_count = @store.stock_entries.in_stock.count
+	#damaged_count = @store.stock_entries.damaged.count
+	#reserved_count = @store.stock_entries.reserved.count
 %>
 
 <div class="chart-item-bg-2">
 	<div class="chart-item-num" data-count="this" data-from="0" data-to="98" data-suffix="%" data-duration="2">
-		<i class="fa-list"></i>
-		<%= total_count %> <span style="font-size:20px">Product Items</span>
+		<i class="fa-truck"></i>
+		<%= @store.total_no_of_products_in_stock %> <span style="font-size:20px">Products</span>
 	</div>
 	<div class="chart-item-desc">
 		<%= link_to raw("<i class=\"fa-truck mr-10\"></i> View Stock"), store_manager_stock_entries_path(@store), class: "btn btn-success btn-lg btn-block", style: "height:50px" %>
@@ -20,23 +19,23 @@
 <div class="row">
 	<div class="col-sm-3">
 
-		<div class="xe-widget xe-counter xe-counter-success" data-count=".num" data-from="0" data-to="99.9" data-suffix="%" data-duration="2">
-			<div class="xe-icon">
-				<i class="fa-shopping-cart"></i>
-			</div>
-			<div class="xe-label">
-			<strong class="num"><%= sold_count %></strong>
-				<span>SOLD</span>
-			</div>
-		</div>
-
 		<div class="xe-widget xe-counter xe-counter-info" data-count=".num" data-from="1" data-to="117" data-suffix="k" data-duration="3" data-easing="false">
 			<div class="xe-icon">
 				<i class="fa-truck"></i>
 			</div>
 			<div class="xe-label">
-				<strong class="num"><%= in_stock_count %></strong>
-				<span>IN STOCK</span>
+				<strong class="num"><%= @store.in_stock_items_count_as_of_now %></strong>
+				<span>TOTAL QUANTITY IN STOCK</span>
+			</div>
+		</div>
+
+		<div class="xe-widget xe-counter xe-counter-success" data-count=".num" data-from="0" data-to="99.9" data-suffix="%" data-duration="2">
+			<div class="xe-icon">
+				<i class="fa-shopping-cart"></i>
+			</div>
+			<div class="xe-label">
+			<strong class="num"><%= @store.sold_items_count_for_today %></strong>
+				<span>ITEMS SOLD TODAY</span>
 			</div>
 		</div>
 
@@ -45,8 +44,8 @@
 				<i class="fa-ban"></i>
 			</div>
 			<div class="xe-label">
-				<strong class="num"><%= damaged_count %></strong>
-				<span>DAMAGED</span>
+				<strong class="num"><%= @store.damaged_items_count_for_today %></strong>
+				<span>ITEMS DAMAGED TODAY</span>
 			</div>
 		</div>
 
@@ -55,7 +54,7 @@
 				<i class="fa-bookmark"></i>
 			</div>
 			<div class="xe-label">
-				<strong class="num"><%= reserved_count %></strong>
+				<strong class="num"><%= @store.reserved_items_count_for_today %></strong>
 				<span>RESERVED</span>
 			</div>
 		</div>

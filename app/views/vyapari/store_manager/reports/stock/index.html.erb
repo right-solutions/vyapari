@@ -1,0 +1,32 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    Filters
+  </div>
+  <div class="panel-body">
+
+    <div id="div_report_filter_list">
+      <%#= render :partial=>"/reports/company_jpr/display_filters" %>
+      <hr>
+      <%= clear_tag(10) %>
+      <%#= render :partial=>"/reports/company_jpr/display_dropdown_filters" %>
+    </div>
+    <%= clear_tag(10) %>
+
+  </div>
+</div>
+
+<div class="panel panel-default">
+  <div class="panel-body">
+
+    <%= clear_tag(10) %>
+
+    <div id="div_report_index">
+      <%#= render :partial=>"/reports/company_jpr/chart" %>
+      <%#= clear_tag(100) %>
+      <%= render :partial=>"vyapari/store_manager/reports/stock/index" %>
+    </div>
+    <%= clear_tag(10) %>
+
+  </div>
+</div>
+

@@ -33,9 +33,19 @@ module Vyapari
         @invoice.assign_attributes(permitted_params)
 
         if @invoice.valid?
+
+          # Save Invoice
           @invoice.save
+
+          # Generating a real invoice number
           @invoice.generate_real_invoice_number!
+
+          # Activatingthe Invoice
           @invoice.activate!
+
+          # Updating the stock register
+          @invoice.update_stock_register!
+          
           set_notification(true, @invoice.invoice_number, "Invoice '#{@invoice.invoice_number}' SAVED")
         else
           error_message = @invoice.invoice_number || I18n.t('status.error')

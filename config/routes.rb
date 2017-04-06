@@ -56,7 +56,8 @@ Vyapari::Engine.routes.draw do
   namespace :store_manager do
 
     scope '/:store_id' do
-      get   'dashboard', to: "dashboard#index",  as: :dashboard
+      get '/dashboard', to: "dashboard#index",  as: :dashboard
+      get '/reports/stock', to: "reports/stock#index", as: :stock_report
       resources :terminals
       resources :stock_entries
       resources :stock_bundles do

@@ -52,7 +52,7 @@
 
 					<ul class="list-unstyled mt-30">
 						<li class="upper fs-20">Invoice No: <strong>#<%= @invoice.invoice_number%></strong></li>
-						<li class="mt-10">Invoice No: <%= @invoice.invoice_date.strftime("%m/%d/%Y") %></li>
+						<li class="mt-10">Invoice Date: <%= @invoice.invoice_date.strftime("%m/%d/%Y") %></li>
 						<!-- <li>Dubai</li> -->
 					</ul>
 
@@ -98,7 +98,7 @@
 			<!-- Invoice Entries -->
 			<table class="table table-bordered mt-60">
 				<thead>
-					<tr style="background-color: #4b4b4b; color:red;">
+					<tr style="">
 						<th width="10%" class="text-center">No</th>
 						<th width="40%" class="text-center">Item</th>
 						<th width="15%" class="text-center">Unit Price</th>
@@ -142,7 +142,7 @@
 
 					<% if @invoice.discount %>
 					<span class="mt-10 fs-20">
-						Discount (<%= number_to_currency @invoice.discount, unit: "%" %>): 
+						Discount (<%= @invoice.discount %>) %: 
 						<strong><%= number_to_currency @invoice.discount_amount, unit: "AED " %></strong>
 					</span>
 					<% end %>
