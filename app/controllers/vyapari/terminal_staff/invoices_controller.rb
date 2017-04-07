@@ -93,7 +93,7 @@ module Vyapari
 	    end
 
       def get_collections
-        @relation = @terminal.invoices.where("")
+        @relation = @terminal.invoices.includes(:user).where("")
 
         parse_filters
         apply_filters
@@ -108,18 +108,6 @@ module Vyapari
         @relation = @relation.status(@status) if @status
         @relation = @relation.payment_method(@payment_method) if @payment_method
         
-        if @terminal == "null"
-          @relation = @relation.where("invoices.terminal_id IS NULL")
-        elsif @terminal
-          @relation = @relation.where("invoices.terminal_id = ?", @terminal.id)
-        end
-
-        if @store == "null"
-          @relation = @relation.where("invoices.store_id IS NULL")
-        elsif @store
-          @relation = @relation.where("invoices.store_id = ?", @terminal.id)
-        end
-
         if @user == "null"
           @relation = @relation.where("invoices.user_id IS NULL")
         elsif @user
@@ -139,14 +127,9 @@ module Vyapari
           ],
           boolean_filters: [],
           reference_filters: [
-            { filter_name: :user, filter_class: User },
-            { filter_name: :fstore, filter_class: Store },
-            { filter_name: :fterminal, filter_class: Terminal }
+            { filter_name: :user, filter_class: User }
           ],
-          variable_filters: [
-            #{ variable_name: :store, filter_name: :store },
-            #{ variable_name: :terminal, filter_name: :terminal }
-          ]
+          variable_filters: []
         }
       end
 
@@ -154,12 +137,8 @@ module Vyapari
         @filter_ui_settings = {}
       end
 
-      def resource_url(obj)
-        url_for([:terminal_staff, @terminal, obj])
-      end
-
-	    def set_navs
-        set_nav("terminal_staff/invoices")
+      def set_navs
+        set_nav("staff_manager/invoices")
 	    end
 
 	  end
