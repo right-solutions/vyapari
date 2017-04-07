@@ -34,13 +34,14 @@ class Product < Vyapari::ApplicationRecord
   # == Examples
   #   >>> object.search(query)
   #   => ActiveRecord::Relation object
-  scope :search, lambda {|query| joins("INNER JOIN categories on categories.id = products.category_id").
-                                 where("LOWER(products.name) LIKE LOWER('%#{query}%') OR\
+  scope :search, lambda {|query| joins("LEFT JOIN categories on categories.id = products.category_id").
+                                 where("LOWER(products.ean_sku) LIKE LOWER('%#{query}%') OR\
+                                        LOWER(products.reference_number) LIKE LOWER('%#{query}%') OR\
+                                        LOWER(products.name) LIKE LOWER('%#{query}%') OR\
                                         LOWER(products.one_liner) LIKE LOWER('%#{query}%') OR\
                                         LOWER(products.description) LIKE LOWER('%#{query}%') OR\
                                         LOWER(categories.name) LIKE LOWER('%#{query}%') OR\
-                                        LOWER(categories.one_liner) LIKE LOWER('%#{query}%') OR\
-                                        LOWER(categories.description) LIKE LOWER('%#{query}%')")
+                                        LOWER(categories.one_liner) LIKE LOWER('%#{query}%')")
                         }
 
   scope :status, lambda { |status| where("LOWER(status)='#{status}'") }

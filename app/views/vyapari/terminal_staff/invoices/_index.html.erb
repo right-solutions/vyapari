@@ -9,7 +9,9 @@
 				<th style="text-align: center;">Payment Method</th>
 				<th style="text-align: right;">Total Amount</th>
 				<th>Status</th>
+				<% if @current_user.has_role?("POS Sales Maanger") %>
 				<th style="text-align: center;">Actions</th>
+				<% end %>
 			</tr> 
 		</thead>
 		
@@ -42,6 +44,8 @@
 
 		      <td class="invoice-name" style="text-align: center;"><%= invoice.display_status %></td>
 
+		      <% if @current_user.has_role?("POS Sales Maanger") %>
+
 		      <td class="action-links" style="width:10%">
 
 		      	<%= link_to raw("<i class=\"linecons-pencil\"></i> Edit"), edit_link, :remote=>true, class: "edit" %>
@@ -49,6 +53,8 @@
 		        <%= link_to raw("<i class=\"linecons-trash\"></i> Delete"), delete_link, method: :delete, invoice: "menuitem", tabindex: "-1", data: { confirm: 'Are you sure?' }, :remote=>true, class: "delete" %>
 
 		      </td>
+
+		      <% end %>
 
 		    </tr>
 		  <% end %>

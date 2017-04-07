@@ -54,6 +54,8 @@ class Invoice < Vyapari::ApplicationRecord
   scope :credit_card_invoices, -> { where(payment_method: CREDIT_CARD) }
   scope :cheque_invoices, -> { where(payment_method: CHEQUE) }
 
+  scope :payment_method, lambda { |pm| where("LOWER(payment_method)='#{payment_method}'") }
+
   scope :this_month, lambda { where("created_at >= ? AND created_at <= ?", Time.zone.now.beginning_of_month, Time.zone.now.end_of_month) }
   scope :today, lambda { where('DATE(created_at) = ?', Date.today)}
   

@@ -3,7 +3,7 @@
 	  <thead> 
 			<tr> 
 				<th>Invoice Number</th>
-				<th>Customer</th>
+				<th>Payment Method</th>
 				<!-- <th>Date</th> -->
 				<th style="text-align: right;">Total Amount</th>
 			</tr> 
@@ -18,15 +18,17 @@
 
 	  			<% if invoice.draft? %>
 		  			<td class="invoice-name"><%= link_to invoice.invoice_number, edit_terminal_staff_invoice_path(@terminal, invoice), remote: true %></td>
-		  			<td class="invoice-name"><%= link_to customer_name, edit_terminal_staff_invoice_path(@terminal, invoice), remote: true %></td>
+		  			<!-- <td class="invoice-name"><%#= link_to customer_name, edit_terminal_staff_invoice_path(@terminal, invoice), remote: true %></td> -->
 		  		<% else %>
 		  			<td class="invoice-name"><%= link_to invoice.invoice_number, terminal_staff_invoice_path(@terminal, invoice), remote: true %></td>
-		  			<td class="invoice-name"><%= link_to customer_name, terminal_staff_invoice_path(@terminal, invoice), remote: true %></td>
+		  			<!-- <td class="invoice-name"><%#= link_to customer_name, terminal_staff_invoice_path(@terminal, invoice), remote: true %></td> -->
 		  		<% end %>
+
+		  		<td class="invoice-name" style="text-align: center;"><%= invoice.display_payment_method %></td>
 
 		      <!-- <td class="invoice-name" style="text-align: center;"><%#= invoice.invoice_date.strftime("%m/%d/%Y") if invoice.invoice_date %></td> -->
 
-		      <td class="invoice-name" style="text-align: center;"><%= number_to_currency invoice.net_total_amount, unit: "" %></td>
+		      <td class="invoice-name" style="text-align: center;"><%= number_to_currency invoice.net_total_amount, unit: "AED " %></td>
 
 		    </tr>
 		  <% end %>

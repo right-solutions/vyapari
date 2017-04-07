@@ -19,9 +19,18 @@ module Vyapari
 
       def configure_filter_param_mapping
         @filter_param_mapping = default_filter_param_mapping
-        @filter_param_mapping[:terminal] = :tm
+        
+        # Variable Filters
         @filter_param_mapping[:store] = :st
+        @filter_param_mapping[:terminal] = :tm
+
+        # Second variable for mapping reference filters
+        @filter_param_mapping[:fstore] = :fst
+        @filter_param_mapping[:fterminal] = :ftm
+        
         @filter_param_mapping[:supplier] = :sp
+        @filter_param_mapping[:user] = :us
+        @filter_param_mapping[:payment_method] = :pm
       end
       
     end	

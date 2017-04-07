@@ -5,6 +5,8 @@
   var bodyContent = "<%= escape_javascript(render(:partial=>"#{@resource_options[:view_path]}/draft")) %>";
   showLargeModal(heading, bodyContent, false);
 
+  $('#div_terminal_dashboard_counts').html("<%= escape_javascript(render(:partial=>"vyapari/terminal_staff/dashboard/counts")) %>");
+
 <% else %>
 
   // Showing Growl Like Message

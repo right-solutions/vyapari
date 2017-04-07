@@ -1,0 +1,24 @@
+<div class="table-responsive"> 
+	<table class="table table-hover members-table middle-align">
+	  <thead> 
+			<tr> 
+				<th style="text-align: left;width:30%;">EAN / SKU</th>
+				<th style="text-align: left;width:50%;">Name</th>
+				<th style="text-align: right;width:20%;;">Price</th>
+			</tr> 
+		</thead>
+		
+	  <tbody>
+	  	<% @products.each_with_index do |product, i| %>
+
+	  		<tr id="tr_product_<%= product.id %>">
+		  		<td class="product-name"><%= product.ean_sku %></td>
+		  		<td class="product-name"><%= product.name %></td>
+		  		<td style="text-align: right;"><strong><%= number_to_currency product.retail_price, unit: "AED " %></strong></td>
+		  		</td>
+		    </tr>
+
+		  <% end %>
+	  </tbody>
+	</table>
+</div>

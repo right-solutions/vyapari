@@ -1,0 +1,12 @@
+<% if @products.any? %>
+  
+  // Refresh the list
+  // $('#div_terminal_dashboard_search_form').html("<%#= escape_javascript(render(:partial=>"vyapari/terminal_staff/dashboard/search_form")) %>");
+  $('#div_terminal_dashboard_search_results').html("<%= escape_javascript(render(:partial=>"vyapari/terminal_staff/dashboard/search_results")) %>");
+  
+<% else %>
+
+	var noResultsText = "<%= escape_javascript(theme_panel_message(I18n.translate('success.no_results_found')))%>";
+  $('#div_terminal_dashboard_search_results').html(noResultsText);
+
+<% end %>

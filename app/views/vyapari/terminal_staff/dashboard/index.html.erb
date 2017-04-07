@@ -1,6 +1,10 @@
-<%= render :partial=>"vyapari/terminal_staff/dashboard/counts" -%>
 
-<div class="row">
+<div id="div_terminal_dashboard_counts">
+	<%= render :partial=>"vyapari/terminal_staff/dashboard/counts" -%>
+</div>
+
+
+<div class="row hidden-xs">
 	<div class="col-md-6">
 		<div class="panel panel-color panel-gray">
 
@@ -14,9 +18,7 @@
 				<%= render :partial=>"vyapari/terminal_staff/dashboard/invoices", locals: { invoices: active_invoices } -%>
 			</div>
 		</div>
-	</div>
 
-	<div class="col-md-6">
 		<div class="panel panel-color panel-gray">
 
 			<div class="panel-heading">
@@ -27,6 +29,24 @@
 				<!-- Draft Invoices -->
 				<% draft_invoices = @terminal.invoices.draft.today.order("created_at DESC").page(1).per(10) %>
 				<%= render :partial=>"vyapari/terminal_staff/dashboard/invoices", locals: { invoices: draft_invoices } -%>
+			</div>
+			
+		</div>
+	</div>
+
+	<div class="col-md-6">
+		<div class="panel panel-color panel-gray">
+
+			<div class="panel-heading">
+				<h3 class="panel-title">Check Price</h3>
+			</div>
+
+			<div class="panel-body search-env">
+				<div id="div_terminal_dashboard_search_form">
+					<%= render :partial=>"vyapari/terminal_staff/dashboard/search_form" -%>
+				</div>
+				<div id="div_terminal_dashboard_search_results">
+				</div>
 			</div>
 			
 		</div>

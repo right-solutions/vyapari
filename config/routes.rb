@@ -74,6 +74,7 @@ Vyapari::Engine.routes.draw do
     
     scope '/:terminal_id' do
       get   '/dashboard',         to: "dashboard#index",  as:   :dashboard
+      get   '/search',            to: "dashboard#search",  as:  :dashboard_search
       resources :invoices do
         resources :line_items
       end

@@ -85,9 +85,7 @@ module Vyapari
 	        heading: "Invoices - #{@terminal.name}",
 	        description: "Listing the invoices - #{@terminal.name}",
 	        links: [
-            {name: "Home", link: user_dashboard_path, icon: 'fa-dashboard'},
-            {name: @store.name, link: store_manager_dashboard_path(@store), icon: 'fa-dashboard'},
-            {name: "Stock Entries", link: nil, icon: 'fa-truck', active: true},
+            {name: "Change Terminal", link: store_manager_dashboard_path(@store), icon: 'fa-cog'},
             {name: @terminal.name, link: terminal_staff_dashboard_path(@terminal), icon: 'fa-desktop'},
             {name: "Invoices", link: nil, icon: 'fa-file', active: true}
           ]
@@ -107,12 +105,26 @@ module Vyapari
 
       def apply_filters
         @relation = @relation.search(@query) if @query
+        @relation = @relation.status(@status) if @status
+        @relation = @relation.payment_method(@payment_method) if @payment_method
         
-        # if @terminal == "null"
-        #   @relation = @relation.where("invoices.terminal_id IS NULL")
-        # elsif @terminal
-        #   @relation = @relation.where("invoices.terminal_id = ?", @terminal.id)
-        # end
+        if @terminal == "null"
+          @relation = @relation.where("invoices.terminal_id IS NULL")
+        elsif @terminal
+          @relation = @relation.where("invoices.terminal_id = ?", @terminal.id)
+        end
+
+        if @store == "null"
+          @relation = @relation.where("invoices.store_id IS NULL")
+        elsif @store
+          @relation = @relation.where("invoices.store_id = ?", @terminal.id)
+        end
+
+        if @user == "null"
+          @relation = @relation.where("invoices.user_id IS NULL")
+        elsif @user
+          @relation = @relation.where("invoices.user_id = ?", @terminal.id)
+        end
 
         @order_by = "created_at desc" unless @order_by
         @relation = @relation.order(@order_by)
@@ -121,13 +133,20 @@ module Vyapari
       def configure_filter_settings
         @filter_settings = {
           string_filters: [
-            { filter_name: :query }
+            { filter_name: :query },
+            { filter_name: :status },
+            { filter_name: :payment_method }
           ],
           boolean_filters: [],
           reference_filters: [
-            { filter_name: :terminal, filter_class: Terminal },
+            { filter_name: :user, filter_class: User },
+            { filter_name: :fstore, filter_class: Store },
+            { filter_name: :fterminal, filter_class: Terminal }
           ],
-          variable_filters: [],
+          variable_filters: [
+            #{ variable_name: :store, filter_name: :store },
+            #{ variable_name: :terminal, filter_name: :terminal }
+          ]
         }
       end
 

@@ -6,6 +6,11 @@ module Vyapari
 	    def index
 	    end
 
+	    def search
+	    	@query = params[:query]
+	    	@products = Product.search(@query).page(@current_page).per(50)
+	    end
+
 	    private
 
 	    def breadcrumbs_configuration
