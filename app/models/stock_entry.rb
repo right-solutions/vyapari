@@ -51,7 +51,7 @@ class StockEntry < Vyapari::ApplicationRecord
   scope :in_stock, -> { where(status: [ACTIVE, RECEIVED, RETURNED]) }
 
   scope :this_month, lambda { where("created_at >= ? AND created_at <= ?", Time.zone.now.beginning_of_month, Time.zone.now.end_of_month) }
-  scope :today, lambda { where('DATE(created_at) = ?', Date.today)}
+  scope :today, lambda { where('DATE(created_at) = ?', Date.current.in_time_zone)}
 
   def self.save_row_data(row)
 
