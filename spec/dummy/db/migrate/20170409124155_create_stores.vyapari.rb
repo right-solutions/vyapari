@@ -3,7 +3,7 @@ class CreateStores < ActiveRecord::Migration
   def change
     create_table(:stores) do |t|
 
-      t.string :name, limit: 256
+      t.string :name
       t.string :code, limit: 24
       t.string :store_type, :null => false, :default=>"POS", :limit=>24
 

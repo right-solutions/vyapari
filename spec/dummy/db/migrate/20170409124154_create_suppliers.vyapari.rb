@@ -3,9 +3,9 @@ class CreateSuppliers < ActiveRecord::Migration
   def change
     create_table(:suppliers) do |t|
 
-      t.string :name, limit: 256
+      t.string :name
       t.string :code, limit: 24
-      t.string :address, limit: 1024
+      t.text :address
       t.string :city, limit: 56
       t.references :country, index: true
 

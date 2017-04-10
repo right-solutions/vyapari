@@ -1,10 +1,10 @@
-# This migration comes from usman (originally 20140402113213)
+# This migration comes from usman (originally 20170000000100)
 class CreateUsers < ActiveRecord::Migration[5.0]
   def change
     create_table(:users) do |t|
 
       ## First Name, Last Name and Username
-      t.string :name, limit: 256
+      t.string :name
       t.string :username, :null => false, :limit=>32
       t.string :email, :null => false
       t.string :phone, :null => true, :limit=>24

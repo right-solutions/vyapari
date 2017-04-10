@@ -3,10 +3,10 @@ class CreateBankAccounts < ActiveRecord::Migration
   def change
     create_table(:bank_accounts) do |t|
 
-      t.string :account_number, limit: 256
+      t.string :account_number
       t.string :iban, limit: 56
       t.string :ifsc_swiftcode, limit: 56
-      t.string :bank_name, limit: 256
+      t.string :bank_name
       t.string :branch_name, limit: 56
       t.string :city, limit: 56
       t.references :country
