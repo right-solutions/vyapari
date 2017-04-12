@@ -1,0 +1,23 @@
+
+
+<div class="row">
+
+	<% @store.terminals.each do |terminal| %>
+	<div class="col-sm-3">
+						
+		<div class="xe-widget xe-vertical-counter xe-vertical-counter-primary" data-count=".num" data-from="0" data-to="442" data-suffix=" TB" data-duration="5">
+			<div class="xe-icon">
+				<i class="fa-desktop"></i>
+			</div>
+			
+			<div class="xe-label">
+				<strong class="num"><%= terminal.code %></strong>
+				<span><%= terminal.name %></span>
+				<span><%= link_to "Log In", terminal_staff_dashboard_path(terminal), class: "btn btn-primary btn-white btn-block mt-20" %></span>
+			</div>
+		</div>
+		
+	</div>
+	<% end %>
+
+</div>

@@ -5,8 +5,8 @@
     <!-- Navbar Brand -->
     <div class="navbar-brand">
       <a href="dashboard-1.html" class="logo">
-        <img src="/assets/kuppayam/logo.png" width="80" alt="" class="hidden-xs" />
-        <img src="/assets/kuppayam/logo.png" width="80" alt="" class="visible-xs" />
+        <img src="/assets/kuppayam/logo.png" width="180" alt="" class="hidden-xs" />
+        <img src="/assets/kuppayam/logo.png" width="180" alt="" class="visible-xs" />
       </a>
       <a href="#" data-toggle="settings-pane" data-animate="true">
         <i class="linecons-cog"></i>
@@ -43,9 +43,28 @@
       </li>
 
       <li class="<%= nav_active?('store_manager/stock') ? 'active' : ''  %>">
-        <%= link_to raw("<i class=\"linecons-desktop\"></i> <span class='title'>Manage Stock</span>"), vyapari.store_manager_stock_entries_path(@store) %>
+        <%= link_to raw("<i class=\"fa-truck\"></i> <span class='title'>Manage Stock</span>"), vyapari.store_manager_stock_entries_path(@store) %>
       </li>
 
+      <!-- Reports -->
+      <li class="<%= nav_active?('store_manager/reports') ? 'active' : ''  %>">
+        <a href="#">
+          <i class="fa-list"></i>
+          <span class="title">Reports</span>
+        </a>
+        <ul>
+          <li>
+            <%= link_to raw("<i class=\"fa-shopping-cart\"></i> <span class='title'>Sales Report</span>"), vyapari.store_manager_sales_report_path(@store) %>
+          </li>
+          <li>
+            <%= link_to raw("<i class=\"fa-book\"></i> <span class='title'>Invoice Report</span>"), vyapari.store_manager_invoices_report_path(@store) %>
+          </li>
+          <!-- <li>
+            <%#= link_to raw("<i class=\"fa-truck\"></i> <span class='title'>Stock Report</span>"), vyapari.store_manager_stock_report_path(@store) %>
+          </li> -->
+        </ul>
+      </li>
+      
       <!-- Admin -->
       <% if @current_user.has_role?("Site Admin") %>
       <li class="<%= nav_active?('admin/dashboard') ? 'active' : ''  %>">
@@ -53,9 +72,9 @@
       </li>
       <% end %>
 
-      <!-- Log out -->
+      <!-- Change Store -->
       <li class="<%= nav_class("user/dashboard") %>">
-        <%= link_to raw("<i class=\"fa-desktop\"></i> <span class='title'>Change Store/Terminal</span>"), vyapari.user_dashboard_path %>
+        <%= link_to raw("<i class=\"fa-desktop\"></i> <span class='title'>Change Store</span>"), vyapari.user_dashboard_path %>
       </li>
 
       

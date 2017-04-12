@@ -5,8 +5,8 @@
     <!-- Navbar Brand -->
     <div class="navbar-brand">
       <a href="dashboard-1.html" class="logo">
-        <img src="/assets/kuppayam/logo.png" width="80" alt="" class="hidden-xs" />
-        <img src="/assets/kuppayam/logo.png" width="80" alt="" class="visible-xs" />
+        <img src="/assets/kuppayam/logo.png" width="180" alt="" class="hidden-xs" />
+        <img src="/assets/kuppayam/logo.png" width="180" alt="" class="visible-xs" />
       </a>
       <a href="#" data-toggle="settings-pane" data-animate="true">
         <i class="linecons-cog"></i>
@@ -42,18 +42,21 @@
 
       <%= nav_class("terminal_staff/invoices") %>
 
+      <!-- Manage Invoices -->
       <li class="<%= nav_class("terminal_staff/invoices") %>">
         <%= link_to raw("<i class=\"fa-book\"></i> <span class='title'>Invoices</span>"), vyapari.terminal_staff_invoices_path(@terminal) %>
       </li>
 
+      <!-- Admin -->
       <% if @current_user.has_role?("Site Admin") %>
       <li class="<%= nav_active?('admin/dashboard') ? 'active' : ''  %>">
         <%= link_to raw("<i class=\"linecons-desktop\"></i> <span class='title'>Admin Dashboard</span>"), vyapari.admin_dashboard_url %>
       </li>
       <% end %>
 
+      <!-- Change Terminal -->
       <li class="<%= nav_class("user/dashboard") %>">
-        <%= link_to raw("<i class=\"fa-desktop\"></i> <span class='title'>Change Store/Terminal</span>"), vyapari.user_dashboard_path %>
+        <%= link_to raw("<i class=\"fa-desktop\"></i> <span class='title'>Change Terminal</span>"), vyapari.user_dashboard_path %>
       </li>
 
     </ul>

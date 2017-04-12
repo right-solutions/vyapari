@@ -4,6 +4,7 @@ module Vyapari
 
 	  	# GET /dashboard
 	    def index
+	    	@date = params[:date] ? Date.parse(params[:date]) : Date.today
 	    end
 
 	    def search

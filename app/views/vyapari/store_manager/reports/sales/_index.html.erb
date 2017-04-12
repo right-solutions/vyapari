@@ -1,0 +1,64 @@
+<div class="table-responsive table-scrollable">
+	<table class="table table-striped table-condensed table-bordered"> 
+		<thead>
+			<tr> 
+				<% @columns.each do |col_item| %>
+					<% next unless @selected_columns.include?(col_item[:column_name]) %>
+						<th style="text-align: center;"><%= col_item[:display_name] %></th>
+				<% end %>
+			</tr>
+		</thead>
+		<tbody> 
+			
+			<% cols_except_id = @columns.reject{|item| item[:column_name] == :id}.select{|item| @selected_columns.include?(item[:column_name]) } %>
+
+			<% @results.each_with_index do |result, i| %>
+				<tr> 
+					<th scope="row" style="text-align: center;"><%= i + 1 %></th>
+					
+					<% cols_except_id.each do |col_item| %>
+
+						<% case col_item[:column_type] %>
+						<% when :string, :integer %>
+							<td style="text-align: <%= col_item[:align] %>;">
+								<%= result.send(col_item[:column_name]) %>
+							</td>
+						<% when :status %>
+							<td style="text-align: <%= col_item[:align] %>;">
+								<%= result.send(col_item[:column_name]).titleize %>
+							</td>
+						<% when :currency %>
+							<td style="text-align: <%= col_item[:align] %>;">
+								<%= number_to_currency(result.send(col_item[:column_name]), unit: "") %>
+							</td>
+						<% when :date %>
+							<td style="text-align: <%= col_item[:align] %>;"><%= result.send(col_item[:column_name]).strftime("%d-%m-%Y") %>
+							</td>
+						<% else %>
+							<td style="text-align: <%= col_item[:align] %>;"><%= result.send(col_item[:column_name]) %>
+							</td>
+						<% end %>
+
+					<% end %>
+
+				</tr>
+			<% end %>
+
+		</tbody> 
+
+		<tfoot> 
+			<% if @total && @total.first && @total.first.retail_price %>
+				<tr>
+					<td></td>
+					<% cols_except_id.each do |col_item| %>
+						<% if col_item[:column_name] == :retail_price %>
+							<td style="font-weight: bold;text-align: <%= col_item[:align] %>;"><%= number_to_currency @total.first.retail_price.to_s, unit: "AED " %></td>
+						<% else %>
+							<td></td>
+						<% end %>
+					<% end %>
+				</tr>
+			<% end %>
+		</tfoot> 
+	</table>
+</div>
