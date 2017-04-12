@@ -7,8 +7,8 @@ class LineItem < Vyapari::ApplicationRecord
   RETURNED = "returned"
   CANCELLED = "cancelled"
   
-  STATUS_HASH = {"Draft" => DRAFT, "Sold" => SOLD, "Damaged" => DAMAGED, "Returned" => RETURNED, "Cancelled" => CANCELLED}
-  STATUS_HASH_REVERSE = {DRAFT => "Draft", SOLD => "Sold", DAMAGED => "Damaged", RETURNED => "Returned", CANCELLED => "Cancelled"}
+  STATUS = {"Draft" => DRAFT, "Sold" => SOLD, "Damaged" => DAMAGED, "Returned" => RETURNED, "Cancelled" => CANCELLED}
+  STATUS_REVERSE = {DRAFT => "Draft", SOLD => "Sold", DAMAGED => "Damaged", RETURNED => "Returned", CANCELLED => "Cancelled"}
 
   # Call backs
   before_save :calculate_total_amount
@@ -18,7 +18,7 @@ class LineItem < Vyapari::ApplicationRecord
   validates :quantity, :presence=> true
   validates :rate, :presence=> true
 
-  validates :status, :presence=> true, :inclusion => {:in => STATUS_HASH_REVERSE.keys, :presence_of => :status, :message => "%{value} is not a valid status" }
+  validates :status, :presence=> true, :inclusion => {:in => STATUS_REVERSE.keys, :presence_of => :status, :message => "%{value} is not a valid status" }
 
   # Associations
   belongs_to :product, optional: true

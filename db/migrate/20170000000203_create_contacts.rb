@@ -4,7 +4,7 @@ class CreateContacts < ActiveRecord::Migration
 
       t.string :name
       t.string :designation, :null => true, :limit=>56
-      t.string :email, :null => false
+      t.string :email, :null => false, :limit=>128
       t.string :phone, :null => true, :limit=>24
       t.string :landline, :null => true, :limit=>24
       t.string :fax, :null => true, :limit=>24

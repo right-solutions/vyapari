@@ -3,7 +3,7 @@ class ExchangeRate < Vyapari::ApplicationRecord
   # Validations
   validates :base_currency, presence: true, length: {minimum: 2, maximum: 6}, allow_blank: false
   validates :counter_currency, presence: true, length: {minimum: 2, maximum: 6}, allow_blank: false
-  validates :value, presence: true
+  validates :value, presence: true, numericality: { greater_than: 0 }
   validates :effective_date, presence: true
 
   # ------------------
@@ -15,7 +15,7 @@ class ExchangeRate < Vyapari::ApplicationRecord
   # == Examples
   #   >>> obj.search(query)
   #   => ActiveRecord::Relation object
-  scope :search, lambda {|query| where("LOWER(base_currency) LIKE LOWER('%#{query}%') OR LOWER(counter_currency) LIKE LOWER('%#{query}%')")}
+  scope :search, lambda {|query| where("LOWER(exchange_rates.base_currency) LIKE LOWER('%#{query}%') OR LOWER(exchange_rates.counter_currency) LIKE LOWER('%#{query}%')")}
 
   def self.save_row_data(row)
 

@@ -7,13 +7,13 @@ class StockBundle < ActiveRecord::Base
   ERRORED = "errored"
   APPROVED = "approved"
 
-  STATUS_HASH = {"Pending" => PENDING, "Approved" => APPROVED, "Errored" => ERRORED}
-  STATUS_HASH_REVERSE = {PENDING => "Pending", APPROVED => "Approved", ERRORED => "Errored"}
+  STATUS = {"Pending" => PENDING, "Approved" => APPROVED, "Errored" => ERRORED}
+  STATUS_REVERSE = {PENDING => "Pending", APPROVED => "Approved", ERRORED => "Errored"}
 
   # Validations
   validates :name, :presence=> true, uniqueness: true
   validates :uploaded_date, presence: true
-  validates :status, :presence=> true, :inclusion => {:in => STATUS_HASH_REVERSE.keys, :presence_of => :status, :message => "%{value} is not a valid status" }
+  validates :status, :presence=> true, :inclusion => {:in => STATUS_REVERSE.keys, :presence_of => :status, :message => "%{value} is not a valid status" }
   # validates :file, :presence=> true
   
   # Associations
@@ -163,7 +163,7 @@ class StockBundle < ActiveRecord::Base
   end
 
   def display_status
-    STATUS_HASH_REVERSE[self.status]
+    STATUS_REVERSE[self.status]
   end
 
   def display_file_name

@@ -10,8 +10,8 @@ class Invoice < Vyapari::ApplicationRecord
   CREDIT_CARD = "credit_card"
   CHEQUE = "cheque"
   
-  STATUS_HASH = {"Draft" => DRAFT, "Active" => ACTIVE, "Cancelled" => CANCELLED}
-  STATUS_HASH_REVERSE = {DRAFT => "Draft", ACTIVE => "Active", CANCELLED => "Cancelled"}
+  STATUS = {"Draft" => DRAFT, "Active" => ACTIVE, "Cancelled" => CANCELLED}
+  STATUS_REVERSE = {DRAFT => "Draft", ACTIVE => "Active", CANCELLED => "Cancelled"}
 
   # Call backs
   before_save :calculate_gross_total_amount
@@ -20,7 +20,7 @@ class Invoice < Vyapari::ApplicationRecord
   validates :invoice_number, :presence=> true
   validates :invoice_date, :presence=> true
 
-  validates :status, :presence=> true, :inclusion => {:in => STATUS_HASH_REVERSE.keys, :presence_of => :status, :message => "%{value} is not a valid status" }
+  validates :status, :presence=> true, :inclusion => {:in => STATUS_REVERSE.keys, :presence_of => :status, :message => "%{value} is not a valid status" }
 
   # Associations
   belongs_to :terminal
@@ -54,10 +54,11 @@ class Invoice < Vyapari::ApplicationRecord
   scope :credit_card_invoices, -> { where(payment_method: CREDIT_CARD) }
   scope :cheque_invoices, -> { where(payment_method: CHEQUE) }
 
-  scope :payment_method, lambda { |pm| where("LOWER(payment_method)='#{payment_method}'") }
+  scope :payment_method, lambda { |pm| where("LOWER(payment_method)=?", ) }
 
   scope :this_month, lambda { where("created_at >= ? AND created_at <= ?", Time.zone.now.beginning_of_month, Time.zone.now.end_of_month) }
   scope :today, lambda { where('DATE(created_at) = ?', Date.current.in_time_zone)}
+  scope :dated, lambda { |d| where('DATE(created_at) = ?', d)}
   
   # ------------------
   # Instance Methods
@@ -78,7 +79,7 @@ class Invoice < Vyapari::ApplicationRecord
   end
 
   def display_status
-    STATUS_HASH_REVERSE[self.status]
+    STATUS_REVERSE[self.status]
   end
 
   def display_payment_method

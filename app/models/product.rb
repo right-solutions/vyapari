@@ -5,8 +5,8 @@ class Product < Vyapari::ApplicationRecord
   UNPUBLISHED = "unpublished"
   REMOVED = "removed"
   
-  STATUS_HASH = {"Published" => PUBLISHED, "Unpublished" => UNPUBLISHED, "Removed" => REMOVED}
-  STATUS_HASH_REVERSE = {PUBLISHED => "Published", UNPUBLISHED => "Unpublished", REMOVED => "Removed"}
+  STATUS = {"Published" => PUBLISHED, "Unpublished" => UNPUBLISHED, "Removed" => REMOVED}
+  STATUS_REVERSE = {PUBLISHED => "Published", UNPUBLISHED => "Unpublished", REMOVED => "Removed"}
 
   FEATURED_HASH = {"Featured" => true, "Non Featured" => false}
   FEATURED_HASH_REVERSE = {true => "Featured", false => "Non Featured"}
@@ -19,7 +19,7 @@ class Product < Vyapari::ApplicationRecord
   validates :ean_sku, presence: true
   
   #validates :description, presence: true
-  validates :status, :presence=> true, :inclusion => {:in => STATUS_HASH_REVERSE.keys, :presence_of => :status, :message => "%{value} is not a valid status" }
+  validates :status, :presence=> true, :inclusion => {:in => STATUS_REVERSE.keys, :presence_of => :status, :message => "%{value} is not a valid status" }
 
   # Associations
   has_one :product_image, :as => :imageable, :dependent => :destroy, :class_name => "Image::ProductImage"

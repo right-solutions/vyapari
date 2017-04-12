@@ -9,14 +9,14 @@ class StockEntry < Vyapari::ApplicationRecord
   RESERVED = "reserved"
   PENDING = "pending"
   
-  STATUS_HASH = {"Active" => ACTIVE, "Sold" => SOLD, "Damaged" => DAMAGED, "Received" => RECEIVED, "Reserved" => RESERVED, "Pending" => PENDING, "Returned" => RETURNED}
-  STATUS_HASH_REVERSE = {ACTIVE => "Active", SOLD => "Sold", DAMAGED => "Damaged", RECEIVED => "Received", RESERVED => "Reserved", PENDING => "Pending", RETURNED => "Returned"}
+  STATUS = {"Active" => ACTIVE, "Sold" => SOLD, "Damaged" => DAMAGED, "Received" => RECEIVED, "Reserved" => RESERVED, "Pending" => PENDING, "Returned" => RETURNED}
+  STATUS_REVERSE = {ACTIVE => "Active", SOLD => "Sold", DAMAGED => "Damaged", RECEIVED => "Received", RESERVED => "Reserved", PENDING => "Pending", RETURNED => "Returned"}
 
   # Validations
   validates :store, presence: true
   validates :product, presence: true
   validates :quantity, presence: true, numericality: true
-  validates :status, :presence=> true, :inclusion => {:in => STATUS_HASH_REVERSE.keys, :presence_of => :status, :message => "%{value} is not a valid status" }
+  validates :status, :presence=> true, :inclusion => {:in => STATUS_REVERSE.keys, :presence_of => :status, :message => "%{value} is not a valid status" }
   
   # Associations
   belongs_to :store
@@ -112,11 +112,11 @@ class StockEntry < Vyapari::ApplicationRecord
   end
 
   def display_store_type
-    STATUS_HASH[self.status]
+    STATUS[self.status]
   end
 
   def display_status
-    STATUS_HASH_REVERSE[self.status]
+    STATUS_REVERSE[self.status]
   end
 
   def slug
