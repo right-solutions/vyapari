@@ -23,6 +23,9 @@ module Vyapari
         @filter_param_mapping[:supplier] = :sp
         @filter_param_mapping[:brand] = :br
         @filter_param_mapping[:category] = :ct
+        @filter_param_mapping[:payment_method] = :pym
+        @filter_param_mapping[:terminal] = :trm
+        @filter_param_mapping[:user] = :usr
       end
       
     end	

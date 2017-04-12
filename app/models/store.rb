@@ -33,9 +33,11 @@ class Store < Vyapari::ApplicationRecord
   belongs_to :country, optional: true
   
   has_many :terminals
+  has_many :invoices
   has_many :stock_entries
   has_many :stock_bundles
   has_many :products, through: :stock_entries
+  
   
   # ------------------
   # Class Methods
@@ -132,39 +134,9 @@ class Store < Vyapari::ApplicationRecord
     true
   end
 
-  def sold_items_count_for_today
-    self.stock_entries.today.sold.sum(:quantity)
-  end
+  # Total Counts
 
-  def sold_items_count_for_this_month
-    self.stock_entries.this_month.sold.sum(:quantity)
-  end
-
-  def damaged_items_count_for_today
-    self.stock_entries.today.damaged.sum(:quantity)
-  end
-
-  def damaged_items_count_for_this_month
-    self.stock_entries.this_month.damaged.sum(:quantity)
-  end
-
-  def returned_items_count_for_today
-    self.stock_entries.today.returned.sum(:quantity)
-  end
-
-  def returned_items_count_for_this_month
-    self.stock_entries.this_month.returned.sum(:quantity)
-  end
-
-  def reserved_items_count_for_today
-    self.stock_entries.today.reserved.sum(:quantity)
-  end
-
-  def reserved_items_count_for_this_month
-    self.stock_entries.this_month.reserved.sum(:quantity)
-  end
-
-  def in_stock_items_count_as_of_now
+  def total_quantity_of_products_in_stock
     self.stock_entries.active.sum(:quantity) - self.stock_entries.sold.sum(:quantity)
   end
 
@@ -182,6 +154,64 @@ class Store < Vyapari::ApplicationRecord
       #0
     #end
   end
+
+  # Sold Items Count
+
+  def sold_items_count(date=Date.today)
+    self.stock_entries.dated(date).sold.sum(:quantity)
+  end
+
+  def sold_items_count_for_today
+    self.stock_entries.today.sold.sum(:quantity)
+  end
+
+  def sold_items_count_for_this_month
+    self.stock_entries.this_month.sold.sum(:quantity)
+  end
+
+  # Damaged Items Count
+
+  def damaged_items_count(date=Date.today)
+    self.stock_entries.dated(date).damaged.sum(:quantity)
+  end
+
+  def damaged_items_count_for_today
+    self.stock_entries.today.damaged.sum(:quantity)
+  end
+
+  def damaged_items_count_for_this_month
+    self.stock_entries.this_month.damaged.sum(:quantity)
+  end
+
+  # Returned Items Count
+
+  def returned_items_count(date=Date.today)
+    self.stock_entries.dated(date).returned.sum(:quantity)
+  end
+
+  def returned_items_count_for_today
+    self.stock_entries.today.returned.sum(:quantity)
+  end
+
+  def returned_items_count_for_this_month
+    self.stock_entries.this_month.returned.sum(:quantity)
+  end
+
+  # Reserved Items Count
+
+  def reserved_items_count(date=Date.today)
+    self.stock_entries.dated(date).reserved.sum(:quantity)
+  end
+
+  def reserved_items_count_for_today
+    self.stock_entries.today.reserved.sum(:quantity)
+  end
+
+  def reserved_items_count_for_this_month
+    self.stock_entries.this_month.reserved.sum(:quantity)
+  end
+
+  
   
   
   

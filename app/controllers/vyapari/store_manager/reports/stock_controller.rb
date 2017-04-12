@@ -111,7 +111,7 @@ module Vyapari
         end
 
       	def set_navs
-          set_nav("reports/stock")
+          set_nav("store_manager/reports")
         end
 
         def render_report

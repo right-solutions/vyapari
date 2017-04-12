@@ -1,0 +1,90 @@
+<%
+
+	total_invoice_amount = @store.invoices.dated(@date).active.sum(:net_total_amount) 
+
+	total_invoices = @store.invoices.dated(@date).active.count
+	
+	total_cash = @store.invoices.dated(@date).active.cash_invoices.sum(:net_total_amount)
+
+	total_cash_invoices = @store.invoices.dated(@date).active.where(payment_method: :cash).count
+
+	total_credit = @store.invoices.dated(@date).active.credit_card_invoices.sum(:net_total_amount)
+
+	total_credit_card_invoices = @store.invoices.dated(@date).active.where(payment_method: :credit_card).count
+
+%>
+
+<div class="row">
+	
+	<div class="col-sm-3">
+					
+		<div class="xe-widget xe-counter-block xe-counter-block-green" data-suffix="k" data-count=".num" data-from="0" data-to="310" data-duration="4" data-easing="false">
+			<div class="xe-upper">
+				
+				<div class="xe-icon">
+					<i class="fa-money"></i>
+				</div>
+				<div class="xe-label">
+					<strong class="num"><%= number_to_currency total_invoice_amount, unit: "AED " %></strong>
+					<span>Total Sales Today</span>
+				</div>
+				
+			</div>
+			<div class="xe-lower">
+				<div class="border"></div>
+				
+				<span>Total Invoices Today: <b><%= total_invoices %></b></span>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-sm-3">
+					
+		<div class="xe-widget xe-counter-block xe-counter-block-white" data-suffix="k" data-count=".num" data-from="0" data-to="310" data-duration="4" data-easing="false">
+			<div class="xe-upper">
+				
+				<div class="xe-icon">
+					<i class="fa-money"></i>
+				</div>
+				<div class="xe-label">
+					<strong class="num"><%= number_to_currency total_cash, unit: "AED " %></strong>
+					<span>Total Cash Sales Today</span>
+				</div>
+				
+			</div>
+			<div class="xe-lower">
+				<div class="border"></div>
+				
+				<span>Total Cash Invoices Today: <b><%= total_cash_invoices %></b></span>
+				
+			</div>
+		</div>
+	</div>
+
+	<div class="col-sm-3">
+					
+		<div class="xe-widget xe-counter-block xe-counter-block-white" data-suffix="k" data-count=".num" data-from="0" data-to="310" data-duration="4" data-easing="false">
+			<div class="xe-upper">
+				
+				<div class="xe-icon">
+					<i class="fa-credit-card"></i>
+				</div>
+				<div class="xe-label">
+					<strong class="num"><%= number_to_currency total_credit, unit: "AED " %></strong>
+					<span>Total Credit Card Sales Today</span>
+				</div>
+			</div>
+			<div class="xe-lower">
+				<div class="border"></div>
+				<span>Total Credit Card Invoices Today: <b><%= total_credit_card_invoices %></b></span>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-sm-3">
+		<%#= link_to raw("<i class=\"fa-book mr-10\"></i> Create Invoice"), new_terminal_staff_invoice_path(@terminal), remote: true, class: "btn btn-success btn-lg btn-block hidden-xs", style: "height:50px" %>
+
+		<%#= link_to raw("<i class=\"fa-book mr-10\"></i> Manage Invoices"), terminal_staff_invoices_path(@terminal), class: "btn btn-primary btn-only-hover btn-lg btn-block", style: "height:50px", target: "_blank" %>
+	</div>
+
+</div>

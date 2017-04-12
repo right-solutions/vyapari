@@ -1,26 +1,45 @@
 <%
 
-	total_invoice_amount = @terminal.invoices.today.active.sum(:net_total_amount) 
+	# [d1, d2, d3].each_with_index do |d, i|
+	# 	[t1, t2].each_with_index do |t, j|
 
-	total_invoices = @terminal.invoices.today.active.count
+	# 		cash_sales = t.invoices.where('DATE(created_at) = ?', d).active.cash_invoices.sum(:net_total_amount)
+	# 		credit_card_sales = t.invoices.where('DATE(created_at) = ?', d).active.credit_card_invoices.sum(:net_total_amount)
+
+	# 		puts "Day #{i+1}, Terminal #{j+1} - Cash Sales - #{cash_sales}"
+	# 		puts "Day #{i+1}, Terminal #{j+1} - Credit Card Sales - #{credit_card_sales}"
+	# 	end
+	# end
+
+	total_invoice_amount = @terminal.invoices.dated(@date).active.sum(:net_total_amount) 
+
+	total_invoices = @terminal.invoices.dated(@date).active.count
 	
-	total_cash = @terminal.invoices.today.active.cash_invoices.sum(:net_total_amount)
+	total_cash = @terminal.invoices.dated(@date).active.cash_invoices.sum(:net_total_amount)
 
-	total_cash_invoices = @terminal.invoices.today.active.where(payment_method: :cash).count
+	total_cash_invoices = @terminal.invoices.dated(@date).active.where(payment_method: :cash).count
 
-	total_credit = @terminal.invoices.today.active.credit_card_invoices.sum(:net_total_amount)
+	total_credit = @terminal.invoices.dated(@date).active.credit_card_invoices.sum(:net_total_amount)
 
-	total_credit_card_invoices = @terminal.invoices.today.active.where(payment_method: :credit_card).count
+	total_credit_card_invoices = @terminal.invoices.dated(@date).active.where(payment_method: :credit_card).count
 
 %>
 
-<div class="row">
-	<div class="col-sm-3">
-		<%= link_to raw("<i class=\"fa-book mr-10\"></i> Create Invoice"), new_terminal_staff_invoice_path(@terminal), remote: true, class: "btn btn-success btn-lg btn-block hidden-xs", style: "height:50px" %>
-
-		<%= link_to raw("<i class=\"fa-book mr-10\"></i> Manage Invoices"), terminal_staff_invoices_path(@terminal), class: "btn btn-primary btn-only-hover btn-lg btn-block", style: "height:50px", target: "_blank" %>
+<div class="row calendar-env">
+	<div class="col-md-12 text-center">
+		<div class="btn-group" style="margin:auto;">
+			
+			<%= link_to raw("<i class=\"fa fa-arrow-left\"></i>"), terminal_staff_dashboard_path(@terminal, date: (@date - 1.day)), class: "btn btn-white", style: "font-size: 20px;" %>
+			
+			<input type="text" name="reportdate" value="<%= @date.strftime("%m-%d-%Y") %>" class="btn btn-white" style="height:42px;" />
+			
+			<%= link_to raw("<i class=\"fa fa-arrow-right\"></i>"), terminal_staff_dashboard_path(@terminal, date: (@date + 1.day)), class: "btn btn-white", style: "font-size: 20px;" %>
+		</div>
 	</div>
+</div>
 
+<div class="row">
+	
 	<div class="col-sm-3">
 					
 		<div class="xe-widget xe-counter-block xe-counter-block-green" data-suffix="k" data-count=".num" data-from="0" data-to="310" data-duration="4" data-easing="false">
@@ -31,14 +50,14 @@
 				</div>
 				<div class="xe-label">
 					<strong class="num"><%= number_to_currency total_invoice_amount, unit: "AED " %></strong>
-					<span>Total Invoice Amount</span>
+					<span>Total Sales Today</span>
 				</div>
 				
 			</div>
 			<div class="xe-lower">
 				<div class="border"></div>
 				
-				<span>Total Invoices: <b><%= total_invoices %></b></span>
+				<span>Total Invoices Today: <b><%= total_invoices %></b></span>
 			</div>
 		</div>
 	</div>
@@ -53,14 +72,14 @@
 				</div>
 				<div class="xe-label">
 					<strong class="num"><%= number_to_currency total_cash, unit: "AED " %></strong>
-					<span>Total Cash</span>
+					<span>Total Cash Sales Today</span>
 				</div>
 				
 			</div>
 			<div class="xe-lower">
 				<div class="border"></div>
 				
-				<span>Total Cash Invoices: <b><%= total_cash_invoices %></b></span>
+				<span>Total Cash Invoices Today: <b><%= total_cash_invoices %></b></span>
 				
 			</div>
 		</div>
@@ -76,13 +95,37 @@
 				</div>
 				<div class="xe-label">
 					<strong class="num"><%= number_to_currency total_credit, unit: "AED " %></strong>
-					<span>Total CC Amount</span>
+					<span>Total Credit Card Sales Today</span>
 				</div>
 			</div>
 			<div class="xe-lower">
 				<div class="border"></div>
-				<span>Total Credit Card Invoices: <b><%= total_credit_card_invoices %></b></span>
+				<span>Total Credit Card Invoices Today: <b><%= total_credit_card_invoices %></b></span>
 			</div>
 		</div>
 	</div>
+
+	<div class="col-sm-3">
+		<%= link_to raw("<i class=\"fa-book mr-10\"></i> Create Invoice"), new_terminal_staff_invoice_path(@terminal), remote: true, class: "btn btn-success btn-lg btn-block hidden-xs", style: "height:50px" %>
+
+		<%= link_to raw("<i class=\"fa-book mr-10\"></i> Manage Invoices"), terminal_staff_invoices_path(@terminal), class: "btn btn-primary btn-only-hover btn-lg btn-block", style: "height:50px", target: "_blank" %>
+	</div>
+
 </div>
+
+<script type="text/javascript">
+	$(function() {
+	  
+	  $('input[name="reportdate"]').daterangepicker({
+	    singleDatePicker: true,
+	    showDropdowns: true
+	  },
+
+	  function(start, end, label) {
+	  	var urlWithoutParams = location.protocol + '//' + location.host + location.pathname;
+	  	var params = { locale:'en', date:start.format('DD-MM-YYYY') };
+			var dateParam = jQuery.param(params);
+			window.location.href = urlWithoutParams + "?" + dateParam;
+	  });
+	});
+</script>

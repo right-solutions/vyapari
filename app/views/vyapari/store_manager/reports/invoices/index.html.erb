@@ -1,0 +1,105 @@
+<div class="row">
+
+  <!-- Action Buttons -->
+  <div class="col-md-12">
+    <a href="#" class="btn btn-primary pull-right mr-10" onclick="$('#div_report_filter_list').toggle();"><i class='fa-filter mr-10'></i></a>
+
+    <a href="#" class="btn btn-primary pull-right mr-10" onclick="$('#div_report_column_select').toggle();"><i class='fa-barcode mr-10'></i></a>
+
+    <%
+      csv_hash = {store_id: @store.id, format: :csv} 
+      csv_hash.merge!(request.query_parameters.reject{ |x| x == 'locale' })
+      export_url = store_manager_invoices_report_path(csv_hash)
+
+      form_hash = {store_id: @store.id} 
+      form_hash.merge!(request.query_parameters.reject{ |x| x == 'locale' })
+      form_url = store_manager_invoices_report_path(form_hash)
+    %>
+    
+    <%= link_to raw("<i class='fa-excel-o'></i> Export"), export_url, class: "btn btn-primary pull-left mr-10" %>
+
+    <%= clear_tag %>
+  </div>
+
+  <!-- Filters -->
+  <div class="col-md-12">
+    <div id="div_report_column_select" style="padding:10px; border: 2px solid #fff; margin-bottom: 10px; display: none;">
+
+      <%= form_tag(form_url, :method => :get ) do %>
+      
+        <div class="mb-20 pull-left" style="font-size:16px; color: darkred; text-align: left;">Selected Columns</div>
+        
+        <%= submit_tag "Apply", class: "btn btn-primary pull-right mr-10" %>
+
+        <%= clear_tag %>
+
+        <div class="mb-20 pull-left" style="font-size:12px; color: #4b4b4b; text-align: left;">Click items on the left box to select. Selected items will appear on the right box.</div>
+        
+        <select class="form-control" multiple="multiple" id="select-columns" name="cols[]">
+          <% @columns.each do |item| %>
+            <option value="<%= item[:column_name] %>" <%= @selected_columns.include?(item[:column_name]) ? 'selected="selected"' : '' %> ><%= item[:display_name] %></option>
+          <% end %>
+        </select>
+
+      <% end %>
+      
+    </div>
+  </div>
+
+  <div class="col-md-12">
+    <div id="div_report_filter_list" style="padding:10px; border: 2px solid #fff; margin-bottom: 10px; display: none;">
+      <%= render :partial=>"kuppayam/filters/display_filters" %>
+      <hr style="border-top:1px solid #fff;">
+      <%= render :partial=>"kuppayam/filters/display_dropdown_filters" %>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-default" style="width:100%">
+      <div class="panel-body">
+
+        <%= clear_tag(10) %>
+
+        <div id="div_report_index">
+          <%#= render :partial=>"/reports/company_jpr/chart" %>
+          <%#= clear_tag(100) %>
+          <%= render :partial=>"vyapari/store_manager/reports/invoices/index" %>
+        </div>
+        <%= clear_tag(10) %>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+
+  function applySelectedColumns(){
+    var selectedColumns = "";
+
+    $.each($("#select-columns option:selected"), function(){
+      selectedColumns = selectedColumns + "cols[]=" + $(this).val() + "&";
+    });
+
+    var uri = window.location.href.split("#")[0];
+    window.location.href = uri + selectedColumns;
+  }
+
+  jQuery(document).ready(function($)
+  { 
+    $("#select-columns").multiSelect({
+      afterInit: function()
+      {
+        // Add alternative scrollbar to list
+        this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar();
+      },
+      afterSelect: function()
+      {
+        // Update scrollbar size
+        this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar('update');
+      }
+    });
+  });
+</script>
