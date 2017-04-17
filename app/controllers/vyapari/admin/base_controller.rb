@@ -10,7 +10,7 @@ module Vyapari
       private
 
       def set_default_title
-        set_title("Vyapari Admin | Vyapari Stock Management Module")
+        set_title("Dashboard | Admin")
       end
 
       def require_site_admin

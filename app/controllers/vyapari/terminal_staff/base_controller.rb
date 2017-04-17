@@ -9,7 +9,7 @@ module Vyapari
       private
 
       def set_default_title
-        set_title("Vyapari Store | Vyapari Stock Management Module")
+        set_title("Termianl - Point of Sale | Merchandise Application")
       end
 
       def get_nested_resource_objects
