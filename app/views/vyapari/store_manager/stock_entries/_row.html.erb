@@ -1,33 +1,57 @@
 <% edit_link = edit_store_manager_stock_entry_path(@store, stock_entry) %>
-      
+
 <% delete_link = store_manager_stock_entries_path(@store, stock_entry) %>
 
-<tr id="tr_stock_entry_<%= stock_entry.id %>">
+<th scope="row" style="text-align: center;">
+  <% if i < 0 %>
+  <i class="fa fa-check text-success"></i>
+  <% else %>
+  <%= i + 1 + (@per_page.to_i * (@current_page.to_i - 1)) %>
+  <% end %>
+</th>
 
-  <th scope="row" style="text-align: center;">
-    <% if i < 0 %>
-      <i class="fa fa-check text-success"></i>
-    <% else %>
-      <%= i + 1 + (@per_page.to_i * (@current_page.to_i - 1)) %>
-    <% end %>
-  </th>
+<td class="stock_entry-name"><%= link_to stock_entry.product.name, store_manager_stock_entries_path(@store, stock_entry), remote: true %></td>
 
-  <td class="stock_entry-name"><%= link_to stock_entry.id, store_manager_stock_entries_path(@store, stock_entry), remote: true %></td>
+<td class="stock_entry-name" style="text-align: center;"><%= stock_entry.product.ean_sku %></td>
 
-  <td class="stock_entry-name"><%= link_to stock_entry.code, store_manager_stock_entries_path(@store, stock_entry), remote: true %></td>
+<td class="stock_entry-name" style="text-align: right;">
+  <%= number_to_currency stock_entry.purchased_price, unit: "" %>
+</td>
 
-  <td class="stock_entry-name"><%= link_to stock_entry.display_stock_entry_type, store_manager_stock_entries_path(@store, stock_entry), remote: true %></td>
+<td class="stock_entry-name" style="text-align: right;">
+  <%= number_to_currency stock_entry.landed_cost, unit: "" %>
+</td>
 
-  <td class="stock_entry-name"><%= link_to stock_entry.region.try(:name), store_manager_stock_entries_path(@store, stock_entry), remote: true %></td>
+<td class="stock_entry-name" style="text-align: right;">
+  <%= number_to_currency stock_entry.miscellaneous_cost, unit: "" %>
+</td>
 
-  <td class="stock_entry-name"><%= link_to stock_entry.country.try(:name), store_manager_stock_entries_path(@store, stock_entry), remote: true %></td>
+<td class="stock_entry-name" style="text-align: right;">
+  <%= number_to_currency stock_entry.cost_price, unit: "" %>
+</td>
 
-  <td class="action-links" style="width:10%">
+<td class="stock_entry-name" style="text-align: right;">
+  <%= stock_entry.discount %>
+</td>
 
-    <%= link_to raw("<i class=\"linecons-pencil\"></i> Edit"), edit_link, :remote=>true, class: "edit" %>
+<td class="stock_entry-name" style="text-align: right;">
+  <%= number_to_currency stock_entry.wholesale_price, unit: "" %>
+</td>
 
-    <%= link_to raw("<i class=\"linecons-trash\"></i> Delete"), delete_link, method: :delete, stock_entry: "menuitem", tabindex: "-1", data: { confirm: 'Are you sure?' }, :remote=>true, class: "delete" %>
+<td class="stock_entry-name" style="text-align: right;">
+  <%= number_to_currency stock_entry.retail_price, unit: "" %>
+</td>
 
-  </td>
+<td class="stock_entry-name" style="text-align: center;">
+  <%= stock_entry.quantity %>
+</td>
 
-</tr>
+<td class="stock_entry-name"><%= stock_entry.display_status %></td>
+
+<td class="action-links" style="width:10%">
+
+  <%= link_to raw("<i class=\"linecons-pencil\"></i> Edit"), edit_link, :remote=>true, class: "edit" %>
+
+  <%= link_to raw("<i class=\"linecons-trash\"></i> Delete"), delete_link, method: :delete, stock_entry: "menuitem", tabindex: "-1", data: { confirm: 'Are you sure?' }, :remote=>true, class: "delete" %>
+
+</td>

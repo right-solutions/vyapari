@@ -1,19 +1,22 @@
+require 'csv'
+
 module Vyapari
   module StoreManager
     module Reports
       class SalesController < Vyapari::StoreManager::BaseController
 
 
-        # select p.name, p.ean_sku, p.retail_price, 
-        # se.quantity, i.invoice_number, i.invoice_date, 
-        # i.payment_method from stock_entries se 
-        # left join products p on p.id = se.product_id 
-        # left join invoices i on i.id = se.invoice_id 
-        # where se.status = 'sold'
         def index
           @relation = StockEntry.select("p.name as product_name, 
             p.ean_sku as ean_sku, 
-            p.retail_price as retail_price, 
+            stock_entries.purchased_price as purchased_price, 
+            stock_entries.landed_cost as landed_cost,
+            stock_entries.miscellaneous_cost as miscellaneous_cost,
+            stock_entries.discount as discount,
+            stock_entries.cost_price as cost_price, 
+            stock_entries.wholesale_price as wholesale_price, 
+            stock_entries.retail_price as retail_price, 
+            ((stock_entries.retail_price - stock_entries.cost_price) * stock_entries.quantity) as profit, 
             stock_entries.quantity as quantity, 
             u.name as user_name, 
             i.invoice_number as invoice_number, 
@@ -34,47 +37,19 @@ module Vyapari
 
           @total = @relation.except(:select).
           select("SUM(stock_entries.id) as id, 
-                  SUM(p.retail_price) as retail_price")
+                  SUM(stock_entries.quantity) as quantity,
+                  SUM(stock_entries.purchased_price) as purchased_price,
+                  SUM(stock_entries.landed_cost) as landed_cost,
+                  SUM(stock_entries.miscellaneous_cost) as miscellaneous_cost,
+                  SUM(stock_entries.discount) as discount,
+                  SUM(stock_entries.cost_price) as cost_price,
+                  SUM(stock_entries.wholesale_price) as wholesale_price,
+                  SUM(stock_entries.retail_price) as retail_price,
+                  SUM((stock_entries.retail_price - stock_entries.cost_price) * stock_entries.quantity) as profit")
 
           render_report
         end
 
-        # select MAX(p.id) as id, MAX(p.name) as name, 
-        # MAX(p.ean_sku) as ean_sku, 
-        # MAX(p.purchased_price) as purchased_price, 
-        # MAX(p.landed_price) as landed_price, 
-        # MAX(p.selling_price) as selling_price, 
-        # MAX(p.retail_price) as retail_price, 
-        # SUM(se.quantity) as se_quantity, 
-        # MAX(se.status) as se_status 
-        # from products p left join stock_entries se 
-        # on se.product_id = p.id group by p.id;
-        def index_old
-          @relation = Product.select("MAX(products.id) as id, 
-            MAX(products.name) as name, 
-            MAX(products.ean_sku) as ean_sku, 
-            MAX(products.purchased_price) as purchased_price, 
-            MAX(products.landed_price) as landed_price, 
-            MAX(products.selling_price) as selling_price, 
-            MAX(products.retail_price) as retail_price, 
-            MAX(se.status) as se_status, 
-            SUM(se.quantity) as se_quantity").
-          joins("LEFT JOIN stock_entries se ON se.product_id = products.id")
-          
-          parse_filters
-          apply_filters
-
-          @results = @relation.group("products.id").page(@current_page).per(@per_page)
-          @total = @relation.except(:select).
-          select("SUM(products.id) as id, 
-                  SUM(products.purchased_price) as purchased_price, 
-                  SUM(products.landed_price) as landed_price, 
-                  SUM(products.selling_price) as selling_price, 
-                  SUM(products.retail_price) as retail_price")
-
-          render_report
-        end
-        
         private
 
         def apply_filters
@@ -113,18 +88,25 @@ module Vyapari
             { column_name: :id, display_name: "Sl.", align: "center", column_type: :integer },
             { column_name: :product_name, display_name: "Product Name", align: "left", column_type: :string },
             { column_name: :ean_sku, display_name: "EAN/SKU", align: "left", column_type: :string },
-            { column_name: :retail_price, display_name: "Retail Price", align: "right", column_type: :currency },
             { column_name: :quantity, display_name: "Quantity", align: "center", column_type: :integer },
             { column_name: :invoice_number, display_name: "Invoice Number", align: "center", column_type: :string },
             { column_name: :invoice_date, display_name: "Invoice Date", align: "center", column_type: :date },
             { column_name: :payment_method, display_name: "Payment Method", align: "center", column_type: :status },
+            { column_name: :purchased_price, display_name: "Purchased Price", align: "right", column_type: :currency },
+            { column_name: :landed_cost, display_name: "Landed Cost", align: "right", column_type: :currency },
+            { column_name: :miscellaneous_cost, display_name: "Miscellaneous Price", align: "right", column_type: :currency },
+            { column_name: :discount, display_name: "Discount", align: "right", column_type: :currency },
+            { column_name: :cost_price, display_name: "Cost Price", align: "right", column_type: :currency },
+            { column_name: :wholesale_price, display_name: "Wholesale Price", align: "right", column_type: :currency },
+            { column_name: :retail_price, display_name: "Retail Price", align: "right", column_type: :currency },
+            { column_name: :profit, display_name: "Profit", align: "right", column_type: :currency },
             { column_name: :user_name, display_name: "User", align: "center", column_type: :string }
           ]
 
           if params[:cols]
             @selected_columns = params[:cols].map{|x| x.to_sym}
           else
-            @selected_columns = [:id, :product_name, :ean_sku, :retail_price, :quantity, :invoice_number]
+            @selected_columns = [:id, :product_name, :ean_sku, :quantity, :invoice_number, :cost_price, :retail_price, :profit]
           end
         end
 

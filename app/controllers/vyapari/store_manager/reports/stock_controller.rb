@@ -1,3 +1,5 @@
+require 'csv'
+
 module Vyapari
   module StoreManager
     module Reports
@@ -6,10 +8,13 @@ module Vyapari
 
         # select MAX(p.id) as id, MAX(p.name) as name, 
         # MAX(p.ean_sku) as ean_sku, 
-        # MAX(p.purchased_price) as purchased_price, 
-        # MAX(p.landed_price) as landed_price, 
-        # MAX(p.selling_price) as selling_price, 
-        # MAX(p.retail_price) as retail_price, 
+        # MAX(se.purchased_price) as purchased_price, 
+        # MAX(se.landed_cost) as landed_cost, 
+        # MAX(se.miscellaneous_cost) as miscellaneous_cost, 
+        # MAX(se.discount) as discount, 
+        # MAX(se.cost_price) as cost_price, 
+        # MAX(se.wholesale_price) as wholesale_price, 
+        # MAX(se.retail_price) as retail_price, 
         # SUM(se.quantity) as se_quantity, 
         # MAX(se.status) as se_status 
         # from products p left join stock_entries se 
@@ -20,7 +25,7 @@ module Vyapari
             MAX(products.ean_sku) as ean_sku, 
             MAX(products.purchased_price) as purchased_price, 
             MAX(products.landed_price) as landed_price, 
-            MAX(products.selling_price) as selling_price, 
+            MAX(products.wholesale_price) as wholesale_price, 
             MAX(products.retail_price) as retail_price, 
             MAX(se.status) as se_status, 
             SUM(se.quantity) as se_quantity").
@@ -34,7 +39,7 @@ module Vyapari
           select("SUM(products.id) as id, 
                   SUM(products.purchased_price) as purchased_price, 
                   SUM(products.landed_price) as landed_price, 
-                  SUM(products.selling_price) as selling_price, 
+                  SUM(products.wholesale_price) as wholesale_price, 
                   SUM(products.retail_price) as retail_price")
 
           render_report

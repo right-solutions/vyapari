@@ -60,7 +60,7 @@ class Store < Vyapari::ApplicationRecord
 
   scope :active, -> { where(status: ACTIVE) }
   scope :inactive, -> { where(status: INACTIVE) }
-  scope :close, -> { where(status: CLOSED) }
+  scope :closed, -> { where(status: CLOSED) }
 
   scope :active_and_inactive, -> { where(status: [ACTIVE, INACTIVE]) }
   

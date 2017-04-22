@@ -1,3 +1,5 @@
+require 'csv'
+
 module Vyapari
   module StoreManager
     module Reports

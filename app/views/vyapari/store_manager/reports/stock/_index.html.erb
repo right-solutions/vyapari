@@ -36,9 +36,15 @@
 
 					<td style="text-align: right;"><%= number_to_currency item.purchased_price, unit: "AED " %></td>
 
-					<td style="text-align: right;"><%= number_to_currency item.landed_price, unit: "AED " %></td>
+					<td style="text-align: right;"><%= number_to_currency item.landed_cost, unit: "AED " %></td>
 
-					<td style="text-align: right;"><%= number_to_currency item.selling_price, unit: "AED " %></td>
+					<td style="text-align: right;"><%= number_to_currency item.miscellaneous_cost, unit: "AED " %></td>
+
+					<td style="text-align: right;"><%= number_to_currency item.discount, unit: "AED " %></td>
+
+					<td style="text-align: right;"><%= number_to_currency item.cost_price, unit: "AED " %></td>
+
+					<td style="text-align: right;"><%= number_to_currency item.wholesale_price, unit: "AED " %></td>
 
 					<td style="text-align: right;"><%= number_to_currency item.retail_price, unit: "AED " %></td>
 
@@ -59,10 +65,21 @@
 					<td></td>
 					<td></td>
 					<td></td>
+					
 					<td style="font-weight: bold;text-align: right;"><%= number_to_currency @total.first.purchased_price.to_s, unit: "AED " %></td>
-					<td style="font-weight: bold;text-align: right;"><%= number_to_currency @total.first.landed_price.to_s, unit: "AED " %></td>
-					<td style="font-weight: bold;text-align: right;"><%= number_to_currency @total.first.selling_price.to_s, unit: "AED " %></td>
+					
+					<td style="font-weight: bold;text-align: right;"><%= number_to_currency @total.first.landed_cost.to_s, unit: "AED " %></td>
+
+					<td style="font-weight: bold;text-align: right;"><%= number_to_currency @total.first.miscellaneous_cost.to_s, unit: "AED " %></td>
+
+					<td style="font-weight: bold;text-align: right;"><%= number_to_currency @total.first.discount.to_s, unit: "" %></td>
+					
+					<td style="font-weight: bold;text-align: right;"><%= number_to_currency @total.first.cost_price.to_s, unit: "AED " %></td>
+
+					<td style="font-weight: bold;text-align: right;"><%= number_to_currency @total.first.wholesale_price.to_s, unit: "AED " %></td>
+					
 					<td style="font-weight: bold;text-align: right;"><%= number_to_currency @total.first.retail_price.to_s, unit: "AED " %></td>
+					
 					<td></td>
 					<td></td>
 				</tr>

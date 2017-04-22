@@ -51,8 +51,21 @@
 				<tr>
 					<td></td>
 					<% cols_except_id.each do |col_item| %>
-						<% if col_item[:column_name] == :retail_price %>
+						<% case col_item[:column_name] %>
+						<% when :quantity %>
+							<td style="font-weight: bold;text-align: <%= col_item[:align] %>;"><%= @total.first.quantity %></td>
+						<% when :purchased_price %>
+							<td style="font-weight: bold;text-align: <%= col_item[:align] %>;"><%= number_to_currency @total.first.purchased_price.to_s, unit: "AED " %></td>
+						<% when :landed_cost %>
+							<td style="font-weight: bold;text-align: <%= col_item[:align] %>;"><%= number_to_currency @total.first.landed_cost.to_s, unit: "AED " %></td>
+						<% when :cost_price %>
+							<td style="font-weight: bold;text-align: <%= col_item[:align] %>;"><%= number_to_currency @total.first.cost_price.to_s, unit: "AED " %></td>
+						<% when :wholesale_price %>
+							<td style="font-weight: bold;text-align: <%= col_item[:align] %>;"><%= number_to_currency @total.first.wholesale_price.to_s, unit: "AED " %></td>
+						<% when :retail_price %>
 							<td style="font-weight: bold;text-align: <%= col_item[:align] %>;"><%= number_to_currency @total.first.retail_price.to_s, unit: "AED " %></td>
+						<% when :profit %>
+							<td style="font-weight: bold;text-align: <%= col_item[:align] %>;"><%= number_to_currency @total.first.profit.to_s, unit: "AED " %></td>
 						<% else %>
 							<td></td>
 						<% end %>

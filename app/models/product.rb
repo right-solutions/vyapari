@@ -28,6 +28,8 @@ class Product < Vyapari::ApplicationRecord
   belongs_to :brand
   belongs_to :category
   belongs_to :top_category, class_name: "Category"
+  has_many :line_items
+  has_many :stock_entries
   
 	# return an active record relation object with the search query in its where clause
   # Return the ActiveRecord::Relation object
