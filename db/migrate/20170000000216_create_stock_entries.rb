@@ -7,6 +7,15 @@ class CreateStockEntries < ActiveRecord::Migration[5.0]
       t.references :supplier, index: true
       t.references :stock_bundle, index: true
       t.references :invoice, index: true
+
+      t.decimal :purchased_price, :precision => 16, :scale => 2
+      t.decimal :landed_cost, :precision => 16, :scale => 2
+      t.decimal :miscellaneous_cost, :precision => 16, :scale => 2
+      
+      t.decimal :cost_price, :precision => 16, :scale => 2
+      t.decimal :discount, :precision => 16, :scale => 2
+      t.decimal :wholesale_price, :precision => 16, :scale => 2
+      t.decimal :retail_price, :precision => 16, :scale => 2
       
       t.integer :quantity
 

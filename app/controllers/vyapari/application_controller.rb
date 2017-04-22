@@ -6,7 +6,7 @@ module Vyapari
     before_action :current_user
     
     def set_default_title
-	    set_title("Vyapari - User Management System")
+	    set_title("Vyapari - Merchandise Application")
 	  end
 
 	  def default_redirect_url_after_sign_in

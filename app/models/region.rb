@@ -1,8 +1,8 @@
 class Region < Vyapari::ApplicationRecord
 
   # Validations
-  validates :name, presence: true, length: {minimum: 2, maximum: 250}, allow_blank: false
-  validates :code, presence: true, uniqueness: true, length: {minimum: 2, maximum: 32}, allow_blank: false
+  validates :name, presence: true, length: {minimum: 2, maximum: 128}, allow_blank: false
+  validates :code, presence: true, uniqueness: true, length: {minimum: 2, maximum: 16}, allow_blank: false
   validates :country, presence: true
   
   # Associations
@@ -18,7 +18,10 @@ class Region < Vyapari::ApplicationRecord
   # == Examples
   #   >>> obj.search(query)
   #   => ActiveRecord::Relation object
-  scope :search, lambda {|query| joins(:country).where("LOWER(cities.name) LIKE LOWER('%#{query}%') OR LOWER(countries.name) LIKE LOWER('%#{query}%')")}
+  scope :search, lambda {|query| joins(:country).where("LOWER(regions.name) LIKE LOWER('%#{query}%') OR LOWER(countries.name) LIKE LOWER('%#{query}%')")}
+
+  # Import Methods
+  # --------------
 
   def self.save_row_data(row)
 
@@ -62,20 +65,11 @@ class Region < Vyapari::ApplicationRecord
   end
 
   def can_be_deleted?
-    # if self.stores.any?
-    #   self.errors.add(:base, DELETE_MESSAGE) 
-    #   return false
-    # else
-    #   return true
-    # end
-    return true
-  end
-
-  def report_heading
-    rh = []
-    rh << self.company.try(:name) if self.company.name
-    rh << self.display_name
-    rh.join(", ")
+    if self.stores.any?
+      return false
+    else
+      return true
+    end
   end
 
 end

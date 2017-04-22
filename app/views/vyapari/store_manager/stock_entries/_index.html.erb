@@ -5,10 +5,13 @@
 				<th style="text-align: center;width:60px">#</th> 
 				<th>Product Name</th>
 				<th style="width:15%;text-align: center;">EAN/SKU</th>
-				<th style="text-align: right;">PP</th>
-				<th style="text-align: right;">LP</th>
-				<th style="text-align: right;">SP</th>
-				<th style="text-align: right;">RP</th>
+				<th style="text-align: right;">Purchased Price</th>
+				<th style="text-align: right;">Landed Cost</th>
+				<th style="text-align: right;">Miscellaneous Cost</th>
+				<th style="text-align: right;">Cost Price</th>
+				<th style="text-align: right;">Discount</th>
+				<th style="text-align: right;">Wholesale Price</th>
+				<th style="text-align: right;">Retail Price</th>
 				<th style="text-align: center;">Quantity</th>
 				<th>Status</th>
 				<th style="text-align: center;">Actions</th>
@@ -37,19 +40,31 @@
 		      <td class="stock_entry-name" style="text-align: center;"><%= stock_entry.product.ean_sku %></td>
 
 		      <td class="stock_entry-name" style="text-align: right;">
-		      	<%= number_to_currency stock_entry.product.purchased_price, unit: "" %>
+		      	<%= number_to_currency stock_entry.purchased_price, unit: "" %>
 		      </td>
 
 		      <td class="stock_entry-name" style="text-align: right;">
-		      	<%= number_to_currency stock_entry.product.landed_price, unit: "" %>
+		      	<%= number_to_currency stock_entry.landed_cost, unit: "" %>
 		      </td>
 
 		      <td class="stock_entry-name" style="text-align: right;">
-		      	<%= number_to_currency stock_entry.product.selling_price, unit: "" %>
+		      	<%= number_to_currency stock_entry.miscellaneous_cost, unit: "" %>
 		      </td>
 
 		      <td class="stock_entry-name" style="text-align: right;">
-		      	<%= number_to_currency stock_entry.product.retail_price, unit: "" %>
+		      	<%= number_to_currency stock_entry.cost_price, unit: "" %>
+		      </td>
+
+		      <td class="stock_entry-name" style="text-align: right;">
+		      	<%= stock_entry.discount %>
+		      </td>
+
+		      <td class="stock_entry-name" style="text-align: right;">
+		      	<%= number_to_currency stock_entry.wholesale_price, unit: "" %>
+		      </td>
+
+		      <td class="stock_entry-name" style="text-align: right;">
+		      	<%= number_to_currency stock_entry.retail_price, unit: "" %>
 		      </td>
 
 		      <td class="stock_entry-name" style="text-align: center;">

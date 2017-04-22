@@ -5,13 +5,13 @@ class Terminal < Vyapari::ApplicationRecord
   INACTIVE = "inactive"
   CLOSED = "closed"
   
-  STATUS_HASH = {"Active" => ACTIVE, "Inactive" => INACTIVE, "Closed" => CLOSED}
-  STATUS_HASH_REVERSE = {ACTIVE => "Active", INACTIVE => "Inactive", CLOSED => "Closed"}
+  STATUS = {"Active" => ACTIVE, "Inactive" => INACTIVE, "Closed" => CLOSED}
+  STATUS_REVERSE = {ACTIVE => "Active", INACTIVE => "Inactive", CLOSED => "Closed"}
 
   # Validations
   validates :name, presence: true, length: {minimum: 2, maximum: 250}, allow_blank: false
   validates :code, presence: true, uniqueness: true, length: {minimum: 2, maximum: 24}, allow_blank: false
-  validates :status, :presence=> true, :inclusion => {:in => STATUS_HASH_REVERSE.keys, :presence_of => :status, :message => "%{value} is not a valid status" }
+  validates :status, :presence=> true, :inclusion => {:in => STATUS_REVERSE.keys, :presence_of => :status, :message => "%{value} is not a valid status" }
   
   # Associations
   belongs_to :store

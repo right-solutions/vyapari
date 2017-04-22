@@ -57,6 +57,8 @@ Vyapari::Engine.routes.draw do
 
     scope '/:store_id' do
       get '/dashboard', to: "dashboard#index",  as: :dashboard
+      get '/reports/sales', to: "reports/sales#index", as: :sales_report
+      get '/reports/invoices', to: "reports/invoices#index", as: :invoices_report
       get '/reports/stock', to: "reports/stock#index", as: :stock_report
       resources :terminals
       resources :stock_entries

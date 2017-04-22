@@ -1,92 +1,64 @@
-<%
-	#total_no_of_products_in_stock = @store.stock_entries.active.count
-	#in_stock_count = @store.stock_entries.in_stock.count
-	#damaged_count = @store.stock_entries.damaged.count
-	#reserved_count = @store.stock_entries.reserved.count
-%>
-
-<div class="chart-item-bg-2">
-	<div class="chart-item-num" data-count="this" data-from="0" data-to="98" data-suffix="%" data-duration="2">
-		<i class="fa-truck"></i>
-		<%= @store.total_no_of_products_in_stock %> <span style="font-size:20px">Products</span>
-	</div>
-	<div class="chart-item-desc">
-		<%= link_to raw("<i class=\"fa-truck mr-10\"></i> View Stock"), store_manager_stock_entries_path(@store), class: "btn btn-success btn-lg btn-block", style: "height:50px" %>
-		<%= link_to raw("<i class=\"fa-upload mr-10\"></i> Import Stock"), store_manager_stock_bundles_path(@store), class: "btn btn-success btn-lg btn-block", style: "height:50px" %>
+<div class="row calendar-env">
+	<div class="col-md-12 text-center">
+		<div class="btn-group" style="margin:auto;">
+			
+			<%= link_to raw("<i class=\"fa fa-arrow-left\"></i>"), store_manager_dashboard_path(@store, date: (@date - 1.day)), class: "btn btn-white", style: "font-size: 20px;" %>
+			
+			<input type="text" name="reportdate" value="<%= @date.strftime("%m-%d-%Y") %>" class="btn btn-white" style="height:42px;" />
+			
+			<%= link_to raw("<i class=\"fa fa-arrow-right\"></i>"), store_manager_dashboard_path(@store, date: (@date + 1.day)), class: "btn btn-white", style: "font-size: 20px;" %>
+		</div>
 	</div>
 </div>
 
-<div class="row">
-	<div class="col-sm-3">
+<script type="text/javascript">
+	$(function() {
+	  
+	  $('input[name="reportdate"]').daterangepicker({
+	    singleDatePicker: true,
+	    showDropdowns: true
+	  },
 
-		<div class="xe-widget xe-counter xe-counter-info" data-count=".num" data-from="1" data-to="117" data-suffix="k" data-duration="3" data-easing="false">
-			<div class="xe-icon">
-				<i class="fa-truck"></i>
-			</div>
-			<div class="xe-label">
-				<strong class="num"><%= @store.in_stock_items_count_as_of_now %></strong>
-				<span>TOTAL QUANTITY IN STOCK</span>
-			</div>
-		</div>
+	  function(start, end, label) {
+	  	var urlWithoutParams = location.protocol + '//' + location.host + location.pathname;
+	  	var params = { locale:'en', date:start.format('DD-MM-YYYY') };
+			var dateParam = jQuery.param(params);
+			window.location.href = urlWithoutParams + "?" + dateParam;
+	  });
+	});
+</script>
 
-		<div class="xe-widget xe-counter xe-counter-success" data-count=".num" data-from="0" data-to="99.9" data-suffix="%" data-duration="2">
-			<div class="xe-icon">
-				<i class="fa-shopping-cart"></i>
-			</div>
-			<div class="xe-label">
-			<strong class="num"><%= @store.sold_items_count_for_today %></strong>
-				<span>ITEMS SOLD TODAY</span>
-			</div>
-		</div>
+<div class="row mt-40 mb-40">
+	<div class="col-sm-12">
+		<h3>Sales Summary</h3>
+	</div>	
+</div>
 
-		<div class="xe-widget xe-counter xe-counter-danger" data-count=".num" data-from="1000" data-to="2470" data-duration="4" data-easing="true">
-			<div class="xe-icon">
-				<i class="fa-ban"></i>
-			</div>
-			<div class="xe-label">
-				<strong class="num"><%= @store.damaged_items_count_for_today %></strong>
-				<span>ITEMS DAMAGED TODAY</span>
-			</div>
-		</div>
+<div id="div_store_dashboard_sales_counts">
+	<%= render :partial=>"vyapari/store_manager/dashboard/sales_counts" -%>
+</div>
 
-		<div class="xe-widget xe-counter xe-counter-gray" data-count=".num" data-from="1000" data-to="2470" data-duration="4" data-easing="true">
-			<div class="xe-icon">
-				<i class="fa-bookmark"></i>
-			</div>
-			<div class="xe-label">
-				<strong class="num"><%= @store.reserved_items_count_for_today %></strong>
-				<span>RESERVED</span>
-			</div>
-		</div>
-
+<div class="row mt-40 mb-40">
+	<div class="col-sm-6">
+		<h3>Stock Summary</h3>
+	</div>	
+	<div class="col-sm-6">
+		<%= link_to raw("<i class=\"fa-truck mr-10\"></i> View Stock"), store_manager_stock_entries_path(@store), class: "btn btn-primary pull-right ml-10 mt-20" %>
+		<%= link_to raw("<i class=\"fa-upload mr-10\"></i> Import Stock"), store_manager_stock_bundles_path(@store), class: "btn btn-secondary pull-right mt-20" %>
 	</div>
+</div>
 
-	<div class="col-sm-9">
 
-		<div class="panel panel-default" style="width:100%;min-height:405px;">
-			<div class="panel-heading">Terminals</div>
-			<table class="table">
-				<thead>
-					<tr>
-						<th style="width:60%">Name</th>
-						<th>Code</th>
-						<th style="text-align:center">Actions</th>
-					</tr>
-				</thead>
-				<tbody>
-					<% @store.terminals.each do |terminal| %>
-						<tr>
-							<td><%= terminal.name %></td>
-							<td><%= terminal.code %></td>
-							<td style="text-align:center">
-								<%= link_to "Log In", terminal_staff_dashboard_path(terminal), class: "btn btn-primary btn-success pr-30 pl-30" %>
-							</td>
-						</tr>
-					<% end %>
-				</tbody>
-			</table>
-		</div>
+<div id="div_store_dashboard_stock_counts">
+	<%= render :partial=>"vyapari/store_manager/dashboard/stock_counts" -%>
+</div>
 
+<div class="row mt-40 mb-40">
+	<div class="col-sm-12">
+		<h3>Terminals</h3>
 	</div>
-	
+</div>
+
+<div id="div_store_dashboard_terminals" class="mb-100">
+	<%= render :partial=>"vyapari/store_manager/dashboard/terminals" -%>
 </div>

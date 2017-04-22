@@ -1,12 +1,12 @@
-class Country < Vyapari::ApplicationRecord
+class Contact < Vyapari::ApplicationRecord
 
   # Validations
-  validates :name, presence: true, length: {minimum: 2, maximum: 128}, allow_blank: false
-  validates :code, presence: true, uniqueness: true, length: {minimum: 2, maximum: 16}, allow_blank: false
+  validates :name, presence: true, length: {minimum: 2, maximum: 250}, allow_blank: false
+  validates :email, length: {maximum: 128}, allow_blank: true
+  validates :phone, length: {maximum: 128}, allow_blank: true
 
   # Associations
-  has_many :regions
-  has_many :stores
+  belongs_to :contactable, :polymorphic => true
   
   # ------------------
   # Class Methods
@@ -17,18 +17,25 @@ class Country < Vyapari::ApplicationRecord
   # == Examples
   #   >>> obj.search(query)
   #   => ActiveRecord::Relation object
-  scope :search, lambda {|query| where("LOWER(countries.name) LIKE LOWER('%#{query}%')")}
+  scope :search, lambda {|query| where("LOWER(contacts.name) LIKE LOWER('%#{query}%') OR
+                                        LOWER(contacts.email) LIKE LOWER('%#{query}%') OR
+                                        LOWER(contacts.phone) LIKE LOWER('%#{query}%') OR
+                                        LOWER(contacts.landline) LIKE LOWER('%#{query}%') OR
+                                        LOWER(contacts.fax) LIKE LOWER('%#{query}%') OR
+                                        LOWER(contacts.designation) LIKE LOWER('%#{query}%')
+                        ")}
 
   # Import Methods
   # --------------
   
+  # TODO - this is yet to be done
   def self.save_row_data(row)
 
     row.headers.each{ |cell| row[cell] = row[cell].to_s.strip }
 
     return if row[:name].blank?
 
-    country = Country.find_by_code(row[:code]) || Country.new
+    country = Contact.find_by_code(row[:code]) || Contact.new
     country.name = row[:name]
     country.code = row[:code]
 
@@ -59,11 +66,7 @@ class Country < Vyapari::ApplicationRecord
   end
 
   def can_be_deleted?
-    if self.regions.any? || self.stores.any?
-      return false
-    else
-      return true
-    end
+    false
   end
 
 end

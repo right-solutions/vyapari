@@ -4,7 +4,7 @@ class CreateStores < ActiveRecord::Migration
 
       t.string :name
       t.string :code, limit: 24
-      t.string :store_type, :null => false, :default=>"POS", :limit=>24
+      t.string :store_type, :null => false, :default=>"pos_store", :limit=>24
 
       t.string :status, :null => false, :default=>"active", :limit=>16
       

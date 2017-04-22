@@ -9,7 +9,7 @@ module Vyapari
       private
 
       def set_default_title
-        set_title("Vyapari Store | Vyapari Stock Management Module")
+        set_title("Manage Stores | Merchandise Application")
       end
 
       def get_nested_resource_objects
@@ -23,6 +23,9 @@ module Vyapari
         @filter_param_mapping[:supplier] = :sp
         @filter_param_mapping[:brand] = :br
         @filter_param_mapping[:category] = :ct
+        @filter_param_mapping[:payment_method] = :pym
+        @filter_param_mapping[:terminal] = :trm
+        @filter_param_mapping[:user] = :usr
       end
       
     end	

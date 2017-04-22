@@ -1,0 +1,63 @@
+<div class="row">
+
+	<div class="col-sm-3">
+		<div class="xe-widget xe-counter xe-counter-info" data-count=".num" data-from="1" data-to="117" data-suffix="k" data-duration="3" data-easing="false">
+			<div class="xe-icon">
+				<i class="fa-truck"></i>
+			</div>
+			<div class="xe-label">
+				<strong class="num"><%= @store.total_quantity_of_products_in_stock %></strong>
+				<span>TOTAL QUANTITY IN STOCK</span>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-sm-3">
+		<div class="xe-widget xe-counter xe-counter-gray" data-count=".num" data-from="1000" data-to="2470" data-duration="4" data-easing="true">
+			<div class="xe-icon">
+				<i class="fa-bookmark"></i>
+			</div>
+			<div class="xe-label">
+				<strong class="num"><%= @store.total_no_of_products_in_stock %></strong>
+				<span>TOTAL NO OF PRODUCTS</span>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-sm-3">
+		<div class="xe-widget xe-counter xe-counter-success" data-count=".num" data-from="0" data-to="99.9" data-suffix="%" data-duration="2">
+				<div class="xe-icon">
+					<i class="fa-shopping-cart"></i>
+				</div>
+				<div class="xe-label">
+				<strong class="num"><%= @store.sold_items_count(@date) %></strong>
+					<span>ITEMS SOLD TODAY</span>
+				</div>
+			</div>
+	</div>
+
+	<!-- <div class="col-sm-3">
+		<div class="xe-widget xe-counter xe-counter-danger" data-count=".num" data-from="1000" data-to="2470" data-duration="4" data-easing="true">
+			<div class="xe-icon">
+				<i class="fa-ban"></i>
+			</div>
+			<div class="xe-label">
+				<strong class="num"><%#= @store.damaged_items_count(@date) %></strong>
+				<span>ITEMS DAMAGED TODAY</span>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-sm-3">
+		<div class="xe-widget xe-counter xe-counter-gray" data-count=".num" data-from="1000" data-to="2470" data-duration="4" data-easing="true">
+			<div class="xe-icon">
+				<i class="fa-bookmark"></i>
+			</div>
+			<div class="xe-label">
+				<strong class="num"><%#= @store.reserved_items_count(@date) %></strong>
+				<span>RESERVED</span>
+			</div>
+		</div>
+	</div> -->
+
+</div>

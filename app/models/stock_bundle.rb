@@ -7,13 +7,13 @@ class StockBundle < ActiveRecord::Base
   ERRORED = "errored"
   APPROVED = "approved"
 
-  STATUS_HASH = {"Pending" => PENDING, "Approved" => APPROVED, "Errored" => ERRORED}
-  STATUS_HASH_REVERSE = {PENDING => "Pending", APPROVED => "Approved", ERRORED => "Errored"}
+  STATUS = {"Pending" => PENDING, "Approved" => APPROVED, "Errored" => ERRORED}
+  STATUS_REVERSE = {PENDING => "Pending", APPROVED => "Approved", ERRORED => "Errored"}
 
   # Validations
   validates :name, :presence=> true, uniqueness: true
   validates :uploaded_date, presence: true
-  validates :status, :presence=> true, :inclusion => {:in => STATUS_HASH_REVERSE.keys, :presence_of => :status, :message => "%{value} is not a valid status" }
+  validates :status, :presence=> true, :inclusion => {:in => STATUS_REVERSE.keys, :presence_of => :status, :message => "%{value} is not a valid status" }
   # validates :file, :presence=> true
   
   # Associations
@@ -75,7 +75,7 @@ class StockBundle < ActiveRecord::Base
     StockEntry.where(stock_bundle: self.id).destroy_all
 
     # We need a collection of all the column headings to pass to error hander to reproduce the errors in same format
-    columns = [:env_sku, :name, :reference_number, :one_liner, :description, :purchased_price, :landed_price, :selling_price, :retail_price, :brand, :category, :quantity]
+    columns = [:env_sku, :name, :reference_number, :one_liner, :description, :purchased_price, :landed_cost, :miscellaneous_cost, :cost_price, :wholesale_price, :retail_price, :brand, :category, :quantity]
 
     # Initializing the Data Error to store errors for each column
     data_error = Kuppayam::Importer::DataError.new
@@ -103,16 +103,6 @@ class StockBundle < ActiveRecord::Base
       product.one_liner = row[:one_liner]
       product.description = row[:description]
 
-      product.purchased_price = row[:purchased_price]
-      product.landed_price = row[:landed_price]
-      product.selling_price = row[:selling_price]
-      product.retail_price = row[:retail_price]
-
-      product.purchased_price = 0.00 if product.purchased_price.blank?
-      product.landed_price = 0.00 if product.landed_price.blank?
-      product.selling_price = 0.00 if product.selling_price.blank?
-      product.retail_price = 0.00 if product.retail_price.blank?
-
       product.brand = Brand.where("name = ?", row[:brand]).first || product.build_brand(name: row[:brand]) if row[:brand]
       product.category = Category.where("name = ?", row[:category]).first || product.build_category(name: row[:category]) if row[:category]
       
@@ -122,6 +112,15 @@ class StockBundle < ActiveRecord::Base
       stock_entry.product = product
       stock_entry.supplier = self.supplier
       stock_entry.quantity = row[:quantity]
+
+      stock_entry.purchased_price = row[:purchased_price] if row[:purchased_price]
+      stock_entry.landed_cost = row[:landed_cost] if row[:landed_cost]
+      stock_entry.miscellaneous_cost = row[:miscellaneous_cost] if row[:miscellaneous_cost]
+      stock_entry.cost_price = row[:cost_price] if row[:cost_price]
+      stock_entry.discount = row[:discount] if row[:discount]
+      stock_entry.wholesale_price = row[:wholesale_price] if row[:wholesale_price]
+      stock_entry.retail_price = row[:retail_price] if row[:retail_price]
+      
       stock_entry.stock_bundle = self
       stock_entry.status = :pending
 
@@ -163,7 +162,7 @@ class StockBundle < ActiveRecord::Base
   end
 
   def display_status
-    STATUS_HASH_REVERSE[self.status]
+    STATUS_REVERSE[self.status]
   end
 
   def display_file_name

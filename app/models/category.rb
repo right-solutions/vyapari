@@ -5,8 +5,8 @@ class Category < Vyapari::ApplicationRecord
   UNPUBLISHED = "unpublished"
   REMOVED = "removed"
   
-  STATUS_HASH = {"Published" => PUBLISHED, "Unpublished" => UNPUBLISHED, "Removed" => REMOVED}
-  STATUS_HASH_REVERSE = {PUBLISHED => "Published", UNPUBLISHED => "Unpublished", REMOVED => "Removed"}
+  STATUS = {"Published" => PUBLISHED, "Unpublished" => UNPUBLISHED, "Removed" => REMOVED}
+  STATUS_REVERSE = {PUBLISHED => "Published", UNPUBLISHED => "Unpublished", REMOVED => "Removed"}
 
   FEATURED_HASH = {"Featured" => true, "Non Featured" => false}
   FEATURED_HASH_REVERSE = {true => "Featured", false => "Non Featured"}
@@ -14,7 +14,7 @@ class Category < Vyapari::ApplicationRecord
   # Validations
   validates :name, presence: true, uniqueness: true
   validates :one_liner, presence: false
-  validates :status, :presence=> true, :inclusion => {:in => STATUS_HASH_REVERSE.keys, :presence_of => :status, :message => "%{value} is not a valid status" }
+  validates :status, :presence=> true, :inclusion => {:in => STATUS_REVERSE.keys, :presence_of => :status, :message => "%{value} is not a valid status" }
 
   # Associations
   has_many :products

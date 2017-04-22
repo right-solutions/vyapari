@@ -4,6 +4,7 @@ module Vyapari
 
 	  	# GET /dashboard
 	    def index
+	    	@date = params[:date] ? Date.parse(params[:date]) : Date.today
 	    end
 
 	    def search
@@ -19,7 +20,7 @@ module Vyapari
 	        description: "#{@store.name}",
 	        links: [
 	        	{name: "Home", link: user_dashboard_path, icon: 'fa-building-o'},
-	        	{name: @terminal.name, link: terminal_staff_dashboard_path(@store), icon: 'fa-desktop'}
+	        	{name: @terminal.name, link: terminal_staff_dashboard_path(@store), icon: 'fa-desktop', active: true}
 	        ]
 	      }
 	    end

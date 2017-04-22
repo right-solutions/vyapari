@@ -10,8 +10,11 @@ class Invoice < Vyapari::ApplicationRecord
   CREDIT_CARD = "credit_card"
   CHEQUE = "cheque"
   
-  STATUS_HASH = {"Draft" => DRAFT, "Active" => ACTIVE, "Cancelled" => CANCELLED}
-  STATUS_HASH_REVERSE = {DRAFT => "Draft", ACTIVE => "Active", CANCELLED => "Cancelled"}
+  STATUS = {"Draft" => DRAFT, "Active" => ACTIVE, "Cancelled" => CANCELLED}
+  STATUS_REVERSE = {DRAFT => "Draft", ACTIVE => "Active", CANCELLED => "Cancelled"}
+
+  PAYMENT_METHOD = {"Cash" => CASH, "Credit" => CREDIT, "Credit Card" => CREDIT_CARD, "Cheque" => CHEQUE}
+  PAYMENT_METHOD_REVERSE = {CASH => "Cash", CREDIT => "Credid", CREDIT_CARD => "Credit Card", CHEQUE => "Cheque"}
 
   # Call backs
   before_save :calculate_gross_total_amount
@@ -20,7 +23,7 @@ class Invoice < Vyapari::ApplicationRecord
   validates :invoice_number, :presence=> true
   validates :invoice_date, :presence=> true
 
-  validates :status, :presence=> true, :inclusion => {:in => STATUS_HASH_REVERSE.keys, :presence_of => :status, :message => "%{value} is not a valid status" }
+  validates :status, :presence=> true, :inclusion => {:in => STATUS_REVERSE.keys, :presence_of => :status, :message => "%{value} is not a valid status" }
 
   # Associations
   belongs_to :terminal
@@ -40,7 +43,7 @@ class Invoice < Vyapari::ApplicationRecord
   # == Examples
   #   >>> invoice.search(query)
   #   => ActiveRecord::Relation object
-  scope :search, lambda { |query| where("LOWER(invoice_number) LIKE LOWER('%#{query}%') OR LOWER(customer_name) LIKE LOWER('%#{query}%') OR LOWER(customer_address) LIKE LOWER('%#{query}%')")
+  scope :search, lambda { |query| where("LOWER(invoice_number) LIKE LOWER('%#{query}%') OR LOWER(notes) LIKE LOWER('%#{query}%') OR LOWER(credit_card_number) LIKE LOWER('%#{query}%') OR LOWER(cheque_number) LIKE LOWER('%#{query}%') OR LOWER(customer_name) LIKE LOWER('%#{query}%') OR LOWER(customer_address) LIKE LOWER('%#{query}%') OR LOWER(net_total_amount) LIKE LOWER('%#{query}%')")
                         }
 
   scope :status, lambda { |status| where("LOWER(status)='#{status}'") }
@@ -54,10 +57,11 @@ class Invoice < Vyapari::ApplicationRecord
   scope :credit_card_invoices, -> { where(payment_method: CREDIT_CARD) }
   scope :cheque_invoices, -> { where(payment_method: CHEQUE) }
 
-  scope :payment_method, lambda { |pm| where("LOWER(payment_method)='#{payment_method}'") }
+  scope :payment_method, lambda { |pm| where("LOWER(payment_method)=?", ) }
 
-  scope :this_month, lambda { where("created_at >= ? AND created_at <= ?", Time.zone.now.beginning_of_month, Time.zone.now.end_of_month) }
-  scope :today, lambda { where('DATE(created_at) = ?', Date.current.in_time_zone)}
+  scope :this_month, lambda { where("invoice_date >= ? AND invoice_date <= ?", Time.zone.now.beginning_of_month, Time.zone.now.end_of_month) }
+  scope :today, lambda { where('DATE(invoice_date) = ?', Date.current.in_time_zone)}
+  scope :dated, lambda { |d| where('DATE(invoice_date) = ?', d)}
   
   # ------------------
   # Instance Methods
@@ -78,7 +82,7 @@ class Invoice < Vyapari::ApplicationRecord
   end
 
   def display_status
-    STATUS_HASH_REVERSE[self.status]
+    STATUS_REVERSE[self.status]
   end
 
   def display_payment_method

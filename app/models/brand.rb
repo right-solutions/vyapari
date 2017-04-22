@@ -5,15 +5,15 @@ class Brand < Vyapari::ApplicationRecord
   UNPUBLISHED = "unpublished"
   REMOVED = "removed"
   
-  STATUS_HASH = {"Published" => PUBLISHED, "Unpublished" => UNPUBLISHED, "Removed" => REMOVED}
-  STATUS_HASH_REVERSE = {PUBLISHED => "Published", UNPUBLISHED => "Unpublished", REMOVED => "Removed"}
+  STATUS = {"Published" => PUBLISHED, "Unpublished" => UNPUBLISHED, "Removed" => REMOVED}
+  STATUS_REVERSE = {PUBLISHED => "Published", UNPUBLISHED => "Unpublished", REMOVED => "Removed"}
 
   FEATURED_HASH = {"Featured" => true, "Non Featured" => false}
   FEATURED_HASH_REVERSE = {true => "Featured", false => "Non Featured"}
 
   # Validations
-  validates :name, :presence=> true, uniqueness: true
-  validates :status, :presence=> true, :inclusion => {:in => STATUS_HASH_REVERSE.keys, :presence_of => :status, :message => "%{value} is not a valid status" }
+  validates :name, :presence=> true, uniqueness: true, length: {minimum: 3, maximum: 250}
+  validates :status, :presence=> true, :inclusion => {:in => STATUS_REVERSE.keys, :presence_of => :status, :message => "%{value} is not a valid status" }
 
   # Associations
   has_one :brand_image, :as => :imageable, :dependent => :destroy, :class_name => "Image::BrandImage"
@@ -32,15 +32,17 @@ class Brand < Vyapari::ApplicationRecord
   #   => ActiveRecord::Relation object
   scope :search, lambda { |query| where("LOWER(name) LIKE LOWER('%#{query}%')")
                         }
-
-  scope :status, lambda { |status| where("LOWER(status)='#{status}'") }
   scope :featured, lambda { |val| where(featured: val) }
 
+  scope :status, lambda { |status| where("LOWER(status)='#{status}'") }
   scope :published, -> { where(status: PUBLISHED) }
   scope :unpublished, -> { where(status: UNPUBLISHED) }
   scope :removed, -> { where(status: REMOVED) }
 
   scope :this_month, lambda { where("created_at >= ? AND created_at <= ?", Time.zone.now.beginning_of_month, Time.zone.now.end_of_month) }
+  
+  # Import Methods
+  # --------------
   
   def self.save_row_data(row)
 
@@ -155,13 +157,6 @@ class Brand < Vyapari::ApplicationRecord
   
   def can_be_deleted?
     removed? && self.products.blank?
-    #if self.jobs.any?
-    #  self.errors.add(:base, DELETE_MESSAGE) 
-    #  return false
-    #else
-    #  return true
-    #end
-    #return true
   end
   
 end
