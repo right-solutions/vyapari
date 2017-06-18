@@ -17,7 +17,7 @@ class Country < Vyapari::ApplicationRecord
   # == Examples
   #   >>> obj.search(query)
   #   => ActiveRecord::Relation object
-  scope :search, lambda {|query| where("LOWER(countries.name) LIKE LOWER('%#{query}%')")}
+  scope :search, lambda {|query| where("LOWER(countries.name) LIKE LOWER('%#{query}%') OR LOWER(countries.code) LIKE LOWER('%#{query}%')")}
 
   # Import Methods
   # --------------

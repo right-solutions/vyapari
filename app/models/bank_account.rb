@@ -22,8 +22,7 @@ class BankAccount < Vyapari::ApplicationRecord
                                         LOWER(bank_accounts.ifsc_swiftcode) LIKE LOWER('%#{query}%') OR
                                         LOWER(bank_accounts.bank_name) LIKE LOWER('%#{query}%') OR
                                         LOWER(bank_accounts.city) LIKE LOWER('%#{query}%') OR
-                                        LOWER(countries.name) LIKE LOWER('%#{query}%')
-                        ")}
+                                        LOWER(countries.name) LIKE LOWER('%#{query}%')")}
 
   # ------------------
   # Instance Methods

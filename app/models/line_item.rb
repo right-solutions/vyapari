@@ -22,7 +22,7 @@ class LineItem < Vyapari::ApplicationRecord
 
   # Associations
   belongs_to :product, optional: true
-
+  belongs_to :invoice
 
   # ------------------
   # Class Methods
@@ -33,7 +33,7 @@ class LineItem < Vyapari::ApplicationRecord
   # return an active record relation object with the search query in its where clause
   # Return the ActiveRecord::Relation object
   # == Examples
-  #   >>> invoice.search(query)
+  #   >>> line_item.search(query)
   #   => ActiveRecord::Relation object
   scope :search, lambda { |query| joins(:product).where("LOWER(products.name) LIKE LOWER('%#{query}%')")}
   scope :status, lambda { |status| where("LOWER(status)='#{status}'") }
@@ -57,9 +57,9 @@ class LineItem < Vyapari::ApplicationRecord
     end
   end
 
-  # * Return true if the invoice is sold, else false.
+  # * Return true if the line item is sold, else false.
   # == Examples
-  #   >>> invoice.sold?
+  #   >>> line_item.sold?
   #   => true
   def sold?
     (status == SOLD)
@@ -68,15 +68,15 @@ class LineItem < Vyapari::ApplicationRecord
   # change the status to :sold
   # Return the status
   # == Examples
-  #   >>> invoice.publish!
+  #   >>> line_item.publish!
   #   => "sold"
   def sold!
     self.update_attribute(:status, SOLD)
   end
 
-  # * Return true if the invoice is active, else false.
+  # * Return true if the line item is active, else false.
   # == Examples
-  #   >>> invoice.active?
+  #   >>> line_item.active?
   #   => true
   def active?
     (status == ACTIVE)
@@ -85,15 +85,15 @@ class LineItem < Vyapari::ApplicationRecord
   # change the status to :active
   # Return the status
   # == Examples
-  #   >>> invoice.unpublish!
+  #   >>> line_item.unpublish!
   #   => "active"
   def activate!
     self.update_attributes(status: ACTIVE, featured: false)
   end
 
-  # * Return true if the invoice is cancelled, else false.
+  # * Return true if the line item is cancelled, else false.
   # == Examples
-  #   >>> invoice.cancelled?
+  #   >>> line_item.cancelled?
   #   => true
   def cancelled?
     (status == CANCELLED)
@@ -102,7 +102,7 @@ class LineItem < Vyapari::ApplicationRecord
   # change the status to :cancelled
   # Return the status
   # == Examples
-  #   >>> invoice.remove!
+  #   >>> line_item.remove!
   #   => "cancelled"
   def cancel!
     self.update_attributes(status: CANCELLED, featured: false)

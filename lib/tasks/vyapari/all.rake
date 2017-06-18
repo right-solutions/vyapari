@@ -8,7 +8,7 @@ namespace 'vyapari' do
     desc "Import all data in sequence"
     task 'all' => :environment do
 
-      import_list = ["countries", "regions", "exchange_rates", "suppliers", "stores", "brands", "categories", "terminals"]
+      import_list = ["countries", "exchange_rates"]
       
       import_list.each do |item|
         print "Importing #{item.titleize} \t".yellow

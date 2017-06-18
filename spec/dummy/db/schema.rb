@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170409124162) do
+ActiveRecord::Schema.define(version: 20170428155532) do
 
   create_table "bank_accounts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "account_number"
@@ -22,16 +22,17 @@ ActiveRecord::Schema.define(version: 20170409124162) do
     t.integer  "country_id"
     t.integer  "bank_accountable_id"
     t.string   "bank_accountable_type"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
     t.index ["bank_accountable_id", "bank_accountable_type"], name: "indx_bank_accountable_id_and_type", using: :btree
+    t.index ["country_id"], name: "index_bank_accounts_on_country_id", using: :btree
   end
 
   create_table "brands", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "name",       limit: 512,                         null: false
     t.boolean  "featured",               default: false
     t.string   "status",     limit: 16,  default: "unpublished", null: false
-    t.integer  "priority"
+    t.integer  "priority",               default: 1000
     t.datetime "created_at",                                     null: false
     t.datetime "updated_at",                                     null: false
     t.index ["status"], name: "index_brands_on_status", using: :btree
@@ -44,7 +45,7 @@ ActiveRecord::Schema.define(version: 20170409124162) do
     t.integer  "top_parent_id"
     t.string   "status",        limit: 16,  default: "unpublished", null: false
     t.boolean  "featured",                  default: false
-    t.integer  "priority"
+    t.integer  "priority",                  default: 1000
     t.datetime "created_at",                                        null: false
     t.datetime "updated_at",                                        null: false
     t.index ["parent_id"], name: "index_categories_on_parent_id", using: :btree
@@ -55,14 +56,14 @@ ActiveRecord::Schema.define(version: 20170409124162) do
   create_table "contacts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "name"
     t.string   "designation",      limit: 56
-    t.string   "email",                       null: false
+    t.string   "email",            limit: 128, null: false
     t.string   "phone",            limit: 24
     t.string   "landline",         limit: 24
     t.string   "fax",              limit: 24
     t.integer  "contactable_id"
     t.string   "contactable_type"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
     t.index ["contactable_id", "contactable_type"], name: "index_contacts_on_contactable_id_and_contactable_type", using: :btree
     t.index ["name"], name: "index_contacts_on_name", using: :btree
   end
@@ -70,8 +71,8 @@ ActiveRecord::Schema.define(version: 20170409124162) do
   create_table "countries", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "name",       limit: 128
     t.string   "code",       limit: 16
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
     t.index ["code"], name: "index_countries_on_code", unique: true, using: :btree
   end
 
@@ -80,8 +81,9 @@ ActiveRecord::Schema.define(version: 20170409124162) do
     t.string   "document_type"
     t.integer  "documentable_id"
     t.string   "documentable_type"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.index ["document_type"], name: "index_documents_on_document_type", using: :btree
     t.index ["documentable_id", "documentable_type"], name: "index_documents_on_documentable_id_and_documentable_type", using: :btree
   end
 
@@ -90,10 +92,11 @@ ActiveRecord::Schema.define(version: 20170409124162) do
     t.string   "counter_currency", limit: 4
     t.decimal  "value",                      precision: 16, scale: 4
     t.datetime "effective_date"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                          null: false
+    t.datetime "updated_at",                                          null: false
     t.integer  "country_id"
     t.index ["base_currency", "counter_currency"], name: "index_exchange_rates_on_base_currency_and_counter_currency", using: :btree
+    t.index ["country_id"], name: "index_exchange_rates_on_country_id", using: :btree
   end
 
   create_table "features", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -110,6 +113,7 @@ ActiveRecord::Schema.define(version: 20170409124162) do
     t.string   "imageable_type"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
+    t.index ["image_type"], name: "index_images_on_image_type", using: :btree
     t.index ["imageable_id", "imageable_type"], name: "index_images_on_imageable_id_and_imageable_type", using: :btree
   end
 
@@ -118,8 +122,8 @@ ActiveRecord::Schema.define(version: 20170409124162) do
     t.string   "importable_type"
     t.string   "data_type"
     t.string   "status",          limit: 16, default: "pending", null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                     null: false
+    t.datetime "updated_at",                                     null: false
     t.index ["data_type"], name: "index_import_data_on_data_type", using: :btree
     t.index ["importable_id", "importable_type"], name: "index_import_data_on_importable_id_and_importable_type", using: :btree
     t.index ["status"], name: "index_import_data_on_status", using: :btree
@@ -184,7 +188,7 @@ ActiveRecord::Schema.define(version: 20170409124162) do
   end
 
   create_table "products", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string   "name",             limit: 128,                                                    null: false
+    t.string   "name",             limit: 128,                           null: false
     t.string   "one_liner"
     t.text     "description",      limit: 65535
     t.string   "ean_sku"
@@ -192,14 +196,11 @@ ActiveRecord::Schema.define(version: 20170409124162) do
     t.integer  "brand_id"
     t.integer  "category_id"
     t.integer  "top_category_id"
-    t.decimal  "purchased_price",                precision: 16, scale: 2
-    t.decimal  "landed_price",                   precision: 16, scale: 2
-    t.decimal  "selling_price",                  precision: 16, scale: 2
-    t.decimal  "retail_price",                   precision: 16, scale: 2
-    t.string   "status",           limit: 16,                             default: "unpublished", null: false
-    t.boolean  "featured",                                                default: false
-    t.datetime "created_at",                                                                      null: false
-    t.datetime "updated_at",                                                                      null: false
+    t.string   "status",           limit: 16,    default: "unpublished", null: false
+    t.boolean  "featured",                       default: false
+    t.integer  "priority",                       default: 1000
+    t.datetime "created_at",                                             null: false
+    t.datetime "updated_at",                                             null: false
     t.index ["brand_id"], name: "index_products_on_brand_id", using: :btree
     t.index ["category_id"], name: "index_products_on_category_id", using: :btree
     t.index ["status"], name: "index_products_on_status", using: :btree
@@ -210,8 +211,8 @@ ActiveRecord::Schema.define(version: 20170409124162) do
     t.string   "name",       limit: 128
     t.string   "code",       limit: 16
     t.integer  "country_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
     t.index ["code"], name: "index_regions_on_code", unique: true, using: :btree
     t.index ["country_id"], name: "index_regions_on_country_id", using: :btree
     t.index ["name"], name: "index_regions_on_name", using: :btree
@@ -244,8 +245,8 @@ ActiveRecord::Schema.define(version: 20170409124162) do
     t.string   "error_details"
     t.string   "error_file"
     t.string   "status",        limit: 16, default: "pending", null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                   null: false
+    t.datetime "updated_at",                                   null: false
     t.index ["store_id"], name: "index_stock_bundles_on_store_id", using: :btree
     t.index ["supplier_id"], name: "index_stock_bundles_on_supplier_id", using: :btree
     t.index ["uploader_id"], name: "index_stock_bundles_on_uploader_id", using: :btree
@@ -257,10 +258,17 @@ ActiveRecord::Schema.define(version: 20170409124162) do
     t.integer  "supplier_id"
     t.integer  "stock_bundle_id"
     t.integer  "invoice_id"
+    t.decimal  "purchased_price",               precision: 16, scale: 2
+    t.decimal  "landed_cost",                   precision: 16, scale: 2
+    t.decimal  "miscellaneous_cost",            precision: 16, scale: 2
+    t.decimal  "cost_price",                    precision: 16, scale: 2
+    t.decimal  "discount",                      precision: 16, scale: 2
+    t.decimal  "wholesale_price",               precision: 16, scale: 2
+    t.decimal  "retail_price",                  precision: 16, scale: 2
     t.integer  "quantity"
-    t.string   "status",          limit: 16, default: "active", null: false
-    t.datetime "created_at",                                    null: false
-    t.datetime "updated_at",                                    null: false
+    t.string   "status",             limit: 16,                          default: "active", null: false
+    t.datetime "created_at",                                                                null: false
+    t.datetime "updated_at",                                                                null: false
     t.index ["invoice_id"], name: "index_stock_entries_on_invoice_id", using: :btree
     t.index ["product_id"], name: "index_stock_entries_on_product_id", using: :btree
     t.index ["stock_bundle_id"], name: "index_stock_entries_on_stock_bundle_id", using: :btree
@@ -271,12 +279,12 @@ ActiveRecord::Schema.define(version: 20170409124162) do
   create_table "stores", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "name"
     t.string   "code",       limit: 24
-    t.string   "store_type", limit: 24, default: "POS",    null: false
-    t.string   "status",     limit: 16, default: "active", null: false
+    t.string   "store_type", limit: 24, default: "pos_store", null: false
+    t.string   "status",     limit: 16, default: "active",    null: false
     t.integer  "region_id"
     t.integer  "country_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                  null: false
+    t.datetime "updated_at",                                  null: false
     t.index ["code"], name: "index_stores_on_code", unique: true, using: :btree
     t.index ["country_id"], name: "index_stores_on_country_id", using: :btree
     t.index ["name"], name: "index_stores_on_name", using: :btree
@@ -289,8 +297,8 @@ ActiveRecord::Schema.define(version: 20170409124162) do
     t.text     "address",    limit: 65535
     t.string   "city",       limit: 56
     t.integer  "country_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
     t.index ["code"], name: "index_suppliers_on_code", unique: true, using: :btree
     t.index ["country_id"], name: "index_suppliers_on_country_id", using: :btree
     t.index ["name"], name: "index_suppliers_on_name", using: :btree

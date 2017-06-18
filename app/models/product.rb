@@ -5,21 +5,22 @@ class Product < Vyapari::ApplicationRecord
   UNPUBLISHED = "unpublished"
   REMOVED = "removed"
   
-  STATUS = {"Published" => PUBLISHED, "Unpublished" => UNPUBLISHED, "Removed" => REMOVED}
-  STATUS_REVERSE = {PUBLISHED => "Published", UNPUBLISHED => "Unpublished", REMOVED => "Removed"}
+  STATUS_REVERSE = {"Published" => PUBLISHED, "Unpublished" => UNPUBLISHED, "Removed" => REMOVED}
+  STATUS = {PUBLISHED => "Published", UNPUBLISHED => "Unpublished", REMOVED => "Removed"}
 
-  FEATURED_HASH = {"Featured" => true, "Non Featured" => false}
-  FEATURED_HASH_REVERSE = {true => "Featured", false => "Non Featured"}
+  FEATURED_HASH = {true => "Featured", false => "Non Featured"}
+  FEATURED_HASH_REVERSE = {"Featured" => true, "Non Featured" => false}
 
   # Callbacks
   before_validation :update_top_category
 
 	# Validations
-  validates :name, presence: true
+  validates :name, presence: true, length: {minimum: 3, maximum: 250}
   validates :ean_sku, presence: true
-  
-  #validates :description, presence: true
-  validates :status, :presence=> true, :inclusion => {:in => STATUS_REVERSE.keys, :presence_of => :status, :message => "%{value} is not a valid status" }
+  validates :priority, numericality: true
+  # validates :one_liner, presence: false
+  # validates :description, presence: true
+  validates :status, :presence=> true, :inclusion => {:in => STATUS.keys, :presence_of => :status, :message => "%{value} is not a valid status" }
 
   # Associations
   has_one :product_image, :as => :imageable, :dependent => :destroy, :class_name => "Image::ProductImage"
@@ -30,6 +31,7 @@ class Product < Vyapari::ApplicationRecord
   belongs_to :top_category, class_name: "Category"
   has_many :line_items
   has_many :stock_entries
+  has_one :product_image, :as => :imageable, :dependent => :destroy, :class_name => "Image::ProductImage"
   
 	# return an active record relation object with the search query in its where clause
   # Return the ActiveRecord::Relation object
@@ -164,20 +166,16 @@ class Product < Vyapari::ApplicationRecord
   end
 
   def can_be_removed?
-    published? or unpublished? or removed?
+    published? or unpublished?
   end
 
   def can_be_edited?
-    true
+    !removed?
   end
 
   def can_be_deleted?
-    #if self.jobs.any?
-    #  self.errors.add(:base, DELETE_MESSAGE) 
-    #  return false
-    #else
-    #  return true
-    #end
+    return false if self.stock_entries.count > 0 or self.line_items.count > 0
+    return false if published? or unpublished?
     return true
   end
 

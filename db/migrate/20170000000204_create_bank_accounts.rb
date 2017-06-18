@@ -1,4 +1,4 @@
-class CreateBankAccounts < ActiveRecord::Migration
+class CreateBankAccounts < ActiveRecord::Migration[5.0]
   def change
     create_table(:bank_accounts) do |t|
 

@@ -17,24 +17,26 @@ RSpec.describe Brand, type: :model do
   context "Factory" do
     it "should validate all the factories" do
       expect(FactoryGirl.build(:brand).valid?).to be true
-      expect(FactoryGirl.build(:published_brand).valid?).to be true
-      expect(FactoryGirl.build(:unpublished_brand).valid?).to be true
-      expect(FactoryGirl.build(:removed_brand).valid?).to be true
-      expect(FactoryGirl.build(:featured_brand).valid?).to be true
-      expect(FactoryGirl.build(:unfeatured_brand).valid?).to be true
-    end
-    
-    it "should set right status for all factories" do
-      expect(FactoryGirl.build(:brand).status).to match "unpublished"
-      expect(FactoryGirl.build(:published_brand).status).to match "published"
-      expect(FactoryGirl.build(:unpublished_brand).status).to match "unpublished"
-      expect(FactoryGirl.build(:removed_brand).status).to match "removed"
-      expect(FactoryGirl.build(:featured_brand).status).to match "published"
-      expect(FactoryGirl.build(:unfeatured_brand).status).to match "published"
-    end
+      
+      published_brand = FactoryGirl.build(:published_brand)
+      expect(published_brand.valid?).to be true
+      expect(published_brand.status).to match("published")
 
-    it "should set featured false for all factories by default" do
-      expect(FactoryGirl.build(:brand).featured).to match false
+      unpublished_brand = FactoryGirl.build(:unpublished_brand)
+      expect(unpublished_brand.valid?).to be true
+      expect(unpublished_brand.status).to match("unpublished")
+
+      removed_brand = FactoryGirl.build(:removed_brand)
+      expect(removed_brand.valid?).to be true
+      expect(removed_brand.status).to match("removed")
+
+      featured_brand = FactoryGirl.build(:featured_brand)
+      expect(featured_brand.valid?).to be true
+      expect(featured_brand.featured).to be_truthy
+
+      unfeatured_brand = FactoryGirl.build(:unfeatured_brand)
+      expect(unfeatured_brand.valid?).to be true
+      expect(unfeatured_brand.featured).to be_falsy
     end
   end
 
@@ -44,7 +46,7 @@ RSpec.describe Brand, type: :model do
     it { should_not allow_value('CC').for(:name )}
     it { should_not allow_value("x"*257).for(:name )}
 
-    it { should validate_inclusion_of(:status).in_array(Brand::STATUS.values)  }
+    it { should validate_inclusion_of(:status).in_array(Brand::STATUS.keys)  }
   end
 
   context "Associations" do
@@ -95,7 +97,6 @@ RSpec.describe Brand, type: :model do
       end
 
     end
-    
   end
 
   context "Instance Methods" do
@@ -112,51 +113,124 @@ RSpec.describe Brand, type: :model do
       expect(tata_salt.to_param).to match("#{tata_salt.id}-#{tata_salt.slug}")
     end
 
-    it "publish!" do
-      b = FactoryGirl.create(:unpublished_brand)
-      expect(b.status).to match "unpublished"
-      b.publish!
-      expect(b.status).to match "published"
-    end
+    context "Status Methods" do
 
-    it "unpublish!" do
-      b = FactoryGirl.create(:published_brand)
-      expect(b.status).to match "published"
-      b.unpublish!
-      expect(b.status).to match "unpublished"
-    end
+      let(:b1) {FactoryGirl.build(:published_brand)}
+      let(:b2) {FactoryGirl.build(:unpublished_brand)}
+      let(:b3) {FactoryGirl.build(:removed_brand)}
+      
+      it "published?" do
+        expect(b1.published?).to be_truthy
+        expect(b1.unpublished?).to be_falsy
+      end
 
-    it "remove!" do
-      b = FactoryGirl.create(:published_brand)
-      expect(b.status).to match "published"
-      b.remove!
-      expect(b.status).to match "removed"
-    end
+      it "unpublished?" do
+        expect(b2.unpublished?).to be_truthy
+        expect(b2.published?).to be_falsy
+      end
 
-    it "can_be_published?, can_be_unpublished? & can_be_removed?" do
-      b = FactoryGirl.create(:unpublished_brand)
-      expect(b.can_be_published?).to be_truthy
-      expect(b.can_be_unpublished?).to be_falsy
-      expect(b.can_be_removed?).to be_truthy
+      it "removed?" do
+        expect(b3.removed?).to be_truthy
+        expect(b3.published?).to be_falsy
+      end
 
-      b.publish!
-      expect(b.can_be_published?).to be_falsy
-      expect(b.can_be_unpublished?).to be_truthy
-      expect(b.can_be_removed?).to be_truthy
+      it "can_be_published?" do
+        expect(b1.can_be_published?).to be_falsy
+        expect(b2.can_be_published?).to be_truthy
+        expect(b3.can_be_published?).to be_truthy
+      end
 
-      b.remove!
-      expect(b.can_be_published?).to be_truthy
-      expect(b.can_be_unpublished?).to be_truthy
-      expect(b.can_be_removed?).to be_falsy
+      it "can_be_unpublished?" do
+        expect(b1.can_be_unpublished?).to be_truthy
+        expect(b2.can_be_unpublished?).to be_falsy
+        expect(b3.can_be_unpublished?).to be_truthy
+      end
+
+      it "can_be_removed?" do
+        expect(b1.can_be_removed?).to be_truthy
+        expect(b2.can_be_removed?).to be_truthy
+        expect(b3.can_be_removed?).to be_falsy
+      end
+
+      it "publish!" do
+        b = FactoryGirl.build(:unpublished_brand)
+        b.publish!
+        expect(b.status).to match "published"
+
+        b = FactoryGirl.build(:published_brand)
+        b.publish!
+        expect(b.errors[:status].size).to eq(1)
+        expect(b.errors[:status]).to include("This brand can't be published. Check if it is already published!")
+      end
+
+      it "unpublish!" do
+        b = FactoryGirl.build(:published_brand)
+        b.unpublish!
+        expect(b.status).to match "unpublished"
+
+        b = FactoryGirl.build(:unpublished_brand)
+        b.unpublish!
+        expect(b.errors[:status].size).to eq(1)
+        expect(b.errors[:status]).to include("Cannot unpublish! Brand should be published first.")
+      end
+
+      it "remove!" do
+        b = FactoryGirl.build(:published_brand)
+        b.remove!
+        expect(b.status).to match "removed"
+
+        b = FactoryGirl.build(:removed_brand)
+        b.remove!
+        expect(b.errors[:status].size).to eq(1)
+        expect(b.errors[:status]).to include("This brand can't be removed. Either, there are products associated with this brand or it is already removed")
+      end
+
+      it "update_status" do
+        b = FactoryGirl.build(:unpublished_brand)
+        b.update_status!("published")
+        expect(b.status).to match "published"
+
+        b = FactoryGirl.build(:published_brand)
+        b.update_status!("unpublished")
+        expect(b.status).to match "unpublished"
+
+        b = FactoryGirl.build(:published_brand)
+        b.update_status!("remove")
+        expect(b.status).to match "removed"
+      end
     end
 
     it "can_be_edited?" do
+      # published brands should be editable
+      b = FactoryGirl.create(:published_brand)
+      expect(b.can_be_edited?).to be_truthy
+
+      # unpublished brands should be editable
       b = FactoryGirl.create(:unpublished_brand)
       expect(b.can_be_edited?).to be_truthy
+
+      # removed brands should not be editable
+      b = FactoryGirl.create(:removed_brand)
+      expect(b.can_be_edited?).to be_falsy
     end
 
     it "can_be_deleted?" do
-      skip
+      # removed brands without products should be deletable
+      b = FactoryGirl.create(:removed_brand)
+      expect(b.can_be_deleted?).to be_truthy
+
+      # published brands should not be deletable
+      b = FactoryGirl.create(:published_brand)
+      expect(b.can_be_deleted?).to be_falsy
+
+      # unpublished brands should not be deletable
+      b = FactoryGirl.create(:unpublished_brand)
+      expect(b.can_be_deleted?).to be_falsy
+      
+      # removed brands with products should not be deletable
+      b = FactoryGirl.create(:removed_brand)
+      p = FactoryGirl.create(:published_product, brand: b)
+      expect(b.can_be_deleted?).to be_falsy
     end
   end
 

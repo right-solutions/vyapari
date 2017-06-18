@@ -58,8 +58,8 @@
 				    <!-- Mark as Featured -->
 				    <%= link_to raw("<i class=\"fa fa-circle-o mr-5\"></i> Mark as Featured"), mark_as_featured_admin_category_path(:id =>category.id, :status =>'published'), :method =>'PUT', :remote=>true, role: "menuitem", tabindex: "-1", :class=>"edit" unless category.featured? %>
 
-				    <!-- Remove from Featured -->
-				    <%= link_to raw("<i class=\"fa fa-circle mr-5\"></i> Remove from Featured"), remove_from_featured_admin_category_path(:id =>category.id, :status =>'unpublished'), :method =>'PUT', :remote=>true, role: "menuitem", tabindex: "-1", :class=>"" if category.featured? %>
+				    <!-- Remove from Featuring -->
+				    <%= link_to raw("<i class=\"fa fa-circle mr-5\"></i> Remove from Featuring"), remove_from_featured_admin_category_path(:id =>category.id, :status =>'unpublished'), :method =>'PUT', :remote=>true, role: "menuitem", tabindex: "-1", :class=>"" if category.featured? %>
 
 				    <!-- Make Parent -->
 				    <%= link_to raw("<i class=\"fa fa-circle mr-5\"></i> Make Parent"), make_parent_admin_category_path(:id =>category.id, :status =>'unpublished'), :method =>'PUT', :remote=>true, role: "menuitem", tabindex: "-1", :class=>"" unless category.parent.blank? %>

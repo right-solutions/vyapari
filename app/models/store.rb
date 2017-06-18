@@ -5,28 +5,31 @@ class Store < Vyapari::ApplicationRecord
   INACTIVE = "inactive"
   CLOSED = "closed"
   
-  STATUS = {"Active" => ACTIVE, "Inactive" => INACTIVE, "Closed" => CLOSED}
-  STATUS_REVERSE = {ACTIVE => "Active", INACTIVE => "Inactive", CLOSED => "Closed"}
+  STATUS = {ACTIVE => "Active", INACTIVE => "Inactive", CLOSED => "Closed"}
+  STATUS_REVERSE = {"Active" => ACTIVE, "Inactive" => INACTIVE, "Closed" => CLOSED}
 
   # Constants
   WAREHOUSE = "warehouse"
   POS_STORE = "pos_store"
+  ECOMMERCE_STORE = "ecommerce_store"
   
   STORE_TYPES = { 
     WAREHOUSE => "Warehouse", 
-    POS_STORE => "POS Store"
+    POS_STORE => "POS Store",
+    ECOMMERCE_STORE => "E-Commerce Store"
   }
 
   STORE_TYPES_REVERSE = { 
     "Warehouse" => WAREHOUSE, 
-    "POS Store" => POS_STORE
+    "POS Store" => POS_STORE,
+    "E-Commerce Store" => ECOMMERCE_STORE,
   }
 
   # Validations
   validates :name, presence: true, length: {minimum: 2, maximum: 250}, allow_blank: false
   validates :code, presence: true, uniqueness: true, length: {minimum: 2, maximum: 24}, allow_blank: false
   validates :store_type, :presence => true, :inclusion => {:in => STORE_TYPES.keys, :presence_of => :store_type, :message => "%{value} is not a valid store type" }
-  validates :status, :presence=> true, :inclusion => {:in => STATUS_REVERSE.keys, :presence_of => :status, :message => "%{value} is not a valid status" }
+  validates :status, :presence=> true, :inclusion => {:in => STATUS.keys, :presence_of => :status, :message => "%{value} is not a valid status" }
   
   # Associations
   belongs_to :region, optional: true
@@ -48,15 +51,16 @@ class Store < Vyapari::ApplicationRecord
   # == Examples
   #   >>> obj.search(query)
   #   => ActiveRecord::Relation object
-  scope :search, lambda {|query| joins(:country, :region).where("LOWER(name) LIKE LOWER('%#{query}%') OR 
-                                                        LOWER(code) LIKE LOWER('%#{query}%') OR 
-                                                        LOWER(store_type) LIKE LOWER('%#{query}%') OR 
+  scope :search, lambda {|query| joins(:country, :region).where("LOWER(stores.name) LIKE LOWER('%#{query}%') OR 
+                                                        LOWER(stores.code) LIKE LOWER('%#{query}%') OR 
+                                                        LOWER(stores.store_type) LIKE LOWER('%#{query}%') OR 
                                                         LOWER(regions.name) LIKE LOWER('%#{query}%') OR
                                                         LOWER(countries.name) LIKE LOWER('%#{query}%')")}
 
   
   scope :warehouse, -> { where(store_type: WAREHOUSE) }
   scope :pos_store, -> { where(store_type: POS_STORE) }
+  scope :ecommerce_store, -> { where(store_type: ECOMMERCE_STORE) }
 
   scope :active, -> { where(status: ACTIVE) }
   scope :inactive, -> { where(status: INACTIVE) }
@@ -74,8 +78,8 @@ class Store < Vyapari::ApplicationRecord
     
     store.name = row[:name]
     store.code = row[:code]
-    
-    store.set_store_type(row[:store_type])
+    store.status = row[:status] if STATUS_REVERSE.keys.include?(row[:status])
+    store.set_store_type(row[:store_type]) if STORE_TYPES.keys.include?(row[:store_type])
     
     store.region = Region.find_by_code(row[:region]) || Country.find_by_name(row[:country])
     store.country = Country.find_by_code(row[:country]) || Country.find_by_name(row[:country])
@@ -97,8 +101,11 @@ class Store < Vyapari::ApplicationRecord
   # Instance Methods
   # ------------------
 
+  # Other Methods
+  # -------------
+
   def display_name
-    #self.country ? "#{self.code_was}-#{self.name_was}, #{self.country.name}" : "#{self.code_was}-#{self.name_was}"
+    #self.country ? "#{self.code_was}-#{self.name_was}, #{self.country.name}" : "#{self.code_was}-#{self.name_was}" 
     "#{self.code_was}-#{self.name_was}"
   end
 
@@ -130,12 +137,18 @@ class Store < Vyapari::ApplicationRecord
     self.store_type == POS_STORE
   end
 
+  def ecommerce_store?
+    self.store_type == ECOMMERCE_STORE
+  end
+
+  # Stock  Methods
+  # --------------
+
   def in_stock?(product)
     true
   end
 
   # Total Counts
-
   def total_quantity_of_products_in_stock
     self.stock_entries.active.sum(:quantity) - self.stock_entries.sold.sum(:quantity)
   end
@@ -211,10 +224,8 @@ class Store < Vyapari::ApplicationRecord
     self.stock_entries.this_month.reserved.sum(:quantity)
   end
 
-  
-  
-  
-  
+  # Status Methods
+  # ------------------
 
   # * Return true if the brand is active, else false.
   # == Examples
@@ -267,6 +278,9 @@ class Store < Vyapari::ApplicationRecord
     self.update_attribute(:status, CLOSED)
   end
 
+  # Permission Methods
+  # ------------------
+
   def can_be_activated?
     inactive? or closed?
   end
@@ -290,13 +304,6 @@ class Store < Vyapari::ApplicationRecord
     else
       return true
     end
-  end
-
-  def report_heading
-    rh = []
-    rh << self.company.try(:name) if self.company.name
-    rh << self.display_name
-    rh.join(", ")
   end
 
 end
