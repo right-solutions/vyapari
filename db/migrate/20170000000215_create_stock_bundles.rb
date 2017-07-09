@@ -1,4 +1,4 @@
-class CreateStockBundles < ActiveRecord::Migration
+class CreateStockBundles < ActiveRecord::Migration[5.0]
   def change
     create_table(:stock_bundles) do |t|
       t.datetime   :uploaded_date

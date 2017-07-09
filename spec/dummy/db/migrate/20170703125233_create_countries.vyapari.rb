@@ -1,5 +1,5 @@
 # This migration comes from vyapari (originally 20170000000201)
-class CreateCountries < ActiveRecord::Migration
+class CreateCountries < ActiveRecord::Migration[5.0]
   def change
     create_table(:countries) do |t|
 
