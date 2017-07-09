@@ -15,12 +15,3 @@ test:
   password: 
   port: 3306
   host: localhost
-
-production:
-  adapter: mysql2
-  encoding: utf8
-  database: vyapari_production
-  username: root
-  password: 
-  port: 3306
-  host: localhost

@@ -16,10 +16,10 @@
 		<li class="dropdown user-profile">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 				
-				<%= display_image(@current_user, "profile_picture.image.small.url", width: "32", height: "auto", class: "img-circle img-inline userpic-32", alt: @current_user.display_name) %>
+				<%= display_image(@current_user, "profile_picture.image.small.url", width: "32", height: "auto", class: "img-circle img-inline userpic-32", alt: @current_user.display_name) if @current_user %>
 				
 				<span>
-					<%= @current_user.display_name %>
+					<%= @current_user.display_name if @current_user %>
 					<i class="fa-angle-down"></i>
 				</span>
 				

@@ -5,16 +5,17 @@ class Category < Vyapari::ApplicationRecord
   UNPUBLISHED = "unpublished"
   REMOVED = "removed"
   
-  STATUS = {"Published" => PUBLISHED, "Unpublished" => UNPUBLISHED, "Removed" => REMOVED}
-  STATUS_REVERSE = {PUBLISHED => "Published", UNPUBLISHED => "Unpublished", REMOVED => "Removed"}
+  STATUS = {PUBLISHED => "Published", UNPUBLISHED => "Unpublished", REMOVED => "Removed"}
+  STATUS_REVERSE = {"Published" => PUBLISHED, "Unpublished" => UNPUBLISHED, "Removed" => REMOVED}
 
-  FEATURED_HASH = {"Featured" => true, "Non Featured" => false}
-  FEATURED_HASH_REVERSE = {true => "Featured", false => "Non Featured"}
+  FEATURED_HASH = {true => "Featured", false => "Non Featured"}
+  FEATURED_HASH_REVERSE = {"Featured" => true, "Non Featured" => false}
 
   # Validations
-  validates :name, presence: true, uniqueness: true
+  validates :name, presence: true, length: {minimum: 3, maximum: 250}
+  validates :priority, numericality: true
   validates :one_liner, presence: false
-  validates :status, :presence=> true, :inclusion => {:in => STATUS_REVERSE.keys, :presence_of => :status, :message => "%{value} is not a valid status" }
+  validates :status, :presence=> true, :inclusion => {:in => STATUS.keys, :presence_of => :status, :message => "%{value} is not a valid status" }
 
   # Associations
   has_many :products
@@ -29,8 +30,7 @@ class Category < Vyapari::ApplicationRecord
   #   >>> object.search(query)
   #   => ActiveRecord::Relation object
   scope :search, lambda {|query| where("LOWER(name) LIKE LOWER('%#{query}%') OR\
-                                        LOWER(one_liner) LIKE LOWER('%#{query}%')")
-                        }
+                                        LOWER(one_liner) LIKE LOWER('%#{query}%')")}
 
   scope :status, lambda { |status| where("LOWER(status)='#{status}'") }
   scope :featured, lambda { |val| where(featured: val) }
@@ -149,11 +149,11 @@ class Category < Vyapari::ApplicationRecord
   end
 
   def can_be_edited?
-    true
+    published? or unpublished?
   end
 
   def can_be_deleted?
-    true
+    removed?
   end
 
 end

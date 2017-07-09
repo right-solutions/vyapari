@@ -3,18 +3,22 @@
 	  <thead> 
 			<tr> 
 				<th style="text-align: center;width:60px">#</th> 
-				<th style="width:50%">Name</th>
+				<th>Name</th>
 				<th>Featured</th>
 				<th>Status</th>
-				<th style="text-align: center;" colspan="3">Actions</th>
+				<th>Priority</th>
+				<th style="text-align: center;">Actions</th>
 			</tr> 
 		</thead>
 		
 	  <tbody>
 	  	<% @brands.each_with_index do |brand, i| %>
 	  		
-	  		<% edit_link = edit_admin_brand_path(id: brand.id) %>
-				<% delete_link = admin_brand_path(id: brand.id) %>
+	  		<% 
+	  			show_link = admin_brand_path(brand)
+	  			edit_link = edit_admin_brand_path(brand)
+					delete_link = admin_brand_path(brand)
+				%>
 				
 		    <tr id="tr_brand_<%= brand.id %>">
 		      
@@ -26,7 +30,7 @@
 						<% end %>
 					</th>
 
-		      <td class="brand-name"><%= link_to brand.name, admin_brand_path(brand), remote: true %></td>
+		      <td class="brand-name"><%= link_to brand.name, show_link, remote: true %></td>
 
 		      <td class="hidden-xs hidden-sm">
 				  	<% if brand.featured? %>
@@ -44,30 +48,11 @@
 				  	<% end %>
 				  </td>
 
-				  <td class="action-links" style="width:10%">
-
-				    <!-- Mark as Featured -->
-				    <%= link_to raw("<i class=\"fa fa-circle-o mr-5\"></i> Mark as Featured"), mark_as_featured_admin_brand_path(:id =>brand.id, :status =>'published'), :method =>'PUT', :remote=>true, role: "menuitem", tabindex: "-1", :class=>"edit" unless brand.featured? %>
-
-				    <!-- Remove from Featured -->
-				    <%= link_to raw("<i class=\"fa fa-circle mr-5\"></i> Remove from Featured"), remove_from_featured_admin_brand_path(:id =>brand.id, :status =>'unpublished'), :method =>'PUT', :remote=>true, role: "menuitem", tabindex: "-1", :class=>"" if brand.featured? %>
-
-				  </td>
+				  <td><%= brand.priority %></td>
 
 				  <td class="action-links" style="width:10%">
 
-		      	<!-- Publish -->
-				    <%= link_to raw("<i class=\"fa fa-circle-o mr-5\"></i> Publish"), update_status_admin_brand_path(:id =>brand.id, :status =>'published'), :method =>'PUT', :remote=>true, role: "menuitem", tabindex: "-1", :class=>"edit" if brand.can_be_published? %>
-
-				    <!-- Un-Publish -->
-				    <%= link_to raw("<i class=\"fa fa-circle mr-5\"></i> Un-Publish"), update_status_admin_brand_path(:id =>brand.id, :status =>'unpublished'), :method =>'PUT', :remote=>true, role: "menuitem", tabindex: "-1", :class=>"" if brand.can_be_unpublished? %>
-
-				    <!-- Remove -->
-				    <%= link_to raw("<i class=\"fa fa-edit mr-5\"></i> Remove"), update_status_admin_brand_path(:id =>brand.id, :status =>'removed'), :method =>'PUT', :remote=>true, role: "menuitem", tabindex: "-1", :class=>"delete" if brand.can_be_removed? %>
-
-		      </td>
-
-		      <td class="action-links" style="width:10%">
+		      	<%= link_to raw("<i class=\"linecons-eye\"></i> View More"), show_link, :remote=>true, class: "view" %>
 
 		      	<%= link_to raw("<i class=\"linecons-pencil\"></i> Edit Brand"), edit_link, :remote=>true, class: "edit" if brand.can_be_edited? %>
 

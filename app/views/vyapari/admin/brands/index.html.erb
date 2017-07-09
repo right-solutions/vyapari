@@ -11,20 +11,22 @@
           <div class="row">
             <div class="col-md-6">
               
-              <%= theme_button('Add a Brand', 'plus', new_admin_brand_path(), classes: "pull-left", btn_type: "success") %>
+              <%= link_to raw("<i class='fa-plus'></i><span class='ml-10 btn-text hidden-sm hidden-xs'> New Brand</span>"), new_admin_brand_path, :class=>"btn btn-success pull-left mr-10", :remote=>true
+              %>
 
-              <%= theme_button('Refresh', 'refresh', admin_brands_path(), classes: "pull-left ml-10", btn_type: "white") %>
+              <%= link_to raw("<i class='fa-refresh'></i><span class='ml-10 btn-text hidden-sm hidden-xs'> Refresh</span>"), admin_brands_path, :class=>"btn btn-white pull-left mr-10", :remote=>true
+              %>
 
               <!-- Single button -->
-              <div class="ml-10 btn-group hidden">
+              <div class="ml-10 btn-group">
                 <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   More Actions <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu">
-                  <li><a href="#">Import Users</a></li>
+                  <li><a href="#">Import Brands</a></li>
                   <li><a href="#">Import History</a></li>
                   <li role="separator" class="divider"></li>
-                  <li><a href="#">Export Users</a></li>
+                  <li><a href="#">Export Brands</a></li>
                 </ul>
               </div>
             </div>

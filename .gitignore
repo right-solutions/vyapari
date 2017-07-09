@@ -8,7 +8,6 @@ spec/dummy/tmp/
 spec/dummy/tmp/*.*
 spec/dummy/public/assets/*.*
 
-
 *.rbc
 
 *.sassc

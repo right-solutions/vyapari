@@ -1,9 +1,12 @@
 class LandingController < Vyapari::ApplicationController
 
-	# GET /dashboard
-  def index
+	def index
   	#redirect_to vyapari.admin_countries_url
-  	redirect_to usman.admin_dashboard_url
+  	if @current_user.super_admin? || @current_user.has_role?("Site Admin")
+  		redirect_to usman.admin_dashboard_url
+  	else
+      redirect_to vyapari.user_dashboard_url
+  	end
   end
 
 end

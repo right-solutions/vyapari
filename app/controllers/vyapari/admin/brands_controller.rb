@@ -5,12 +5,11 @@ module Vyapari
       def mark_as_featured
         @brand = @r_object = Brand.find(params[:id])
         if @brand
-          @brand.featured = true
-          if @brand.valid?
-            @brand.save
+          @brand.mark_as_featured!
+          if @brand.errors.blank?
             set_notification(true, I18n.t('status.success'), I18n.t('state.changed', item: default_item_name.titleize, new_state: "featured"))
           else
-            set_notification(false, I18n.t('status.error'), I18n.translate("error"), @brand.errors.full_messages.join("<br>"))
+            set_notification(false, I18n.t('status.error'), @brand.errors[:featured].join("<br>"))
           end
         else
           set_notification(false, I18n.t('status.not_found'), I18n.t('status.not_found', item: default_item_name.titleize))
@@ -21,12 +20,11 @@ module Vyapari
       def remove_from_featured
         @brand = @r_object = Brand.find(params[:id])
         if @brand
-          @brand.featured = false
-          if @brand.valid?
-            @brand.save
+          @brand.remove_from_featured!
+          if @brand.errors.blank?
             set_notification(true, I18n.t('status.success'), I18n.t('state.changed', item: default_item_name.titleize, new_state: "featured"))
           else
-            set_notification(false, I18n.t('status.error'), I18n.translate("error"), @brand.errors.full_messages.join("<br>"))
+            set_notification(false, I18n.t('status.error'), @brand.errors[:featured].join("<br>"))
           end
         else
           set_notification(false, I18n.t('status.not_found'), I18n.t('status.not_found', item: default_item_name.titleize))
@@ -72,7 +70,7 @@ module Vyapari
       def resource_controller_configuration
         {
           page_title: "Brands",
-          js_view_path: "/kuppayam/workflows/parrot",
+          js_view_path: "/kuppayam/workflows/peacock",
           view_path: "/vyapari/admin/brands"
         }
       end

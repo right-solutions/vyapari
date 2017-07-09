@@ -45,7 +45,7 @@
 			</li>
 			
 			<!-- Configurations -->
-			<% if @current_user.super_admin? %>
+			<% if @current_user && @current_user.super_admin? %>
 			<li class="">
 				<a href="#">
 					<i class="linecons-params"></i>
@@ -78,7 +78,7 @@
 			<% end %>
 
 			<!-- Administration -->
-			<% if @current_user.super_admin? || @current_user.has_role?("Site Admin") %>
+			<% if @current_user && (@current_user.super_admin? || @current_user.has_role?("Site Admin")) %>
 			<li class="">
 				<a href="#">
 					<i class="linecons-cog"></i>
@@ -114,7 +114,7 @@
 			</li>
 			<% end %>
 
-			<% if @current_user.super_admin? %>
+			<% if @current_user && @current_user.super_admin? %>
 			<li class="">
 				<a href="#">
 					<i class="linecons-database"></i>
@@ -122,6 +122,14 @@
 				</a>
 				<ul>
 					
+					<li class="">
+						<%= link_to raw("<i class=\"fa-photo\"></i> <span class='title'>Manage Images</span>"), main_app.images_url %>
+					</li>
+
+					<li class="">
+						<%= link_to raw("<i class=\"fa-file\"></i> <span class='title'>Manage Documents</span>"), main_app.documents_url %>
+					</li>
+
 					<li class="">
 						<%= link_to raw("<i class=\"linecons-truck\"></i> <span class='title'>Manage Products</span>"), vyapari.admin_products_url %>
 					</li>

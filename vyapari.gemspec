@@ -10,10 +10,15 @@ Gem::Specification.new do |s|
   s.authors     = ["kpvarma"]
   s.email       = ["krshnaprsad@gmail.com"]
   s.homepage    = "https://github.com/right-solutions/vyapari"
-  s.summary     = "An online product catelog for general traders"
-  s.description = "Comes with an admin interface to configure brands, multilevel categories & products"
-  s.license     = "MIT"
+  
+  #s.summary     = "An online product catelog for general traders"
+  #s.description = "Comes with an admin interface to configure brands, multilevel categories & products"
 
+  s.summary     = "Vyapari is an Online Merchandise Application with integrated POS & Store Management Modules."
+  s.description = "Comes with an admin interface to configure products, multilevel categories, brands, stores & stock"
+
+  s.license     = "MIT"
+  
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
 
   s.add_dependency 'rails', '~> 5.0', '>= 5.0.2'

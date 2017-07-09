@@ -11,7 +11,7 @@ class CreateCategories < ActiveRecord::Migration[5.0]
       t.string :status, :null => false, :default=>"unpublished", :limit=>16
       t.boolean :featured, default: false
 
-      t.integer :priority
+      t.integer :priority, default: 1000
 
       t.timestamps null: false
     end
