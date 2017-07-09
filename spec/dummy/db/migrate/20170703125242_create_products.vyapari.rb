@@ -14,13 +14,9 @@ class CreateProducts < ActiveRecord::Migration[5.0]
       t.references :category
       t.references :top_category
 
-      t.decimal :purchased_price, :precision => 16, :scale => 2
-      t.decimal :landed_price, :precision => 16, :scale => 2
-      t.decimal :selling_price, :precision => 16, :scale => 2
-      t.decimal :retail_price, :precision => 16, :scale => 2
-
       t.string :status, :null => false, :default=>"unpublished", :limit=>16
       t.boolean :featured, default: false
+      t.integer :priority, default: 1000
 
       t.timestamps null: false
     end

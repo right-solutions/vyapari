@@ -13,6 +13,6 @@ gemspec
 # To use a debugger
 # gem 'byebug', group: [:development, :test]
 
-# gem 'usman', path: "/Users/kpvarma/Projects/RightSolutions/Engines/usman"
-# gem 'kuppayam', path: "/Users/kpvarma/Projects/RightSolutions/Engines/kuppayam"
+gem 'usman', path: "/Users/rightsolutions/Projects/Products/usman"
+gem 'kuppayam', path: "/Users/rightsolutions/Projects/Products/kuppayam"
 # gem 'uglifier'

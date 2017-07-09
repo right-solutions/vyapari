@@ -10,8 +10,8 @@ Gem::Specification.new do |s|
   s.authors     = ["kpvarma"]
   s.email       = ["krshnaprsad@gmail.com"]
   s.homepage    = "https://github.com/right-solutions/vyapari"
-  s.summary     = "An online product catelog for general traders"
-  s.description = "Comes with an admin interface to configure brands, multilevel categories & products"
+  s.summary     = "A Simple Warehouse Management with integrated POS & E-Commerce Back End."
+  s.description = "Comes with an admin interface to configure brands, multilevel categories & products along with managing multiple warehouses / stores"
   s.license     = "MIT"
 
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]

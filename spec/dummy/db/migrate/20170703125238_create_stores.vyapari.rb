@@ -1,11 +1,11 @@
 # This migration comes from vyapari (originally 20170000000206)
-class CreateStores < ActiveRecord::Migration
+class CreateStores < ActiveRecord::Migration[5.0]
   def change
     create_table(:stores) do |t|
 
-      t.string :name, limit: 256
+      t.string :name
       t.string :code, limit: 24
-      t.string :store_type, :null => false, :default=>"POS", :limit=>24
+      t.string :store_type, :null => false, :default=>"pos_store", :limit=>24
 
       t.string :status, :null => false, :default=>"active", :limit=>16
       

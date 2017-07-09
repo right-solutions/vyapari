@@ -92,6 +92,10 @@ class Product < Vyapari::ApplicationRecord
   # Instance variables
   # ------------------
 
+  def code
+    self.ean_sku
+  end
+
   def display_name
     "#{self.ean_sku} : #{self.name}"
   end

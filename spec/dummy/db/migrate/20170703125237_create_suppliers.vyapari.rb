@@ -1,11 +1,11 @@
 # This migration comes from vyapari (originally 20170000000205)
-class CreateSuppliers < ActiveRecord::Migration
+class CreateSuppliers < ActiveRecord::Migration[5.0]
   def change
     create_table(:suppliers) do |t|
 
-      t.string :name, limit: 256
+      t.string :name
       t.string :code, limit: 24
-      t.string :address, limit: 1024
+      t.text :address
       t.string :city, limit: 56
       t.references :country, index: true
 

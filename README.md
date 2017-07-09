@@ -1,11 +1,12 @@
 # Vyapari
-Short description and motivation.
+A Simple Warehouse Management with integrated POS & E-Commerce Back End.
 
 ## Usage
-How to use my plugin.
+<TODO> How to use my plugin.
 
 ## Installation
 Add this line to your application's Gemfile:
+<TODO>
 
 ```ruby
 gem 'vyapari'
@@ -36,6 +37,24 @@ $ bundle exec rake railties:install:migrations
 This will copy migrations from kuppayam and usman engines
 which will have migrations to create images, documents, users, features and permissions respectively.
 
+
+
+This will copy migrations from kuppayam and usman engines
+which will have migrations to create images, documents, users, features and permissions respectively. 
+
+## Create Dummy Data 
+
+run rake task for loading dummy data for users and features to start with.
+
+## Mount the engine
+
+Mount usman engine in your application routes.rb
+
+```
+mount Usman::Engine => "/"
+```
+
+open browser and go to /sign_in url
 
 ## Configurations
 
